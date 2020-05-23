@@ -2,7 +2,7 @@ package fr.iut.tetris;
 
 public class Main {
 	public static void main(String[] args) {
-		System.out.println("LOL");
-		System.out.println("echo toto");
+		MainController ctrl = new MainController();
+		//System.out.println("LOL");
 	}
 }
