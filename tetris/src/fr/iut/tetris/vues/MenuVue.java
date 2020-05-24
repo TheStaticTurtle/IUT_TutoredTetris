@@ -3,12 +3,16 @@ package fr.iut.tetris.vues;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.models.MenuModel;
+import sun.java2d.loops.FillRect;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -149,13 +153,17 @@ class TetrisLogo extends JPanel {
 			e.printStackTrace();
 		}
 
-		JPanel p = this;
+		final TetrisLogo p = this;
 		new Timer(100, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			p.repaint();
-			p.revalidate();
-			parent.repaint();
-			parent.revalidate();
+			p.update_size();
 		}}).start();
+	}
+
+	public void update_size() {
+		width += direction;
+		height += direction;
+		if(width>(baseWidth+offset) || height>(baseHeight+offset)) { direction = -speed; }
+		if(width<(baseWidth-offset) || height<(baseHeight-offset)) { direction = speed; }
 	}
 
 	@Override public int getHeight() { return canvasHeight; }
@@ -163,11 +171,6 @@ class TetrisLogo extends JPanel {
 
 	@Override public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-
-		width += direction;
-		height += direction;
-		if(width>(baseWidth+offset) || height>(baseHeight+offset)) { direction = -speed; }
-		if(width<(baseWidth-offset) || height<(baseHeight-offset)) { direction = speed; }
 
 		int spaceX = canvasWidth - width;
 		int spaceY = canvasHeight - height;
@@ -180,45 +183,64 @@ class TetrisLogo extends JPanel {
 	}
 }
 
-
-class Star{
-	int y = 0;
-	int x = 0;
-	int max_x = 0;
+class StarModel {
+	Point position;
+	Dimension parent;
+	Random rng;
 	int speed = 0;
-	public Star(int y,int x, int max_x, int speed) {
-		this.max_x = max_x;
+	int size = 96;
+	public StarModel(Random rng, Dimension parent, int speed) {
+		this.parent = parent;
 		this.speed = speed;
-		this.y = y;
-		this.x = x;
+		this.rng = rng;
+		this.position = new Point();
+		this.position.y = rng.nextInt(this.parent.height);
+		this.position.x = rng.nextInt(this.parent.width);
+		this.size = 100;
 	}
 
 	public void move() {
-		x += speed;
-		if(x>max_x) x=0;
+		position.x += speed;
+		if(position.x>parent.width+size) {
+			position.x=0;
+			this.position.y = this.rng.nextInt(this.parent.height);
+		}
 	}
 }
-
 class StarsAnimation extends JPanel {
 	Random rn = new Random();
-	Star[] stars = new Star[20];
+	StarModel[] stars = new StarModel[25];
 	Dimension size;
+	Image img;
+	Image resize_img;
 
 	public StarsAnimation(Dimension size) {
 		this.size = size;
 
 		for(int i=0; i<stars.length; i++) {
 			int s = rn.nextInt(2)+1;
-			int y = rn.nextInt(this.size.height);
-			int x = rn.nextInt(this.size.width);
-			stars[i] = new Star(y,x, this.size.width,1);
+			stars[i] = new StarModel(rn,size,s+2);
 		}
 
+		String imgPath = Main.class.getResource("/res/star.png").getPath();
+		try {
+			img = ImageIO.read(new File(imgPath));
+			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+			tx.translate(-img.getWidth(null), 0);
+			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+			img = op.filter((BufferedImage) img, null);
+			resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		StarsAnimation p = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			for (Star star : stars) {
+			for (StarModel star : p.stars) {
 				star.move();
 			}
 		}}).start();
+
 	}
 
 	@Override public int getHeight() { return size.height; }
@@ -226,11 +248,8 @@ class StarsAnimation extends JPanel {
 
 	@Override public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-
-		g2.setColor(Color.blue);
-		for (Star star : stars) {
-			
-			g2.fillOval(star.x,star.y,10,10);
+		for (StarModel star : stars) {
+			g2.drawImage(resize_img,star.position.x-star.size, star.position.y, this);
 		}
 	}
 }
@@ -262,6 +281,9 @@ public class MenuVue extends JPanel  {
 
 		JButton quitButton = new MenuButton("Quitter",Color.LIGHT_GRAY,Color.WHITE);
 		JButton creditButton = new MenuButton("Credits",Color.LIGHT_GRAY,Color.WHITE);
+
+		creditButton.addActionListener(ctrl);
+		creditButton.setActionCommand("CLICK:MENU:CREDIT");
 
 		Font font = new JLabel().getFont();
 		try {
@@ -333,5 +355,11 @@ public class MenuVue extends JPanel  {
 		setLayout(lyt2);
 
 		add(testPane);
+
+		JPanel t = this;
+		new Timer(1, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			t.repaint();
+			t.revalidate();
+		}}).start();
 	}
 }

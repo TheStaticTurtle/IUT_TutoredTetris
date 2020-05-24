@@ -1,16 +1,16 @@
 package fr.iut.tetris.controllers;
 
 import fr.iut.tetris.MainController;
-import fr.iut.tetris.models.MenuModel;
+import fr.iut.tetris.models.CreditModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MenuController implements ActionListener {
+public class CreditController implements ActionListener {
 	MainController mainCtrl;
-	MenuModel model;
+	CreditModel model;
 
-	public MenuController(MainController mainCtrl, MenuModel model) {
+	public CreditController(MainController mainCtrl, CreditModel model) {
 		this.model = model;
 		this.mainCtrl = mainCtrl;
 	}
@@ -18,7 +18,7 @@ public class MenuController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
-			case "CLICK:MENU:CREDIT":
+			case "CLICK:CREDIT:BACK":
 				mainCtrl.actionPerformed(e);
 				break;
 			default:

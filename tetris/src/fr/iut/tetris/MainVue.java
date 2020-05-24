@@ -4,6 +4,7 @@ import fr.iut.tetris.vues.MenuVue;
 
 import javax.swing.*;
 
+
 public class MainVue extends JFrame {
 	JPanel currentVue;
 
@@ -11,6 +12,9 @@ public class MainVue extends JFrame {
 		setTitle("Tetris");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+
+		ImageIcon img = new ImageIcon(Main.class.getResource("/res/icon.png"));
+		setIconImage(img.getImage());
 	}
 
 	public void setCurrentVue(JPanel p) {
