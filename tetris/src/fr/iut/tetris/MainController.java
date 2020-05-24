@@ -50,6 +50,9 @@ public class MainController implements ActionListener {
 				menuVue = new MenuVue(menuModel, menuCtrl);
 				mainVue.setCurrentVue(menuVue);
 				break;
+			case "CLICK:MENU:QUIT":
+				System.exit(0);
+				break;
 			default:
 				break;
 		}

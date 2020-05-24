@@ -75,7 +75,7 @@ public class CreditVue extends JPanel  {
 		mainPanel.add(backButton);
 
 		mainPanel.setLocation(0, 0);
-		mainPanel.setSize(mainPanel.getPreferredSize());
+		mainPanel.setPreferredSize(mainPanel.getPreferredSize());
 
 		mainPanel.setBounds(0, 0, (int)mainPanel.getPreferredSize().getWidth(), (int)mainPanel.getPreferredSize().getHeight());
 		mainPanel.setVisible(true);

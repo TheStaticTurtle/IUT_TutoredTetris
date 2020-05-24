@@ -284,6 +284,8 @@ public class MenuVue extends JPanel  {
 
 		creditButton.addActionListener(ctrl);
 		creditButton.setActionCommand("CLICK:MENU:CREDIT");
+		quitButton.addActionListener(ctrl);
+		quitButton.setActionCommand("CLICK:MENU:QUIT");
 
 		Font font = new JLabel().getFont();
 		try {
@@ -335,7 +337,7 @@ public class MenuVue extends JPanel  {
 		mainPanel.add( new Spacer());
 
 		mainPanel.setLocation(0, 0);
-		mainPanel.setSize(mainPanel.getPreferredSize());
+		mainPanel.setPreferredSize(mainPanel.getPreferredSize());
 
 		mainPanel.setBounds(0, 0, (int)mainPanel.getPreferredSize().getWidth(), (int)mainPanel.getPreferredSize().getHeight());
 		mainPanel.setVisible(true);

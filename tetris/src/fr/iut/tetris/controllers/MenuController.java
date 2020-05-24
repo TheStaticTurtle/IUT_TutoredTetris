@@ -19,6 +19,7 @@ public class MenuController implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
 			case "CLICK:MENU:CREDIT":
+			case "CLICK:MENU:QUIT":
 				mainCtrl.actionPerformed(e);
 				break;
 			default:
