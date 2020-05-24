@@ -199,12 +199,12 @@ class Star{
 	}
 }
 
-class StarsAnnimation extends JPanel {
+class StarsAnimation extends JPanel {
 	Random rn = new Random();
 	Star[] stars = new Star[20];
 	Dimension size;
 
-	public StarsAnnimation(Dimension size) {
+	public StarsAnimation(Dimension size) {
 		this.size = size;
 
 		for(int i=0; i<stars.length; i++) {
@@ -318,7 +318,7 @@ public class MenuVue extends JPanel  {
 		mainPanel.setVisible(true);
 
 		JLayeredPane testPane = new JLayeredPane();
-		testPane.add(new StarsAnnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
+		testPane.add(new StarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 
