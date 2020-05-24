@@ -229,6 +229,7 @@ class StarsAnimation extends JPanel {
 
 		g2.setColor(Color.blue);
 		for (Star star : stars) {
+			
 			g2.fillOval(star.x,star.y,10,10);
 		}
 	}
