@@ -5,7 +5,7 @@ import fr.iut.tetris.vues.MenuVue;
 import javax.swing.*;
 
 public class MainVue extends JFrame {
-	JPanel currrentVue;
+	JPanel currentVue;
 
 	public MainVue() {
 		setTitle("Tetris");
@@ -14,10 +14,10 @@ public class MainVue extends JFrame {
 	}
 
 	public void setCurrentVue(JPanel p) {
-		this.currrentVue = p;
+		this.currentVue = p;
 
 		getContentPane().removeAll();
-		setContentPane(this.currrentVue);
+		setContentPane(this.currentVue);
 		validate();
 		pack();
 		setLocationRelativeTo(null);

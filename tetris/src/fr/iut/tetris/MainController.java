@@ -19,7 +19,7 @@ public class MainController {
 		menuCtrl = new MenuController(menuModel);
 
 		menuVue = new MenuVue(menuModel, menuCtrl);
-		//gameVue = new GameVue();
+		// gameVue = new GameVue();
 
 		mainVue.setCurrentVue(menuVue);
 		mainVue.display();
