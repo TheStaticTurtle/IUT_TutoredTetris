@@ -56,6 +56,7 @@ public class MainController implements ActionListener {
 		switch(e.getActionCommand() ) {
 		
 			case "CLICK:MENU:SOLO":
+				soloModel = new SoloModel();
 				soloVue = new SoloVue(soloModel, soloCtrl);
 				mainVue.setCurrentVue(soloVue);
 				break;
