@@ -28,6 +28,7 @@ class Spacer extends Box {
 }
 
 class HoveredButtonIcon implements Icon {
+	
 	int height;
 	int width;
 	Color foreGroundColor;
@@ -214,6 +215,7 @@ class StarModel {
 		}
 	}
 }
+
 class StarsAnimation extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -245,7 +247,7 @@ class StarsAnimation extends JPanel {
 			resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 			
 		} catch (IOException e) {
-			System.out.println("Logo non trouvé");
+			System.out.println("Image non trouvé");
 		}
 		
 
@@ -297,6 +299,9 @@ public class MenuVue extends JPanel  {
 		JButton versusButton = new MenuButton("Versus",Color.ORANGE,Color.WHITE);
 		JButton settingsButton = new MenuButton("Parametres",Color.CYAN,Color.WHITE);
 
+		soloButton.addActionListener(ctrl);
+		soloButton.setActionCommand("CLICK:MENU:SOLO");
+		
 		JButton quitButton = new MenuButton("Quitter",Color.LIGHT_GRAY,Color.WHITE);
 		JButton creditButton = new MenuButton("Credits",Color.LIGHT_GRAY,Color.WHITE);
 

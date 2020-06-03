@@ -1,16 +1,17 @@
 package fr.iut.tetris.controllers;
 
-import fr.iut.tetris.MainController;
-import fr.iut.tetris.models.MenuModel;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MenuController implements ActionListener {
-	MainController mainCtrl;
-	MenuModel model;
+import fr.iut.tetris.MainController;
+import fr.iut.tetris.models.SoloModel;
 
-	public MenuController(MainController mainCtrl, MenuModel model) {
+public class SoloController implements ActionListener {
+
+	MainController mainCtrl;
+	SoloModel model;
+
+	public SoloController(MainController mainCtrl, SoloModel model) {
 		this.model = model;
 		this.mainCtrl = mainCtrl;
 	}
@@ -18,13 +19,12 @@ public class MenuController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
-			case "CLICK:MENU:CREDIT":
-			case "CLICK:MENU:QUIT":
-			case "CLICK:MENU:SOLO":
+			case "CLICK:CREDIT:BACK":
 				mainCtrl.actionPerformed(e);
 				break;
 			default:
 				break;
 		}
 	}
+	
 }
