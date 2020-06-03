@@ -2,10 +2,7 @@ package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.CreditController;
-import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.models.CreditModel;
-import fr.iut.tetris.models.MenuModel;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.io.InputStream;
 
 public class CreditVue extends JPanel  {
+
+	private static final long serialVersionUID = 1L;
+	
 	CreditModel model;
 	CreditController ctrl;
 

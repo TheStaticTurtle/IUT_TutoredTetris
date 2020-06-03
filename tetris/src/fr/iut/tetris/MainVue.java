@@ -1,11 +1,11 @@
 package fr.iut.tetris;
 
-import fr.iut.tetris.vues.MenuVue;
-
 import javax.swing.*;
 
-
 public class MainVue extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	
 	JPanel currentVue;
 
 	public MainVue() {

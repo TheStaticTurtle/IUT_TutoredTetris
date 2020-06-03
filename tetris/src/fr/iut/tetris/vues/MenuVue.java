@@ -3,25 +3,23 @@ package fr.iut.tetris.vues;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.models.MenuModel;
-import sun.java2d.loops.FillRect;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Objects;
 import java.util.Random;
 
 class Spacer extends Box {
+
+	private static final long serialVersionUID = 1L;
+
 	public Spacer() {
 		super(0);
 		setPreferredSize(new Dimension(1, 1));
@@ -69,6 +67,9 @@ class HoveredButtonIcon implements Icon {
 	public int getIconHeight() { return this.height; }
 }
 class MenuButton extends JButton implements MouseListener {
+
+	private static final long serialVersionUID = 1L;
+	
 	String text;
 	Font font;
 	Color foreGroundColor;
@@ -126,6 +127,9 @@ class MenuButton extends JButton implements MouseListener {
 	}
 }
 class TetrisLogo extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+
 	int offset = 10;
 
 	int canvasWidth = 450;
@@ -146,12 +150,15 @@ class TetrisLogo extends JPanel {
 		this.baseWidth = this.canvasWidth-offset;
 		this.baseHeight = this.canvasHeight-offset;
 
-		String imgPath = Main.class.getResource("/res/logo.png").getPath();
 		try {
-			img = ImageIO.read(new File(imgPath));
+
+			URL logo = getClass().getResource( "/res/logo.png" );
+			img = ImageIO.read(logo);
+			
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Logo non trouvé");
 		}
+		
 
 		final TetrisLogo p = this;
 		new Timer(100, new ActionListener() { public void actionPerformed(ActionEvent e) {
@@ -208,6 +215,9 @@ class StarModel {
 	}
 }
 class StarsAnimation extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+	
 	Random rn = new Random();
 	StarModel[] stars = new StarModel[25];
 	Dimension size;
@@ -222,17 +232,22 @@ class StarsAnimation extends JPanel {
 			stars[i] = new StarModel(rn,size,s+2);
 		}
 
-		String imgPath = Main.class.getResource("/res/star.png").getPath();
+		
 		try {
-			img = ImageIO.read(new File(imgPath));
+
+			URL star = getClass().getResource( "/res/star.png" );
+			img = ImageIO.read(star);
+
 			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
 			tx.translate(-img.getWidth(null), 0);
 			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 			img = op.filter((BufferedImage) img, null);
 			resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
+			
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Logo non trouvé");
 		}
+		
 
 		StarsAnimation p = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
@@ -255,6 +270,9 @@ class StarsAnimation extends JPanel {
 }
 
 public class MenuVue extends JPanel  {
+
+	private static final long serialVersionUID = 1L;
+	
 	MenuModel model;
 	MenuController ctrl;
 
