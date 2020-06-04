@@ -36,16 +36,16 @@ public class MainController implements ActionListener, KeyListener {
 
 		menuModel = new MenuModel();
 		creditModel = new CreditModel();
-		soloModel = new SoloModel();
+		//soloModel = new SoloModel();
 		
 		menuCtrl = new MenuController(this, menuModel);
 		creditCtrl = new CreditController(this, creditModel);
-		soloCtrl = new SoloController(this, soloModel);
+		//soloCtrl = new SoloController(this, soloModel);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
 		creditVue = new CreditVue(creditModel, creditCtrl);
-		soloVue = new SoloVue(soloModel, soloCtrl);
-		soloCtrl.setVue(soloVue);
+		//soloVue = new SoloVue(soloModel, soloCtrl);
+		//soloCtrl.setVue(soloVue);
 		
 		// gameVue = new GameVue();
 
@@ -59,8 +59,11 @@ public class MainController implements ActionListener, KeyListener {
 		
 			case "CLICK:MENU:SOLO":
 				soloModel = new SoloModel();
+				soloCtrl = new SoloController(this, soloModel);
 				soloVue = new SoloVue(soloModel, soloCtrl);
+
 				soloCtrl.setVue(soloVue);
+
 				mainVue.setCurrentVue(soloVue);
 				break;
 		

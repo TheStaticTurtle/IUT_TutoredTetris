@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public
 class PieceModel {
-	BlockModel[][] childs= new BlockModel[4][4];
+	public BlockModel[][] childs= new BlockModel[4][4];
 
 	//Position represent top-left corner of the 4x4 grid
 	int x = 0;
@@ -50,5 +50,25 @@ class PieceModel {
 			new Point(5,-1),
 			new Point(2,2)
 	);
-	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT};
+	static PieceModel PieceO = new PieceModel(
+			new BlockModel[][] {
+					{null                       , null                        , null                        , null},
+					{null                       , null                        , null                        , null},
+					{null                       , new BlockModel(Color.yellow), new BlockModel(Color.yellow), null},
+					{null                       , new BlockModel(Color.yellow), new BlockModel(Color.yellow), null}
+			},
+			new Point(5,-2),
+			new Point(1,2)
+	);
+	static PieceModel PieceS = new PieceModel(
+			new BlockModel[][] {
+					{null                      , null                      , null                      , null},
+					{null                      , null                      , null                      , null},
+					{null                      , new BlockModel(Color.BLUE), new BlockModel(Color.BLUE), null},
+					{new BlockModel(Color.BLUE), new BlockModel(Color.BLUE), null                      , null}
+			},
+			new Point(5,-2),
+			new Point(1,2)
+	);
+	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS};
 }

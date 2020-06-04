@@ -1,6 +1,7 @@
 package fr.iut.tetris.models;
 
 import fr.iut.tetris.component.Piece;
+import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
@@ -12,11 +13,14 @@ import java.util.Random;
 public class SoloModel {
 	public int height = 20;
 	public int witdh = 10;
+	public int fallSpeed = 1000; //ms
 	ArrayList<PieceModel> pieceList = new ArrayList<PieceModel>();
 	public PieceModel fallingPiece = null;
+	public PieceModel nextPiece = null;
 	public GameState gameState = GameState.WAITING;
 
 	public SoloModel() {
+		nextPiece = getRandomPiece();
 	}
 
 	static Object getRandomElement(Object[] list)
@@ -25,10 +29,22 @@ public class SoloModel {
 		return list[rand.nextInt(list.length)];
 	}
 
-	public void spawnRandomPiece() {
+	public PieceModel getRandomPiece() {
+		System.out.println("Spawned a new random piece");
 		PieceModel p = ((PieceModel)getRandomElement(PieceModel.Pieces)).clone();
+		return p;
+	}
+	public void spawnPiece() {
+		System.out.println("Spawned a new piece");
+
+		PieceModel p = nextPiece.clone();
 		pieceList.add(p);
 		fallingPiece = p;
+		nextPiece = getRandomPiece();
+
+		try {
+			computeMixedGrid();
+		} catch (OverlappedPieceException | PieceOutOfBoardException e) {gameState = GameState.FINISHED;}
 	}
 
 	//the mega function who does everything
@@ -47,19 +63,22 @@ public class SoloModel {
 			}
 
 		}
-		System.out.println(Arrays.deepToString(table));
+		//System.out.println(Arrays.deepToString(table));
 		return table;
 	}
 
-	public boolean moveCurrentX(int direction) {
-		fallingPiece.x += Math.max(Math.min(direction,-1),1);
-		try {
-			computeMixedGrid();
-			return true;
-		} catch (PieceOutOfBoardException | OverlappedPieceException e) {
-			fallingPiece.x -= Math.max(Math.min(direction,-1),1);
-			return false;
+	public boolean moveCurrentX(Direction dir) {
+		if(fallingPiece != null) {
+			fallingPiece.x += dir.step;
+			try {
+				computeMixedGrid();
+				return true;
+			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
+				fallingPiece.x -= dir.step;
+				return false;
+			}
 		}
+		return false;
 	}
 
 	public void fallCurrent() {
@@ -73,9 +92,10 @@ public class SoloModel {
 			}
 		}
 	}
-
-	boolean isGameOver() {
-		return false;
+	public void fallCurrentAtBottom() {
+		while(fallingPiece != null) {
+			fallCurrent();
+		}
 	}
 
 	/*private int score;

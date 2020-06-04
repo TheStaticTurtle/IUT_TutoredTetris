@@ -1,25 +1,20 @@
 package fr.iut.tetris.vues;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 import fr.iut.tetris.models.BlockModel;
+import fr.iut.tetris.models.PieceModel;
 import fr.iut.tetris.models.SoloModel;
 
 public class SoloVue extends JPanel {
@@ -28,6 +23,7 @@ public class SoloVue extends JPanel {
 
 	PiecePanel panelPiece;
 	SplashScreenPanel splashScreen;
+	JLayeredPane testPane;
 
 	public SoloVue(SoloModel model, SoloController ctrl) {
 		this.model = model;
@@ -75,7 +71,7 @@ public class SoloVue extends JPanel {
 		mainPanel.setVisible(true);
 
 
-		panelPiece = new PiecePanel(model);
+		panelPiece = new PiecePanel(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight());
 		panelPiece.setLocation(0, 0);
 		panelPiece.setVisible(true);
 
@@ -83,7 +79,7 @@ public class SoloVue extends JPanel {
 		splashScreen.setVisible(true);
 
 		//ICI Pour ajoutter des couches
-		JLayeredPane testPane = new JLayeredPane();
+		testPane = new JLayeredPane();
 		//testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
 		testPane.add(panelPiece,JLayeredPane.PALETTE_LAYER);
 		testPane.add(splashScreen,JLayeredPane.MODAL_LAYER);
@@ -106,10 +102,15 @@ public class SoloVue extends JPanel {
 		setLayout(lyt2);
 		add(testPane);
 	}
-	public void redraw() {
-		panelPiece.redraw();
-		splashScreen.redraw(model.gameState != GameState.PLAYING);
-		repaint();
+
+	public void setModel(SoloModel model) {
+		this.model = model;
+	}
+
+	public void recalculate() {
+		//panelPiece.recalculate();
+		splashScreen.recalculate(model.gameState != GameState.PLAYING);
+		panelPiece.recalculate();
 	}
 }
 
@@ -162,48 +163,39 @@ class SplashScreenPanel extends JPanel {
 		add(mainPanel);
 	}
 
-	public void redraw(boolean visible) {
+	public void recalculate(boolean visible) {
 		mainPanel.setVisible(visible);
 		pressSpace.setVisible(visible);
-		repaint();
+		setVisible(visible);
+
 	}
 }
 
-class TetrisPiece extends JPanel {
+class TetrisBlock extends JPanel {
 
 	int canvasWidth;
 	int canvasHeight;
-	boolean draw;
 
-	Color color;
+	boolean draw;
 	BufferedImage img;
 
-	TetrisPiece(boolean draw, int size,Color color,BufferedImage img) {
+	TetrisBlock(int size) {
 		this.canvasWidth = size;
 		this.canvasHeight = size;
-		this.color = color;
-		this.draw = draw;
-		this.img = img;
 	}
 
-	private static BufferedImage dye(BufferedImage image, Color color) {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		BufferedImage dyed = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = dyed.createGraphics();
-		g.drawImage(image, 0,0, null);
-		g.setComposite(AlphaComposite.SrcAtop);
-		g.setColor(color);
-		g.fillRect(0,0,w,h);
-		g.dispose();
-		return dyed;
-	}
-
-	public void redraw(boolean draw,Color color) {
-		this.color = color;
-		this.draw = draw;
-		invalidate();
-		repaint();
+	public void recalulate(@Nullable BlockModel model) {
+		if(model != null) {
+			if(model.size.width != this.canvasWidth || model.size.height != this.canvasHeight) {
+				model.setSize(new Dimension(this.canvasWidth,this.canvasHeight));
+				model.recalculate();
+			}
+			this.img = model.image;
+			this.draw = true;
+		} else {
+			this.img = null;
+			this.draw = false;
+		}
 	}
 
 	@Override public int getHeight() { return canvasHeight; }
@@ -213,74 +205,137 @@ class TetrisPiece extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 		if(this.draw) {
 			if (img != null) {
-				Color c = new Color(this.color.getRed(),this.color.getGreen(),this.color.getBlue(),190);
-				g2.drawImage(dye(img,c), 0, 0, this.canvasWidth, this.canvasHeight,this);
+				g2.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight,this);
 			} else {
 				System.out.println("Error: Image couldn't be loaded displaying dummy instead");
-				g2.setColor(this.color);
+				g2.setColor(Color.MAGENTA);
 				g2.fillRect(0,0,canvasWidth,canvasHeight);
+			}
+		}
+	}
+}
+class NextPiecePanel extends JPanel {
+	int canvasWidth;
+	int canvasHeight;
+	int blockSize;
+	BufferedImage img;
+	PieceModel piece;
+
+	NextPiecePanel(int blockSize) {
+		this.blockSize = blockSize;
+		this.canvasWidth = blockSize*4;
+		this.canvasHeight = blockSize*4;
+	}
+
+	public void recalulate(@NotNull PieceModel model) {
+		this.piece = model;
+		repaint();
+	}
+
+	@Override public int getHeight() { return canvasHeight; }
+	@Override public int getWidth() { return canvasWidth; }
+
+	@Override public void paintComponent(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.fillRect(0,0,canvasWidth,canvasHeight);
+		if(this.piece != null) {
+			for (int y = 0; y < this.piece.childs.length; y++) {
+				for (int x = 0; x < this.piece.childs[y].length; x++) {
+					if(this.piece.childs[y][x] != null) {
+						g2.drawImage(this.piece.childs[y][x].image, x*blockSize, y*blockSize, this.blockSize, this.blockSize,this);
+					}
+				}
 			}
 		}
 	}
 }
 class PiecePanel extends JPanel {
 	SoloModel model;
-	int squareSize = 45;
+	int squareSize = 40;
+	BufferedImage img = null;
+	JPanel mainPanel;
+	NextPiecePanel nextPiecePanel;
 
-	private static BufferedImage toBufferedImage(Image img) {
-		if (img instanceof BufferedImage) { return (BufferedImage) img; }
-		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-		Graphics2D bGr = bimage.createGraphics();
-		bGr.drawImage(img, 0, 0, null);
-		bGr.dispose();
-		return bimage;
-	}
-
-	public PiecePanel(SoloModel model) {
-		this.model = model;
-
-		BufferedImage img = null;
-		try {
-			URL piece = getClass().getResource( "/res/piece_grayscale.png" );
-			img = toBufferedImage(ImageIO.read(piece).getScaledInstance(model.witdh*squareSize,model.height*squareSize, Image.SCALE_REPLICATE));
-		} catch (IOException e) {
-		}
-
-		setPreferredSize(new Dimension((model.witdh)*squareSize,(model.height)*squareSize));
+	public PiecePanel(SoloModel model, int xp, int yp, int width, int height) {
+		setLocation(xp, yp);
+		setPreferredSize(new Dimension(width,height));
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		setOpaque(false);
-		setLayout(new GridLayout(0,model.witdh)); //ROW = 0 IF Else bug
+
+		this.model = model;
+
+		mainPanel = new JPanel();
+		GridLayout mainLayout = new GridLayout(0,model.witdh);
+		mainPanel.setLocation(0, 0);
+		mainPanel.setPreferredSize(new Dimension((model.witdh)*squareSize,(model.height)*squareSize));
+		mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		//mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		mainPanel.setLayout(mainLayout); //ROW = 0 IF Else bug
+		mainPanel.setVisible(true);
+		mainPanel.setOpaque(false);
+		mainPanel.setBackground(Color.BLUE);
+
+		nextPiecePanel = new NextPiecePanel(squareSize/2);
+		nextPiecePanel.setLocation(0, 0);
+		nextPiecePanel.setPreferredSize(new Dimension(2*squareSize,2*squareSize));
+		nextPiecePanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		nextPiecePanel.setVisible(true);
+		nextPiecePanel.setOpaque(true);
+		nextPiecePanel.setBackground(Color.MAGENTA);
+
+		/*setPreferredSize(new Dimension((model.witdh)*squareSize,(model.height)*squareSize));
+		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		setOpaque(false);
+		setLayout(new GridLayout(0,model.witdh)); //ROW = 0 IF Else bug*/
 
 		try {
 			BlockModel[][] grid = model.computeMixedGrid();
 			for (int y = 0; y < grid.length; y++) {
 				for (int x = 0; x < grid[y].length; x++) {
-					add(new TetrisPiece(false,squareSize,null,img));
+					mainPanel.add(new TetrisBlock(squareSize));
 				}
 			}
 		} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 			e.printStackTrace();
 		}
+
+		add(mainPanel);
+		add(nextPiecePanel);
+
+		SpringLayout layout = new SpringLayout();
+
+		layout.putConstraint(SpringLayout.WEST, mainPanel, 10, SpringLayout.WEST, this);
+		layout.putConstraint(SpringLayout.NORTH, mainPanel, 10, SpringLayout.NORTH, this);
+
+		layout.putConstraint(SpringLayout.EAST, nextPiecePanel, 10, SpringLayout.EAST, this);
+		layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.NORTH, this);
+		setLayout(layout);
+
+		recalculate();
 	}
 
-	public void redraw() {
+	public void recalculate() {
 		setIgnoreRepaint(true);
 
-		try {
-			BlockModel[][] grid = model.computeMixedGrid();
-			for (int y = 0; y < grid.length; y++) {
-				for (int x = 0; x < grid[y].length; x++) {
-					TetrisPiece p = (TetrisPiece) getComponent(y*model.witdh + x);
-					if(grid[y][x] != null) {
-						p.redraw(true,grid[y][x].color);
-					} else {
-						p.redraw(false,null);
+		if(model.gameState==GameState.PLAYING) {
+			try {
+				nextPiecePanel.recalulate(model.nextPiece);
+				BlockModel[][] grid = model.computeMixedGrid();
+				for (int y = 0; y < grid.length; y++) {
+					for (int x = 0; x < grid[y].length; x++) {
+						TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
+						if(grid[y][x] != null) {
+							p.recalulate(grid[y][x]);
+						} else {
+							p.recalulate(null);
+						}
 					}
 				}
+			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
+				e.printStackTrace();
 			}
-		} catch (PieceOutOfBoardException | OverlappedPieceException e) {
-			e.printStackTrace();
 		}
+
 		setIgnoreRepaint(false);
 		repaint();
 	}
@@ -288,7 +343,7 @@ class PiecePanel extends JPanel {
 	@Override public void paintComponent(Graphics g) {
 		Dimension d = getPreferredSize();
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.gray);
-		g2.fillRect(0,0,d.width,d.height);
+		/*g2.setColor(Color.gray);
+		g2.fillRect(0,0,d.width,d.height);*/
 	}
 }

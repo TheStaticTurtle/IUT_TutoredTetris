@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import fr.iut.tetris.MainController;
+import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.models.SoloModel;
 import fr.iut.tetris.vues.SoloVue;
@@ -18,7 +19,6 @@ public class SoloController implements ActionListener, KeyListener {
 	SoloModel model;
 	SoloVue vue;
 
-	int fallSpeed = 1000; //ms
 
 	public SoloController(MainController mainCtrl, SoloModel model) {
 		this.model = model;
@@ -37,17 +37,15 @@ public class SoloController implements ActionListener, KeyListener {
 	private long timerCounter;
 	void timerTicked() {
 		timerCounter += 10;
-		if(timerCounter > fallSpeed) {
-			timerCounter -= fallSpeed;
+		if(timerCounter > model.fallSpeed) {
+			timerCounter -= model.fallSpeed;
 
 			if(model.gameState == GameState.PLAYING) {
 				model.fallCurrent();
 				if(model.fallingPiece == null) {
-					model.spawnRandomPiece();
-					System.out.println("Spawn");
+					model.spawnPiece();
 				}
-				vue.redraw();
-				vue.repaint();
+				vue.recalculate();
 			}
 		}
 	}
@@ -60,16 +58,18 @@ public class SoloController implements ActionListener, KeyListener {
 		if(model.gameState == GameState.WAITING && e.getKeyCode()==32) {
 			model.gameState = GameState.PLAYING;
 		}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==37)  { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==40)  { model.fallCurrent(); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==10)  { model.fallCurrentAtBottom(); vue.recalculate();}
 		/*
 			SPACE = 32
 			LEFT = 37
 			RIGHT = 39
 			UP = 38
 			DOWN = 40
+			ENTER = 10
 		*/
-		/*if(model.gameState == GameState.WAITING && e.getKeyChar()==' ') {
-			model.gameState = GameState.PLAYING;
-		}*/
 		System.out.println(e);
 	}
 

@@ -157,7 +157,7 @@ class TetrisLogo extends JPanel {
 			img = ImageIO.read(logo);
 			
 		} catch (IOException e) {
-			System.out.println("Logo non trouvé");
+			System.out.println("Logo non trouvÃ©");
 		}
 		
 
@@ -247,7 +247,7 @@ class StarsAnimation extends JPanel {
 			resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 			
 		} catch (IOException e) {
-			System.out.println("Image non trouvé");
+			System.out.println("Image non trouvÃ©");
 		}
 		
 
