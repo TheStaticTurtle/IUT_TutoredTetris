@@ -1,6 +1,5 @@
 package fr.iut.tetris.models;
 
-import fr.iut.tetris.component.Piece;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
