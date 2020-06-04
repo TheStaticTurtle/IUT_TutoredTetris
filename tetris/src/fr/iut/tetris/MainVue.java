@@ -8,13 +8,16 @@ public class MainVue extends JFrame {
 	
 	JPanel currentVue;
 
-	public MainVue() {
+	public MainVue(MainController ctrl) {
 		setTitle("Tetris");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 
 		ImageIcon img = new ImageIcon(Main.class.getResource("/res/icon.png"));
 		setIconImage(img.getImage());
+
+		addKeyListener(ctrl);
+		setFocusable(true);
 	}
 
 	public void setCurrentVue(JPanel p) {

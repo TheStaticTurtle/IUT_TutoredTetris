@@ -2,6 +2,8 @@ package fr.iut.tetris;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.controllers.MenuController;
@@ -13,7 +15,7 @@ import fr.iut.tetris.vues.CreditVue;
 import fr.iut.tetris.vues.MenuVue;
 import fr.iut.tetris.vues.SoloVue;
 
-public class MainController implements ActionListener {
+public class MainController implements ActionListener, KeyListener {
 	MainVue mainVue;
 
 	MenuModel menuModel;
@@ -30,7 +32,7 @@ public class MainController implements ActionListener {
 
 
 	public MainController() {
-		mainVue = new MainVue();
+		mainVue = new MainVue(this);
 
 		menuModel = new MenuModel();
 		creditModel = new CreditModel();
@@ -43,7 +45,7 @@ public class MainController implements ActionListener {
 		menuVue = new MenuVue(menuModel, menuCtrl);
 		creditVue = new CreditVue(creditModel, creditCtrl);
 		soloVue = new SoloVue(soloModel, soloCtrl);
-		
+		soloCtrl.setVue(soloVue);
 		
 		// gameVue = new GameVue();
 
@@ -58,6 +60,7 @@ public class MainController implements ActionListener {
 			case "CLICK:MENU:SOLO":
 				soloModel = new SoloModel();
 				soloVue = new SoloVue(soloModel, soloCtrl);
+				soloCtrl.setVue(soloVue);
 				mainVue.setCurrentVue(soloVue);
 				break;
 		
@@ -75,5 +78,20 @@ public class MainController implements ActionListener {
 			default:
 				break;
 		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		soloCtrl.keyTyped(e);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		soloCtrl.keyPressed(e);
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		soloCtrl.keyReleased(e);
 	}
 }
