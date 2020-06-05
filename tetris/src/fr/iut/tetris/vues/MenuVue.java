@@ -1,6 +1,8 @@
 package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Main;
+import fr.iut.tetris.controllers.AudioController;
+import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.models.MenuModel;
 
@@ -75,21 +77,31 @@ class MenuButton extends JButton implements MouseListener {
 	Font font;
 	Color foreGroundColor;
 	Color backGroundColor;
+	ActionListener listener;
 
+	public MenuButton(String text, CreditController ctrl) {
+		this(text);
+		listener = ctrl;
+	}
+	public MenuButton(String text,MenuController ctrl) {
+		this(text);
+		listener = ctrl;
+	}
+	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, CreditController ctrl) {
+		this(text,foreGroundColor,backGroundColor);
+		listener = ctrl;
+	}
+	public MenuButton(String text, Color foreGroundColor, Color backGroundColor,MenuController ctrl) {
+		this(text,foreGroundColor,backGroundColor);
+		super.setForeground(foreGroundColor);
+		listener = ctrl;
+	}
 	public MenuButton(String text, Color foreGroundColor, Color backGroundColor) {
-		this.text = text;
+		this(text);
+		super.setForeground(foreGroundColor);
 		this.foreGroundColor = foreGroundColor;
 		this.backGroundColor = backGroundColor;
-		super.setForeground(foreGroundColor);
-		addMouseListener(this);
-		setBorder(null);
-		setText(text);
-		setContentAreaFilled(false);
-		setBorderPainted(false);
-		setFocusPainted(false);
-		setCursor(new Cursor(Cursor.HAND_CURSOR));
 	}
-
 	public MenuButton(String text) {
 		this.text = text;
 		this.foreGroundColor = Color.black;
@@ -121,8 +133,12 @@ class MenuButton extends JButton implements MouseListener {
 	@Override public void mouseEntered(MouseEvent e) {
 		setText("");
 		setIcon(new HoveredButtonIcon(getHeight(),getWidth(),this.font, this.text, this.foreGroundColor, this.backGroundColor));
+		if(listener!=null)
+			listener.actionPerformed(new ActionEvent(this,0,"MOUSE:ENTER"));
 	}
 	@Override public void mouseExited(MouseEvent e) {
+		if(listener!=null)
+			listener.actionPerformed(new ActionEvent(this,0,"MOUSE:EXIT"));
 		setText(text);
 		setIcon(null);
 	}
@@ -294,16 +310,16 @@ public class MenuVue extends JPanel  {
 		mainPanel.setPreferredSize(new Dimension(450,600));
 
 		JPanel myLabel = new TetrisLogo(this,450);
-		JButton soloButton = new MenuButton("Solo",Color.YELLOW,Color.WHITE);
-		JButton coopButton = new MenuButton("Coop",Color.RED,Color.WHITE);
-		JButton versusButton = new MenuButton("Versus",Color.ORANGE,Color.WHITE);
-		JButton settingsButton = new MenuButton("Parametres",Color.CYAN,Color.WHITE);
+		JButton soloButton = new MenuButton("Solo",Color.YELLOW,Color.WHITE,ctrl);
+		JButton coopButton = new MenuButton("Coop",Color.RED,Color.WHITE,ctrl);
+		JButton versusButton = new MenuButton("Versus",Color.ORANGE,Color.WHITE,ctrl);
+		JButton settingsButton = new MenuButton("Parametres",Color.CYAN,Color.WHITE,ctrl);
 
 		soloButton.addActionListener(ctrl);
 		soloButton.setActionCommand("CLICK:MENU:SOLO");
 		
-		JButton quitButton = new MenuButton("Quitter",Color.LIGHT_GRAY,Color.WHITE);
-		JButton creditButton = new MenuButton("Credits",Color.LIGHT_GRAY,Color.WHITE);
+		JButton quitButton = new MenuButton("Quitter",Color.LIGHT_GRAY,Color.WHITE,ctrl);
+		JButton creditButton = new MenuButton("Credits",Color.LIGHT_GRAY,Color.WHITE,ctrl);
 
 		creditButton.addActionListener(ctrl);
 		creditButton.setActionCommand("CLICK:MENU:CREDIT");

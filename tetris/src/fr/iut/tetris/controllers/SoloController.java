@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
+import fr.iut.tetris.enums.LineCompleted;
 import fr.iut.tetris.models.SoloModel;
 import fr.iut.tetris.vues.SoloVue;
 
@@ -17,11 +18,12 @@ public class SoloController implements ActionListener, KeyListener {
 
 	MainController mainCtrl;
 	SoloModel model;
-	SoloVue vue;
+	public SoloVue vue;
 
 
 	public SoloController(MainController mainCtrl, SoloModel model) {
 		this.model = model;
+		model.setCtrl(this);
 		this.mainCtrl = mainCtrl;
 
 		SoloController me = this;
@@ -32,6 +34,10 @@ public class SoloController implements ActionListener, KeyListener {
 
 	public void setVue(SoloVue vue) {
 		this.vue = vue;
+	}
+
+	public void lineCompleted(LineCompleted score) {
+
 	}
 
 	private long timerCounter;

@@ -9,10 +9,12 @@ import java.awt.event.ActionListener;
 public class CreditController implements ActionListener {
 	MainController mainCtrl;
 	CreditModel model;
+	AudioController audio;
 
-	public CreditController(MainController mainCtrl, CreditModel model) {
+	public CreditController(MainController mainCtrl, CreditModel model, AudioController audio) {
 		this.model = model;
 		this.mainCtrl = mainCtrl;
+		this.audio = audio;
 	}
 
 	@Override

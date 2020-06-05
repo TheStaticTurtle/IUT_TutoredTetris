@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.net.URL;
 
+import fr.iut.tetris.controllers.AudioController;
 import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.controllers.SoloController;
@@ -14,6 +16,8 @@ import fr.iut.tetris.models.SoloModel;
 import fr.iut.tetris.vues.CreditVue;
 import fr.iut.tetris.vues.MenuVue;
 import fr.iut.tetris.vues.SoloVue;
+
+import javax.sound.sampled.LineUnavailableException;
 
 public class MainController implements ActionListener, KeyListener {
 	MainVue mainVue;
@@ -30,16 +34,21 @@ public class MainController implements ActionListener, KeyListener {
 	CreditVue creditVue;
 	SoloVue soloVue;
 
+	AudioController audio;
 
 	public MainController() {
+		audio = new AudioController();
+		audio.setMusicTrack(getClass().getResource( "/res/sounds/music2.wav"));
+
+
 		mainVue = new MainVue(this);
 
 		menuModel = new MenuModel();
 		creditModel = new CreditModel();
 		//soloModel = new SoloModel();
 		
-		menuCtrl = new MenuController(this, menuModel);
-		creditCtrl = new CreditController(this, creditModel);
+		menuCtrl = new MenuController(this, menuModel, audio);
+		creditCtrl = new CreditController(this, creditModel, audio);
 		//soloCtrl = new SoloController(this, soloModel);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
@@ -61,7 +70,6 @@ public class MainController implements ActionListener, KeyListener {
 				soloModel = new SoloModel();
 				soloCtrl = new SoloController(this, soloModel);
 				soloVue = new SoloVue(soloModel, soloCtrl);
-
 				soloCtrl.setVue(soloVue);
 
 				mainVue.setCurrentVue(soloVue);
@@ -95,6 +103,8 @@ public class MainController implements ActionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		soloCtrl.keyReleased(e);
+		if(soloCtrl != null) {
+			soloCtrl.keyReleased(e);
+		}
 	}
 }

@@ -55,18 +55,19 @@ public class BlockModel {
 	}
 
 	public BlockModel clone() {
-		return new BlockModel(color,image,base_image,size,standAlonePos,parent);
+		return new BlockModel(color,base_image,size,standAlonePos,parent);
 	}
 
 	public BlockModel(Color color) {
 		this.color = color;
 	}
-	public BlockModel(Color color,BufferedImage image,BufferedImage base_image,Dimension size,Point standAlonePos, PieceModel parent) {
+	public BlockModel(Color color,BufferedImage base_image,Dimension size,Point standAlonePos, PieceModel parent) {
 		this.color = color;
-		this.image = image;
 		this.base_image = base_image;
 		this.size = size;
 		this.standAlonePos = (Point) standAlonePos.clone();
 		this.parent= parent;
+		Color c = new Color(this.color.getRed(),this.color.getGreen(),this.color.getBlue(),190);
+		this.image = dye(this.base_image,c);
 	}
 }

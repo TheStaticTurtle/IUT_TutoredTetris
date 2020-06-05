@@ -1,8 +1,9 @@
 package fr.iut.tetris.models;
 
-import fr.iut.tetris.Main;
+import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
+import fr.iut.tetris.enums.LineCompleted;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 
@@ -18,9 +19,14 @@ public class SoloModel {
 	public PieceModel fallingPiece = null;
 	public PieceModel nextPiece = null;
 	public GameState gameState = GameState.WAITING;
+	SoloController ctrl;
 
 	public SoloModel() {
 		nextPiece = getRandomPiece();
+	}
+
+	public void setCtrl(SoloController ctrl) {
+		this.ctrl = ctrl;
 	}
 
 	static Object getRandomElement(Object[] list)
@@ -93,11 +99,14 @@ public class SoloModel {
 		}
 	}
 
-	void checkForFullLineAndRemoveIt(){
+
+	LineCompleted checkForFullLineAndRemoveIt(){
 		try {
 			BlockModel[][] grid = computeMixedGrid();
-			for (int y = grid.length-1; y >= 0; y--) {
+			int lineCount = 0;
+			int lastLineY = height-1;
 
+			for (int y = grid.length-1; y >= 0; y--) {
 				boolean isLineFull = true;
 				for (BlockModel block: grid[y]) {
 					if(block == null){
@@ -107,18 +116,22 @@ public class SoloModel {
 				}
 
 				if(isLineFull) {
+					lineCount++;
+					lastLineY = Math.max(y,lastLineY);
 					System.out.println("Line "+y+" is full");
 					fallDownOver(y);
 					for (BlockModel block: grid[y]) {
 						pieceList.remove(block);
 					}
 				}
-
 			}
+
+			return LineCompleted.getScore(lineCount,lastLineY,height-1);
 		} catch (PieceOutOfBoardException | OverlappedPieceException ignored) {}
+		return LineCompleted.NO_LINE;
 	}
 
-	void convertPiecesToBlocks(PieceModel piece) {
+	void convertFullPiecesToBlocks(PieceModel piece) {
 		pieceList.remove(piece);
 		for (int y = 0; y < 4; y++) {
 			for (int x = 0; x < 4; x++) {
@@ -168,8 +181,9 @@ public class SoloModel {
 				computeMixedGrid();
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.y--;
-				convertPiecesToBlocks(fallingPiece);
-				checkForFullLineAndRemoveIt();
+				convertFullPiecesToBlocks(fallingPiece);
+				LineCompleted score = checkForFullLineAndRemoveIt();
+				this.ctrl.lineCompleted(score);
 				fallingPiece = null; // The piece can not fall anymore
 			}
 		}
