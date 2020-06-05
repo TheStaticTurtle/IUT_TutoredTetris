@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 import javax.swing.*;
+import javax.xml.bind.ValidationEventLocator;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
@@ -109,7 +110,7 @@ public class SoloVue extends JPanel {
 
 	public void recalculate() {
 		//panelPiece.recalculate();
-		splashScreen.recalculate(model.gameState != GameState.PLAYING);
+		splashScreen.recalculate(model.gameState != GameState.PLAYING,model.gameState);
 		panelPiece.recalculate();
 	}
 }
@@ -163,11 +164,13 @@ class SplashScreenPanel extends JPanel {
 		add(mainPanel);
 	}
 
-	public void recalculate(boolean visible) {
+	public void recalculate(boolean visible, GameState state) {
 		mainPanel.setVisible(visible);
 		pressSpace.setVisible(visible);
 		setVisible(visible);
-
+		if(state == GameState.FINISHED) {
+			pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
+		}
 	}
 }
 
@@ -290,7 +293,7 @@ class PiecePanel extends JPanel {
 		setLayout(new GridLayout(0,model.witdh)); //ROW = 0 IF Else bug*/
 
 		try {
-			BlockModel[][] grid = model.computeMixedGrid();
+			Object[][] grid = model.computeMixedGrid();
 			for (int y = 0; y < grid.length; y++) {
 				for (int x = 0; x < grid[y].length; x++) {
 					mainPanel.add(new TetrisBlock(squareSize));
@@ -322,6 +325,7 @@ class PiecePanel extends JPanel {
 			try {
 				nextPiecePanel.recalulate(model.nextPiece);
 				BlockModel[][] grid = model.computeMixedGrid();
+
 				for (int y = 0; y < grid.length; y++) {
 					for (int x = 0; x < grid[y].length; x++) {
 						TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);

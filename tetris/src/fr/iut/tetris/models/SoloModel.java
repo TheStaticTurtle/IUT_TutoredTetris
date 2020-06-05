@@ -1,19 +1,20 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Main;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class SoloModel {
 	public int height = 20;
 	public int witdh = 10;
 	public int fallSpeed = 1000; //ms
-	ArrayList<PieceModel> pieceList = new ArrayList<PieceModel>();
+	ArrayList<Object> pieceList = new ArrayList<Object>();
 	public PieceModel fallingPiece = null;
 	public PieceModel nextPiece = null;
 	public GameState gameState = GameState.WAITING;
@@ -49,14 +50,23 @@ public class SoloModel {
 	//the mega function who does everything
 	public BlockModel[][] computeMixedGrid() throws OverlappedPieceException, PieceOutOfBoardException {
 		BlockModel[][] table = new BlockModel[height][witdh];
-		for (PieceModel piece: pieceList) {
-			for (int y = piece.y; y < piece.y+4; y++) {
-				for (int x = piece.x; x < piece.x+4; x++) {
-					if(piece.childs[y-piece.y][x-piece.x] != null) {
-						if(y> height-1 || y<0) throw new PieceOutOfBoardException();
-						if(x> witdh-1 || x<0) throw new PieceOutOfBoardException();
-						if(table[y][x] != null) throw new OverlappedPieceException();
-						table[y][x] = piece.childs[y-piece.y][x-piece.x];
+		for (Object obj: pieceList) {
+
+			if(obj instanceof BlockModel) {
+				BlockModel block = (BlockModel)obj;
+				table[block.standAlonePos.y][block.standAlonePos.x] = block;
+			}
+
+			if(obj instanceof PieceModel) {
+				PieceModel piece = (PieceModel)obj;
+				for (int y = piece.y; y < piece.y+4; y++) {
+					for (int x = piece.x; x < piece.x+4; x++) {
+						if(piece.childs[y-piece.y][x-piece.x] != null) {
+							if(y> height-1 || y<0) throw new PieceOutOfBoardException();
+							if(x> witdh-1 || x<0) throw new PieceOutOfBoardException();
+							if(table[y][x] != null) throw new OverlappedPieceException();
+							table[y][x] = piece.childs[y-piece.y][x-piece.x];
+						}
 					}
 				}
 			}
@@ -64,6 +74,63 @@ public class SoloModel {
 		}
 		//System.out.println(Arrays.deepToString(table));
 		return table;
+	}
+
+	void fallDownOver(int miny) {
+		try {
+			BlockModel[][] grid = computeMixedGrid();
+			for (int y = miny; y >= 0; y--) {
+
+				for (BlockModel block: grid[y]) {
+					if(block != null) {
+						block.standAlonePos.y = Math.min(block.standAlonePos.y+1,this.height-1);
+					}
+				}
+
+			}
+		} catch (PieceOutOfBoardException | OverlappedPieceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	void checkForFullLineAndRemoveIt(){
+		try {
+			BlockModel[][] grid = computeMixedGrid();
+			for (int y = grid.length-1; y >= 0; y--) {
+
+				boolean isLineFull = true;
+				for (BlockModel block: grid[y]) {
+					if(block == null){
+						isLineFull = false;
+						break;
+					}
+				}
+
+				if(isLineFull) {
+					System.out.println("Line "+y+" is full");
+					fallDownOver(y);
+					for (BlockModel block: grid[y]) {
+						pieceList.remove(block);
+					}
+				}
+
+			}
+		} catch (PieceOutOfBoardException | OverlappedPieceException ignored) {}
+	}
+
+	void convertPiecesToBlocks(PieceModel piece) {
+		pieceList.remove(piece);
+		for (int y = 0; y < 4; y++) {
+			for (int x = 0; x < 4; x++) {
+				if(piece.childs[y][x] != null) {
+					BlockModel block = piece.childs[y][x];
+					if(block != null) {
+						block.standAlonePos = new Point(piece.x +x, piece.y+y);
+						pieceList.add(block.clone());
+					}
+				}
+			}
+		}
 	}
 
 	public boolean moveCurrentX(Direction dir) {
@@ -101,6 +168,8 @@ public class SoloModel {
 				computeMixedGrid();
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.y--;
+				convertPiecesToBlocks(fallingPiece);
+				checkForFullLineAndRemoveIt();
 				fallingPiece = null; // The piece can not fall anymore
 			}
 		}

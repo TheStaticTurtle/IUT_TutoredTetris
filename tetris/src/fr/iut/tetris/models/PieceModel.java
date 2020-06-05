@@ -94,7 +94,7 @@ class PieceModel {
 					{null                       , null                       , null                       , null},
 					{null                       , new BlockModel(Color.CYAN), null                       , null},
 					{null                       , new BlockModel(Color.CYAN), null                       , null},
-					{new BlockModel(Color.CYAN), new BlockModel(Color.CYAN), null                       , null}
+					{new BlockModel(Color.CYAN) , new BlockModel(Color.CYAN), null                       , null}
 			},
 			new Point(5,-1),
 			new Point(2,2)

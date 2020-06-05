@@ -11,6 +11,7 @@ public class BlockModel {
 	public BufferedImage image;
 	public BufferedImage base_image;
 	public Dimension size = new Dimension(32,32);
+	public Point standAlonePos = new Point(0,0);
 	public PieceModel parent;
 
 	private static BufferedImage dye(BufferedImage image, Color color) {
@@ -53,7 +54,19 @@ public class BlockModel {
 		image = dye(this.base_image,c);
 	}
 
+	public BlockModel clone() {
+		return new BlockModel(color,image,base_image,size,standAlonePos,parent);
+	}
+
 	public BlockModel(Color color) {
 		this.color = color;
+	}
+	public BlockModel(Color color,BufferedImage image,BufferedImage base_image,Dimension size,Point standAlonePos, PieceModel parent) {
+		this.color = color;
+		this.image = image;
+		this.base_image = base_image;
+		this.size = size;
+		this.standAlonePos = (Point) standAlonePos.clone();
+		this.parent= parent;
 	}
 }

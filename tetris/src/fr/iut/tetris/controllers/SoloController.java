@@ -57,13 +57,14 @@ public class SoloController implements ActionListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		if(model.gameState == GameState.WAITING && e.getKeyCode()==32) {
 			model.gameState = GameState.PLAYING;
+			vue.recalculate();
 		}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==37)  { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==40)  { model.fallCurrent(); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==10)  { model.fallCurrentAtBottom(); vue.recalculate();}
 
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==38)  { model.rotateCurrent(Direction.LEFT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==38)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
 		//if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
 
 		/*
