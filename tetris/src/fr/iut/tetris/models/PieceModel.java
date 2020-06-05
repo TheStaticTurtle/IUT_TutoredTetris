@@ -21,6 +21,14 @@ class PieceModel {
 		this.y = spawnPoint.y;
 		this.spawnPoint = spawnPoint; //Just for the clone()
 		this.centerOfgravity = centerOfgravity;
+		for (int y = 0; y < childs.length; y++) {
+			for (int x = 0; x < childs[y].length; x++) {
+				if(childs[y][x] != null) {
+					childs[y][x].setParent(this);
+				}
+			}
+		}
+
 	}
 
 	void spawnPoint(int x, int y) {
@@ -111,5 +119,15 @@ class PieceModel {
 			new Point(5,-2),
 			new Point(1,2)
 	);
-	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ};
+	static PieceModel Piece_ = new PieceModel(
+			new BlockModel[][] {
+					{null                         , null                         , null                         , null},
+					{null                         , null                         , null                         , null},
+					{new BlockModel(Color.WHITE), new BlockModel(Color.WHITE), new BlockModel(Color.WHITE), new BlockModel(Color.WHITE)},
+					{null                         , null                         , null                         , null},
+			},
+			new Point(5,-2),
+			new Point(1,2)
+	);
+	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.Piece_};
 }

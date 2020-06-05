@@ -11,6 +11,7 @@ public class BlockModel {
 	public BufferedImage image;
 	public BufferedImage base_image;
 	public Dimension size = new Dimension(32,32);
+	public PieceModel parent;
 
 	private static BufferedImage dye(BufferedImage image, Color color) {
 		int w = image.getWidth();
@@ -35,6 +36,10 @@ public class BlockModel {
 
 	public void setSize(Dimension size) {
 		this.size = size;
+	}
+
+	public void setParent(PieceModel parent) {
+		this.parent = parent;
 	}
 
 	public void recalculate() {
