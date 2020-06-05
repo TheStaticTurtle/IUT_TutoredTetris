@@ -273,8 +273,8 @@ class PiecePanel extends JPanel {
 		//mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		mainPanel.setLayout(mainLayout); //ROW = 0 IF Else bug
 		mainPanel.setVisible(true);
-		mainPanel.setOpaque(false);
-		mainPanel.setBackground(Color.BLUE);
+		mainPanel.setOpaque(true);
+		mainPanel.setBackground(Color.DARK_GRAY);
 
 		nextPiecePanel = new NextPiecePanel(squareSize/2);
 		nextPiecePanel.setLocation(0, 0);

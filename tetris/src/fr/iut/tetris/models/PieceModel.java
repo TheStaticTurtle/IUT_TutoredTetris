@@ -89,6 +89,16 @@ class PieceModel {
 			new Point(5,-1),
 			new Point(2,2)
 	);
+	static PieceModel Piece7 = new PieceModel(
+			new BlockModel[][] {
+					{null                       , null                       , null                       , null},
+					{null                       , new BlockModel(Color.CYAN), null                       , null},
+					{null                       , new BlockModel(Color.CYAN), null                       , null},
+					{new BlockModel(Color.CYAN), new BlockModel(Color.CYAN), null                       , null}
+			},
+			new Point(5,-1),
+			new Point(2,2)
+	);
 	static PieceModel PieceO = new PieceModel(
 			new BlockModel[][] {
 					{null                       , null                        , null                        , null},
@@ -129,5 +139,5 @@ class PieceModel {
 			new Point(5,-2),
 			new Point(1,2)
 	);
-	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.Piece_};
+	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.Piece_,PieceModel.Piece7};
 }
