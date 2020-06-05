@@ -1,5 +1,7 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.enums.Direction;
+
 import java.awt.*;
 import java.util.Arrays;
 
@@ -24,6 +26,35 @@ class PieceModel {
 	void spawnPoint(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	private static BlockModel[][] rotateClockWise(BlockModel[][] matrix) {
+		int size = matrix.length;
+		BlockModel[][] ret = new BlockModel[size][size];
+
+		for (int i = 0; i < size; ++i)
+			for (int j = 0; j < size; ++j)
+				ret[i][j] = matrix[size - j - 1][i]; //***
+
+		return ret;
+	}
+	private static BlockModel[][] rotateConterClockWise(BlockModel[][] matrix) {
+		int size = matrix.length;
+		BlockModel[][] ret = new BlockModel[size][size];
+
+		for (int i = 0; i < size; ++i)
+			for (int j = 0; j < size; ++j)
+				ret[i][j] = matrix[j][size - i - 1]; //***
+
+		return ret;
+	}
+
+	void rotateModel(int direction) { // -1LEFT / 1RIGHT
+		if(direction == -1) {
+			this.childs = rotateConterClockWise(this.childs);
+		} else if (direction == 1){
+			this.childs = rotateClockWise(this.childs);
+		}
 	}
 
 	@Override
@@ -70,5 +101,15 @@ class PieceModel {
 			new Point(5,-2),
 			new Point(1,2)
 	);
-	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS};
+	static PieceModel PieceZ = new PieceModel(
+			new BlockModel[][] {
+					{null                         , null                         , null                         , null},
+					{null                         , null                         , null                         , null},
+					{new BlockModel(Color.MAGENTA), new BlockModel(Color.MAGENTA), null                         , null},
+					{null                         , new BlockModel(Color.MAGENTA), new BlockModel(Color.MAGENTA), null}
+			},
+			new Point(5,-2),
+			new Point(1,2)
+	);
+	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ};
 }

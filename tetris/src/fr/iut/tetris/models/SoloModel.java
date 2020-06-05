@@ -80,6 +80,20 @@ public class SoloModel {
 		return false;
 	}
 
+	public boolean rotateCurrent(Direction dir) {
+		if(fallingPiece != null) {
+			fallingPiece.rotateModel(dir.step);
+			try {
+				computeMixedGrid();
+				return true;
+			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
+				fallingPiece.rotateModel(dir.step * -1);
+				return false;
+			}
+		}
+		return false;
+	}
+
 	public void fallCurrent() {
 		if(fallingPiece != null) {
 			fallingPiece.y++;

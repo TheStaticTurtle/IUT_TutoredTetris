@@ -229,6 +229,7 @@ class NextPiecePanel extends JPanel {
 
 	public void recalulate(@NotNull PieceModel model) {
 		this.piece = model;
+		invalidate();
 		repaint();
 	}
 
