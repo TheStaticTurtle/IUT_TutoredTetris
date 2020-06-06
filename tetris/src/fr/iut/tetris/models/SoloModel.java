@@ -21,6 +21,7 @@ public class SoloModel {
 	public PieceModel nextPiece;
 	public GameState gameState = GameState.WAITING;
 	SoloController ctrl;
+	public int currentScore = 0;
 
 	public SoloModel() {
 		nextPiece = getRandomPiece();
@@ -30,8 +31,7 @@ public class SoloModel {
 		this.ctrl = ctrl;
 	}
 
-	static Object getRandomElement(Object[] list)
-	{
+	static Object getRandomElement(Object[] list)  {
 		Random rand = new Random();
 		return list[rand.nextInt(list.length)];
 	}
@@ -125,7 +125,6 @@ public class SoloModel {
 		} catch (PieceOutOfBoardException | OverlappedPieceException ignored) {}
 		return LineCompleted.NO_LINE;
 	}
-
 	void convertFullPiecesToBlocks(PieceModel piece) {
 		Log.info(this,"Converting the fallling piece to individual blocks");
 		pieceList.remove(piece);
@@ -177,6 +176,7 @@ public class SoloModel {
 				fallingPiece.y--;
 				convertFullPiecesToBlocks(fallingPiece);
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
+				this.calculateScore(score);
 				Log.info(this,"Got score: "+score.toString());
 				this.ctrl.lineCompleted(score);
 				fallingPiece = null; // The piece can not fall anymore
@@ -189,12 +189,7 @@ public class SoloModel {
 		}
 	}
 
-	/*private int score;
-	
-	public int getScore() {
-		return score;
+	public void calculateScore(LineCompleted lc) {
+		this.currentScore += 10 * lc.pointMultiplier;
 	}
-	public void setScore(int score) {
-		this.score = score;
-	}*/
 }

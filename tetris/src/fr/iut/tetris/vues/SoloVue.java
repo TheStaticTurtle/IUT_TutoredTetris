@@ -2,13 +2,9 @@ package fr.iut.tetris.vues;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.xml.bind.ValidationEventLocator;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
@@ -26,7 +22,7 @@ public class SoloVue extends JPanel {
 	SoloModel model;
 	SoloController ctrl;
 
-	PiecePanel panelPiece;
+	GamePanel gamePanel;
 	SplashScreenPanel splashScreen;
 	JLayeredPane testPane;
 
@@ -76,9 +72,9 @@ public class SoloVue extends JPanel {
 		mainPanel.setVisible(true);
 
 
-		panelPiece = new PiecePanel(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight());
-		panelPiece.setLocation(0, 0);
-		panelPiece.setVisible(true);
+		gamePanel = new GamePanel(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight());
+		gamePanel.setLocation(0, 0);
+		gamePanel.setVisible(true);
 
 		splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight());
 		splashScreen.setVisible(true);
@@ -86,7 +82,7 @@ public class SoloVue extends JPanel {
 		//ICI Pour ajoutter des couches
 		testPane = new JLayeredPane();
 		//testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
-		testPane.add(panelPiece,JLayeredPane.PALETTE_LAYER);
+		testPane.add(gamePanel,JLayeredPane.PALETTE_LAYER);
 		testPane.add(splashScreen,JLayeredPane.MODAL_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 
@@ -115,7 +111,7 @@ public class SoloVue extends JPanel {
 	public void recalculate() {
 		//panelPiece.recalculate();
 		splashScreen.recalculate(model.gameState != GameState.PLAYING,model.gameState);
-		panelPiece.recalculate();
+		gamePanel.recalculate();
 	}
 }
 
@@ -230,8 +226,8 @@ class NextPiecePanel extends JPanel {
 
 	NextPiecePanel(int blockSize) {
 		this.blockSize = blockSize;
-		this.canvasWidth = blockSize*4;
-		this.canvasHeight = blockSize*4;
+		this.canvasWidth = blockSize*6;
+		this.canvasHeight = blockSize*6;
 	}
 
 	public void recalulate(@NotNull PieceModel model) {
@@ -257,15 +253,16 @@ class NextPiecePanel extends JPanel {
 		}
 	}
 }
-class PiecePanel extends JPanel {
+class GamePanel extends JPanel {
 	SoloModel model;
 	int squareSize = 40;
 	BufferedImage img = null;
 	JPanel mainPanel;
 	NextPiecePanel nextPiecePanel;
 	BlockModel noBlockModel;
+	JLabel scoreLabel;
 
-	public PiecePanel(SoloModel model, int xp, int yp, int width, int height) {
+	public GamePanel(SoloModel model, int xp, int yp, int width, int height) {
 		setLocation(xp, yp);
 		setPreferredSize(new Dimension(width,height));
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
@@ -274,24 +271,50 @@ class PiecePanel extends JPanel {
 		noBlockModel = new BlockModel(Color.BLACK);
 		noBlockModel.recalculate();
 
+		Font font = new JLabel().getFont();
+		Font bigFont = font.deriveFont(55f);
+		Font mormalFont = font.deriveFont(40f);
+		try {
+			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
+			font = Font.createFont(Font.TRUETYPE_FONT, is);
+			bigFont = font.deriveFont(55f);
+			mormalFont = font.deriveFont(40f);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(mormalFont);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		this.model = model;
 		mainPanel = new JPanel();
 		GridLayout mainLayout = new GridLayout(0,model.witdh);//ROW = 0 IF Else bug
-		mainPanel.setLocation(0, 0);
+		//mainPanel.setLocation(0, 0);
 		mainPanel.setPreferredSize(new Dimension((model.witdh)*squareSize,(model.height)*squareSize));
-		mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		//mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setVisible(true);
 		mainPanel.setOpaque(true);
 		mainPanel.setBackground(Color.DARK_GRAY);
 
 		nextPiecePanel = new NextPiecePanel(squareSize/2);
-		nextPiecePanel.setLocation(0, 0);
-		nextPiecePanel.setPreferredSize(new Dimension(2*squareSize,2*squareSize));
-		nextPiecePanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		//nextPiecePanel.setLocation(0, 0);
+		//nextPiecePanel.setPreferredSize(new Dimension(2*squareSize,2*squareSize));
+		//nextPiecePanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		nextPiecePanel.setVisible(true);
 		nextPiecePanel.setOpaque(true);
 		nextPiecePanel.setBackground(Color.MAGENTA);
+
+		JLabel labelNextPiece = new JLabel("<html>Next:");
+		labelNextPiece.setForeground(Color.white);
+		labelNextPiece.setFont(mormalFont);
+
+		scoreLabel = new JLabel("<html>Score: "+this.model.currentScore);
+		scoreLabel.setForeground(Color.white);
+		scoreLabel.setFont(bigFont);
+
+		add(mainPanel);
+		add(nextPiecePanel);
+		add(labelNextPiece);
+		add(scoreLabel);
 
 		try {
 			Object[][] grid = model.computeMixedGrid();
@@ -304,17 +327,22 @@ class PiecePanel extends JPanel {
 			e.printStackTrace();
 		}
 
-		add(mainPanel);
-		add(nextPiecePanel);
 
 		SpringLayout layout = new SpringLayout();
 
+
+		layout.putConstraint(SpringLayout.NORTH, scoreLabel, 0, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.WEST, scoreLabel, 10, SpringLayout.WEST, this);
+
 		layout.putConstraint(SpringLayout.WEST, mainPanel, 10, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.SOUTH, mainPanel, -10, SpringLayout.SOUTH, this);
+		layout.putConstraint(SpringLayout.NORTH, mainPanel, 10, SpringLayout.SOUTH, scoreLabel);
 		//layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 
+		layout.putConstraint(SpringLayout.NORTH, labelNextPiece, 0, SpringLayout.NORTH, mainPanel);
+		layout.putConstraint(SpringLayout.WEST, labelNextPiece, 10, SpringLayout.EAST, mainPanel);
+
+		layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.SOUTH, labelNextPiece);
 		layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
-		layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 0, SpringLayout.NORTH, mainPanel);
 		setLayout(layout);
 
 
@@ -323,6 +351,8 @@ class PiecePanel extends JPanel {
 
 	public void recalculate() {
 		setIgnoreRepaint(true);
+
+		scoreLabel.setText("<html>Score: "+this.model.currentScore);
 
 		if(model.gameState==GameState.PLAYING) {
 			try {
