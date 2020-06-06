@@ -53,7 +53,7 @@ public class SoloVue extends JPanel {
 		gamePanel.setLocation(0, 0);
 		gamePanel.setVisible(true);
 
-		splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl);
+		splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
 		splashScreen.setVisible(true);
 
 		//ICI Pour ajoutter des couches
@@ -100,9 +100,11 @@ class SplashScreenPanel extends JPanel {
 	JLabel bestScoreLabel;
 	JPanel backReplayPanel;
 	SoloController ctrl;
+	SoloModel model;
 
-	public SplashScreenPanel(int x, int y, int width, int height,SoloController ctrl) {
+	public SplashScreenPanel(int x, int y, int width, int height,SoloController ctrl,SoloModel model) {
 		this.ctrl= ctrl;
+		this.model = model;
 		setLocation(x, y);
 		setPreferredSize(new Dimension(width,height));
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
@@ -180,6 +182,8 @@ class SplashScreenPanel extends JPanel {
 		setVisible(visible);
 		if(state == GameState.FINISHED) {
 			pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
+			currentScoreLabel.setText("<html>Current score: "+this.model.currentScore);
+			bestScoreLabel.setText("<html>Best score: "+this.model.bestScore);
 			mainPanel.removeAll();
 			mainPanel.add(pressSpace);
 			mainPanel.add(new Spacer());
