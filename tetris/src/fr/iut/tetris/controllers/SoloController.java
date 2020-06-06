@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
@@ -19,12 +20,16 @@ public class SoloController implements ActionListener, KeyListener {
 	MainController mainCtrl;
 	SoloModel model;
 	public SoloVue vue;
+	AudioController audio;
+	Config config;
 
 
-	public SoloController(MainController mainCtrl, SoloModel model) {
+	public SoloController(MainController mainCtrl, Config config, SoloModel model,AudioController audio) {
 		this.model = model;
 		model.setCtrl(this);
 		this.mainCtrl = mainCtrl;
+		this.audio = audio;
+		this.config = config;
 
 		SoloController me = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {

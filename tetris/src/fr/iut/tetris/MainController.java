@@ -53,8 +53,8 @@ public class MainController implements ActionListener, KeyListener {
 		settingsModel = new SettingsModel();
 		//soloModel = new SoloModel();
 		
-		menuCtrl = new MenuController(this, menuModel, audio);
-		creditCtrl = new CreditController(this, creditModel, audio);
+		menuCtrl = new MenuController(this, config, menuModel, audio);
+		creditCtrl = new CreditController(this, config, creditModel, audio);
 		settingsCtrl = new SettingsController(this, config, settingsModel,settingsVue, audio);
 		//soloCtrl = new SoloController(this, soloModel);
 		
@@ -77,7 +77,7 @@ public class MainController implements ActionListener, KeyListener {
 		
 			case "CLICK:MENU:SOLO":
 				soloModel = new SoloModel();
-				soloCtrl = new SoloController(this, soloModel);
+				soloCtrl = new SoloController(this, config, soloModel,audio);
 				soloVue = new SoloVue(soloModel, soloCtrl);
 				soloCtrl.setVue(soloVue);
 
