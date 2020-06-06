@@ -76,7 +76,7 @@ class PieceModel {
 					{new BlockModel(Color.red), new BlockModel(Color.red), new BlockModel(Color.red), null},
 					{null                     , new BlockModel(Color.red), null                     , null}
 			},
-			new Point(5,-2),
+			new Point(3,-2),
 			new Point(2,2)
 	);
 	static PieceModel PieceL = new PieceModel(
@@ -86,7 +86,7 @@ class PieceModel {
 					{null                       , new BlockModel(Color.green), null                       , null},
 					{null                       , new BlockModel(Color.green), new BlockModel(Color.green), null}
 			},
-			new Point(5,-1),
+			new Point(3,-1),
 			new Point(2,2)
 	);
 	static PieceModel Piece7 = new PieceModel(
@@ -96,7 +96,7 @@ class PieceModel {
 					{null                       , new BlockModel(Color.CYAN), null                       , null},
 					{new BlockModel(Color.CYAN) , new BlockModel(Color.CYAN), null                       , null}
 			},
-			new Point(5,-1),
+			new Point(4,-1),
 			new Point(2,2)
 	);
 	static PieceModel PieceO = new PieceModel(
@@ -106,7 +106,7 @@ class PieceModel {
 					{null                       , new BlockModel(Color.yellow), new BlockModel(Color.yellow), null},
 					{null                       , new BlockModel(Color.yellow), new BlockModel(Color.yellow), null}
 			},
-			new Point(5,-2),
+			new Point(3,-2),
 			new Point(1,2)
 	);
 	static PieceModel PieceS = new PieceModel(
@@ -116,7 +116,7 @@ class PieceModel {
 					{null                      , new BlockModel(Color.BLUE), new BlockModel(Color.BLUE), null},
 					{new BlockModel(Color.BLUE), new BlockModel(Color.BLUE), null                      , null}
 			},
-			new Point(5,-2),
+			new Point(4,-2),
 			new Point(1,2)
 	);
 	static PieceModel PieceZ = new PieceModel(
@@ -126,7 +126,7 @@ class PieceModel {
 					{new BlockModel(Color.MAGENTA), new BlockModel(Color.MAGENTA), null                         , null},
 					{null                         , new BlockModel(Color.MAGENTA), new BlockModel(Color.MAGENTA), null}
 			},
-			new Point(5,-2),
+			new Point(3,-2),
 			new Point(1,2)
 	);
 	static PieceModel Piece_ = new PieceModel(
@@ -136,7 +136,7 @@ class PieceModel {
 					{new BlockModel(Color.WHITE), new BlockModel(Color.WHITE), new BlockModel(Color.WHITE), new BlockModel(Color.WHITE)},
 					{null                         , null                         , null                         , null},
 			},
-			new Point(5,-2),
+			new Point(3,-2),
 			new Point(1,2)
 	);
 	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.Piece_,PieceModel.Piece7};

@@ -65,6 +65,12 @@ public class SoloController implements ActionListener, KeyListener {
 			model.gameState = GameState.PLAYING;
 			vue.recalculate();
 		}
+		if(model.gameState == GameState.FINISHED && e.getKeyCode()==32) { //HACKY
+			this.actionPerformed(new ActionEvent(this,0,"CLICK:MENU:SOLO"));
+		}
+		if(model.gameState == GameState.FINISHED && e.getKeyCode()==27)  {
+			this.actionPerformed(new ActionEvent(this,0,"CLICK:SOLO:BACK"));
+		}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==37)  { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==40)  { model.fallCurrent(); vue.recalculate();}
@@ -87,7 +93,8 @@ public class SoloController implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
-			case "CLICK:CREDIT:BACK":
+			case "CLICK:MENU:SOLO": //HACKY
+			case "CLICK:SOLO:BACK":
 				mainCtrl.actionPerformed(e);
 				break;
 			default:

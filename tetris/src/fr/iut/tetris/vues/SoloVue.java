@@ -148,7 +148,7 @@ class SplashScreenPanel extends JPanel {
 		}
 
 
-		pressSpace = new JLabel("<html><div style='text-align: center;'>Press \"SPACE\" to start<br>a new game</div></html>");
+		pressSpace = new JLabel("<html><div style='text-align: center;'>Press \"SPACE\" to start</div></html>");
 		pressSpace.setFont(mormalFont);
 		pressSpace.setForeground(Color.white);
 		mainPanel.add(pressSpace);
@@ -169,7 +169,7 @@ class SplashScreenPanel extends JPanel {
 		pressSpace.setVisible(visible);
 		setVisible(visible);
 		if(state == GameState.FINISHED) {
-			pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
+			pressSpace.setText("<html><div style='text-align: center;'>Game Over<br><br>Space: RESTART<br>Esc: Back</div></html>");
 		}
 	}
 }

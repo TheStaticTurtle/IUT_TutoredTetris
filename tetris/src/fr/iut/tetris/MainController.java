@@ -94,6 +94,7 @@ public class MainController implements ActionListener, KeyListener {
 				break;
 
 			case "CLICK:CREDIT:BACK":
+			case "CLICK:SOLO:BACK":
 			case "CLICK:SETTINGS:BACK":
 				menuVue = new MenuVue(menuModel, menuCtrl);
 				mainVue.setCurrentVue(menuVue);
@@ -109,12 +110,16 @@ public class MainController implements ActionListener, KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		soloCtrl.keyTyped(e);
+		if(soloCtrl != null) {
+			soloCtrl.keyTyped(e);
+		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		soloCtrl.keyPressed(e);
+		if(soloCtrl != null) {
+			soloCtrl.keyPressed(e);
+		}
 	}
 
 	@Override
