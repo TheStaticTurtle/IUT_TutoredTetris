@@ -43,33 +43,8 @@ public class SoloVue extends JPanel {
 		mainLayout.setVgap(5);
 
 		mainPanel.setPreferredSize(new Dimension(450,600));
-
-
-		/*JButton backButton = new MenuButton("Retour", Color.ORANGE,Color.WHITE);
-
-		backButton.addActionListener(ctrl);
-		backButton.setActionCommand("CLICK:CREDIT:BACK");
-
-		Font font = new JLabel().getFont();
-		try {
-			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, is);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-
-		Font mormalFont = font.deriveFont(40f);
-		backButton.setFont(mormalFont);
-
-
-
-		mainPanel.add( new Spacer());
-		mainPanel.add(backButton);*/
-
 		mainPanel.setLocation(0, 0);
 		mainPanel.setPreferredSize(mainPanel.getPreferredSize());
-
 		mainPanel.setBounds(0, 0, (int) mainPanel.getPreferredSize().getWidth(), (int) mainPanel.getPreferredSize().getHeight());
 		mainPanel.setVisible(true);
 
@@ -268,11 +243,14 @@ class NextPiecePanel extends JPanel {
 	int blockSize;
 	BufferedImage img;
 	PieceModel piece;
+	BlockModel noBlockModel;
 
 	NextPiecePanel(int blockSize) {
-		this.blockSize = blockSize;
 		this.canvasWidth = blockSize*6;
 		this.canvasHeight = blockSize*6;
+		this.blockSize = this.canvasHeight/4;
+		noBlockModel = new BlockModel(Color.DARK_GRAY);
+		noBlockModel.recalculate();
 	}
 
 	public void recalulate(@NotNull PieceModel model) {
@@ -287,12 +265,13 @@ class NextPiecePanel extends JPanel {
 	@Override public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.fillRect(0,0,canvasWidth,canvasHeight);
-		if(this.piece != null) {
-			for (int y = 0; y < this.piece.childs.length; y++) {
-				for (int x = 0; x < this.piece.childs[y].length; x++) {
-					if(this.piece.childs[y][x] != null) {
-						g2.drawImage(this.piece.childs[y][x].image, x*blockSize, y*blockSize, this.blockSize, this.blockSize,this);
-					}
+		for (int y = 0; y < 4; y++) {
+			for (int x = 0; x < 4; x++) {
+				if(this.piece!= null && this.piece.childs[y][x] != null) {
+					this.piece.childs[y][x].recalculate();
+					g2.drawImage(this.piece.childs[y][x].image, x*blockSize, y*blockSize, this.blockSize, this.blockSize,this);
+				} else {
+					g2.drawImage(noBlockModel.image, x*blockSize, y*blockSize, this.blockSize, this.blockSize,this);
 				}
 			}
 		}
@@ -365,7 +344,9 @@ class GamePanel extends JPanel {
 			Object[][] grid = model.computeMixedGrid();
 			for (Object[] objects : grid) {
 				for (int x = 0; x < objects.length; x++) {
-					mainPanel.add(new TetrisBlock(squareSize));
+					TetrisBlock b = new TetrisBlock(squareSize);
+					mainPanel.add(b);
+					b.recalulate(noBlockModel);
 				}
 			}
 		} catch (PieceOutOfBoardException | OverlappedPieceException e) {
