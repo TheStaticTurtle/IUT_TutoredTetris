@@ -9,6 +9,7 @@ import javax.xml.bind.ValidationEventLocator;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
+import fr.iut.tetris.Log;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
@@ -210,7 +211,7 @@ class TetrisBlock extends JPanel {
 			if (img != null) {
 				g2.drawImage(img, 0, 0, this.canvasWidth, this.canvasHeight,this);
 			} else {
-				System.out.println("Error: Image couldn't be loaded displaying dummy instead");
+				Log.critical(this,"Failed to load block image loading dummy");
 				g2.setColor(Color.MAGENTA);
 				g2.fillRect(0,0,canvasWidth,canvasHeight);
 			}

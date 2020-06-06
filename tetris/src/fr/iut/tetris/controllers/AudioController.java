@@ -67,8 +67,7 @@ public class AudioController {
 					}
 					clip.stop();
 
-					System.out.println("Stop playing bg music");
-
+					Log.info(this,"Stop playing bg music");
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
 					e.printStackTrace();
 				}

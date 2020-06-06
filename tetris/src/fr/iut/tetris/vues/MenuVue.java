@@ -1,5 +1,6 @@
 package fr.iut.tetris.vues;
 
+import fr.iut.tetris.Log;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.AudioController;
 import fr.iut.tetris.controllers.CreditController;
@@ -178,7 +179,7 @@ class TetrisLogo extends JPanel {
 			img = ImageIO.read(logo);
 			
 		} catch (IOException e) {
-			System.out.println("Logo non trouvé");
+			Log.critical(this,"Failed to load logo.png image");
 		}
 		
 
@@ -268,7 +269,7 @@ class StarsAnimation extends JPanel {
 			resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 			
 		} catch (IOException e) {
-			System.out.println("Image non trouvé");
+			Log.critical(this,"Failed to load star.png image");
 		}
 		
 

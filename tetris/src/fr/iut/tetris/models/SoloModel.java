@@ -37,12 +37,12 @@ public class SoloModel {
 	}
 
 	public PieceModel getRandomPiece() {
-		System.out.println("Spawned a new random piece");
+		Log.info(this,"Spawned a new random piece");
 		PieceModel p = ((PieceModel)getRandomElement(PieceModel.Pieces)).clone();
 		return p;
 	}
 	public void spawnPiece() {
-		System.out.println("Spawned a new piece");
+		Log.info(this,"Spawned a new piece");
 
 		PieceModel p = nextPiece.clone();
 		pieceList.add(p);
@@ -83,7 +83,7 @@ public class SoloModel {
 		return table;
 	}
 
-	void fallDownOver(int miny) {
+	/*void fallDownOver(int miny) {
 		try {
 			BlockModel[][] grid = computeMixedGrid();
 			for (int y = miny; y >= 0; y--) {
@@ -98,12 +98,47 @@ public class SoloModel {
 		} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 
 	LineCompleted checkForFullLineAndRemoveIt(){
 		try {
 			BlockModel[][] grid = computeMixedGrid();
+
+
+			for (int y = grid.length-1; y >= 0; y--) {
+				boolean isLineFull = true;
+				for (BlockModel block: grid[y]) {
+					if(block == null){
+						isLineFull = false;
+						break;
+					}
+				}
+
+				if(isLineFull) {
+					Log.info(this,"Line "+y+" is full");
+
+					for (BlockModel block: grid[y]) {
+						grid[y] = null;
+						pieceList.remove(block);
+					}
+
+					for (int fally = y-1; fally >= 0; fally--) {
+						for (BlockModel block: grid[fally]) {
+							if(block != null) {
+								Log.debug(this, "Falling line " + fally + " to "+(fally+1)+" (x:"+block.standAlonePos.x+")");
+								block.standAlonePos.y = Math.min( (fally+1) , this.height - 1);
+							}
+						}
+					}
+					checkForFullLineAndRemoveIt();
+					break;
+				}
+			}
+
+
+
+			/*
 			int lineCount = 0;
 			int lastLineY = height-1;
 
@@ -120,19 +155,20 @@ public class SoloModel {
 					lineCount++;
 					lastLineY = Math.max(y,lastLineY);
 					Log.info(this,"Line "+y+" is full");
-					fallDownOver(y);
+					fallDownOver(y,lineCount);
 					for (BlockModel block: grid[y]) {
 						pieceList.remove(block);
 					}
 				}
-			}
+			}*/
 
-			return LineCompleted.getScore(lineCount,lastLineY,height-1);
+			return LineCompleted.NO_LINE; //LineCompleted.getScore(lineCount,lastLineY,height-1);
 		} catch (PieceOutOfBoardException | OverlappedPieceException ignored) {}
 		return LineCompleted.NO_LINE;
 	}
 
 	void convertFullPiecesToBlocks(PieceModel piece) {
+		Log.info(this,"Converting the fallling piece to individual blocks");
 		pieceList.remove(piece);
 		for (int y = 0; y < 4; y++) {
 			for (int x = 0; x < 4; x++) {
