@@ -21,6 +21,7 @@ public class SoloModel {
 	public PieceModel nextPiece;
 	public GameState gameState = GameState.WAITING;
 	SoloController ctrl;
+	public int bestScore = 0;
 	public int currentScore = 0;
 
 	public SoloModel() {
@@ -50,7 +51,10 @@ public class SoloModel {
 
 		try {
 			computeMixedGrid();
-		} catch (OverlappedPieceException | PieceOutOfBoardException e) {gameState = GameState.FINISHED;}
+		} catch (OverlappedPieceException | PieceOutOfBoardException e) {
+			gameState = GameState.FINISHED;
+			this.bestScore = this.ctrl.gameEnded();
+		}
 	}
 
 	//the mega function who does everything
@@ -178,7 +182,7 @@ public class SoloModel {
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
 				Log.info(this,"Got score: "+score.toString());
-				this.ctrl.lineCompleted(score);
+
 				fallingPiece = null; // The piece can not fall anymore
 			}
 		}
@@ -188,6 +192,7 @@ public class SoloModel {
 			fallCurrent();
 		}
 	}
+
 
 	public void calculateScore(LineCompleted lc) {
 		this.currentScore += 10 * lc.pointMultiplier;

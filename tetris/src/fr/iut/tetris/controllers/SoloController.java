@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import fr.iut.tetris.Config;
+import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
@@ -41,8 +42,14 @@ public class SoloController implements ActionListener, KeyListener {
 		this.vue = vue;
 	}
 
-	public void lineCompleted(LineCompleted score) {
-
+	public int gameEnded() {
+		int bestScore = this.config.getInt("SCORE_SOLO_BEST");
+		if(model.currentScore > bestScore) {
+			bestScore = model.currentScore;
+			this.config.putInt("SCORE_SOLO_BEST",model.currentScore);
+			this.config.saveAsync();
+		}
+		return bestScore;
 	}
 
 	private long timerCounter;
@@ -70,12 +77,6 @@ public class SoloController implements ActionListener, KeyListener {
 			model.gameState = GameState.PLAYING;
 			vue.recalculate();
 		}
-		if(model.gameState == GameState.FINISHED && e.getKeyCode()==config.getInt("KEYCODE_STARTGAME")) { //HACKY
-			this.actionPerformed(new ActionEvent(this,0,"CLICK:MENU:SOLO"));
-		}
-		if(model.gameState == GameState.FINISHED && e.getKeyCode()==config.getInt("KEYCODE_GOBACK"))  {
-			this.actionPerformed(new ActionEvent(this,0,"CLICK:SOLO:BACK"));
-		}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_DOWN"))     { model.fallCurrent(); vue.recalculate();}
@@ -92,14 +93,18 @@ public class SoloController implements ActionListener, KeyListener {
 			DOWN = 40
 			ENTER = 10
 		*/
-		System.out.println(e);
+		Log.debug(this,e.toString());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
+			case "MOUSE:ENTER":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
+				break;
 			case "CLICK:MENU:SOLO": //HACKY
 			case "CLICK:SOLO:BACK":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				mainCtrl.actionPerformed(e);
 				break;
 			default:

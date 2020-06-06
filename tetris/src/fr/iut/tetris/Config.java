@@ -73,6 +73,7 @@ public class Config {
 		p.put("KEYCODE_STARTGAME"  ,"32"); // Space key
 		p.put("VOLUME_MUSIC", "0"); //0Gain
 		p.put("VOLUME_SFX"  , "0"); //0Gain
+		p.put("SCORE_SOLO_BEST" ,"0"); // Enter key
 		return p;
 	}
 }

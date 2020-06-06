@@ -5,11 +5,13 @@ import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import com.sun.istack.internal.NotNull;
 import com.sun.istack.internal.Nullable;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.Main;
+import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
@@ -76,7 +78,7 @@ public class SoloVue extends JPanel {
 		gamePanel.setLocation(0, 0);
 		gamePanel.setVisible(true);
 
-		splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight());
+		splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl);
 		splashScreen.setVisible(true);
 
 		//ICI Pour ajoutter des couches
@@ -119,7 +121,13 @@ public class SoloVue extends JPanel {
 class SplashScreenPanel extends JPanel {
 	JPanel mainPanel;
 	JLabel pressSpace;
-	public SplashScreenPanel(int x, int y, int width, int height) {
+	JLabel currentScoreLabel;
+	JLabel bestScoreLabel;
+	JPanel backReplayPanel;
+	SoloController ctrl;
+
+	public SplashScreenPanel(int x, int y, int width, int height,SoloController ctrl) {
+		this.ctrl= ctrl;
 		setLocation(x, y);
 		setPreferredSize(new Dimension(width,height));
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
@@ -128,13 +136,12 @@ class SplashScreenPanel extends JPanel {
 		System.out.println(getPreferredSize());
 		mainPanel = new JPanel();
 		GridLayout mainLayout = new GridLayout(0,1,0,0);
+		GridLayout subLayout = new GridLayout(1,2);
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setLocation(0, 0);
-		//mainPanel.setPreferredSize(getPreferredSize());
-		//mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		mainPanel.setVisible(true);
 		mainPanel.setOpaque(false);
-		mainPanel.setBackground(Color.BLUE);
+		mainPanel.setBackground(Color.BLACK);
 
 		Font font = new JLabel().getFont();
 		Font mormalFont = font.deriveFont(40f);
@@ -152,12 +159,41 @@ class SplashScreenPanel extends JPanel {
 		pressSpace.setFont(mormalFont);
 		pressSpace.setForeground(Color.white);
 		mainPanel.add(pressSpace);
+		mainPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white),new EmptyBorder(10, 10, 10, 10)));
+
+		backReplayPanel = new JPanel();
+		JButton backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE, ctrl);
+		JButton replayButton = new MenuButton("Replay",Color.RED,Color.WHITE, ctrl);
+		backButton.setActionCommand("CLICK:SOLO:BACK");
+		replayButton.setActionCommand("CLICK:MENU:SOLO"); //HACKY
+		backButton.addActionListener(ctrl);
+		replayButton.addActionListener(ctrl);
+
+		backReplayPanel.setOpaque(false);
+		backReplayPanel.setLayout(subLayout);
+		backReplayPanel.add(backButton);
+		backReplayPanel.add(replayButton);
+		backButton.setFont(mormalFont);
+		replayButton.setFont(mormalFont);
+
+		currentScoreLabel = new JLabel();
+		currentScoreLabel.setForeground(Color.white);
+		currentScoreLabel.setFont(mormalFont);
+		currentScoreLabel.setText("<html>Current Score: 0");
+		bestScoreLabel = new JLabel();
+		bestScoreLabel.setForeground(Color.white);
+		bestScoreLabel.setFont(mormalFont);
+		bestScoreLabel.setText("<html>Best Score: 0");
 
 
 		SpringLayout layout = new SpringLayout();
 
+		mainPanel.setOpaque(true);
+
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		layout.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, this);
+
+
 		setLayout(layout);
 		setVisible(true);
 
@@ -166,10 +202,19 @@ class SplashScreenPanel extends JPanel {
 
 	public void recalculate(boolean visible, GameState state) {
 		mainPanel.setVisible(visible);
-		pressSpace.setVisible(visible);
 		setVisible(visible);
 		if(state == GameState.FINISHED) {
-			pressSpace.setText("<html><div style='text-align: center;'>Game Over<br><br>Space: RESTART<br>Esc: Back</div></html>");
+			pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
+			mainPanel.removeAll();
+			mainPanel.add(pressSpace);
+			mainPanel.add(new Spacer());
+			mainPanel.add(currentScoreLabel);
+			mainPanel.add(bestScoreLabel);
+			mainPanel.add(new Spacer());
+			mainPanel.add(backReplayPanel);
+		} else {
+			mainPanel.removeAll();
+			mainPanel.add(pressSpace);
 		}
 	}
 }
