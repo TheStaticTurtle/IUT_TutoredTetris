@@ -54,8 +54,12 @@ public class AudioController {
 
 					clip.loop(Clip.LOOP_CONTINUOUSLY);
 					clip.start();
-					while (! Thread.currentThread().isInterrupted() ) {
-						ctrl.setValue(musicLineVolumeControl);
+					float old = musicLineVolumeControl;
+					while (! Thread.currentThread().isInterrupted()) {
+						if(old != musicLineVolumeControl) {
+							old = musicLineVolumeControl;
+							ctrl.setValue(musicLineVolumeControl);
+						}
 					}
 					clip.stop();
 

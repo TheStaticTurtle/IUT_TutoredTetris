@@ -4,6 +4,7 @@ import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.AudioController;
 import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.controllers.MenuController;
+import fr.iut.tetris.controllers.SettingsController;
 import fr.iut.tetris.models.MenuModel;
 
 import javax.imageio.ImageIO;
@@ -85,6 +86,10 @@ class MenuButton extends JButton implements MouseListener {
 	}
 	public MenuButton(String text,MenuController ctrl) {
 		this(text);
+		listener = ctrl;
+	}
+	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, SettingsController ctrl) {
+		this(text,foreGroundColor,backGroundColor);
 		listener = ctrl;
 	}
 	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, CreditController ctrl) {
@@ -317,6 +322,9 @@ public class MenuVue extends JPanel  {
 
 		soloButton.addActionListener(ctrl);
 		soloButton.setActionCommand("CLICK:MENU:SOLO");
+
+		settingsButton.addActionListener(ctrl);
+		settingsButton.setActionCommand("CLICK:MENU:SETTINGS");
 		
 		JButton quitButton = new MenuButton("Quitter",Color.LIGHT_GRAY,Color.WHITE,ctrl);
 		JButton creditButton = new MenuButton("Credits",Color.LIGHT_GRAY,Color.WHITE,ctrl);

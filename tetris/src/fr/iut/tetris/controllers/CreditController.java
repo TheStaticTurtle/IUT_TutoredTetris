@@ -20,7 +20,11 @@ public class CreditController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
+			case "MOUSE:ENTER":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
+				break;
 			case "CLICK:CREDIT:BACK":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				mainCtrl.actionPerformed(e);
 				break;
 			default:

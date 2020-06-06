@@ -6,15 +6,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.net.URL;
 
-import fr.iut.tetris.controllers.AudioController;
-import fr.iut.tetris.controllers.CreditController;
-import fr.iut.tetris.controllers.MenuController;
-import fr.iut.tetris.controllers.SoloController;
+import fr.iut.tetris.controllers.*;
 import fr.iut.tetris.models.CreditModel;
 import fr.iut.tetris.models.MenuModel;
+import fr.iut.tetris.models.SettingsModel;
 import fr.iut.tetris.models.SoloModel;
 import fr.iut.tetris.vues.CreditVue;
 import fr.iut.tetris.vues.MenuVue;
+import fr.iut.tetris.vues.SettingsVue;
 import fr.iut.tetris.vues.SoloVue;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -25,14 +24,17 @@ public class MainController implements ActionListener, KeyListener {
 	MenuModel menuModel;
 	CreditModel creditModel;
 	SoloModel soloModel;
+	SettingsModel settingsModel;
 	
 	MenuController menuCtrl;
 	CreditController creditCtrl;
 	SoloController soloCtrl;
+	SettingsController settingsCtrl;
 	
 	MenuVue menuVue;
 	CreditVue creditVue;
 	SoloVue soloVue;
+	SettingsVue settingsVue;
 
 	AudioController audio;
 
@@ -45,14 +47,18 @@ public class MainController implements ActionListener, KeyListener {
 
 		menuModel = new MenuModel();
 		creditModel = new CreditModel();
+		settingsModel = new SettingsModel();
 		//soloModel = new SoloModel();
 		
 		menuCtrl = new MenuController(this, menuModel, audio);
 		creditCtrl = new CreditController(this, creditModel, audio);
+		settingsCtrl = new SettingsController(this, settingsModel,settingsVue, audio);
 		//soloCtrl = new SoloController(this, soloModel);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
 		creditVue = new CreditVue(creditModel, creditCtrl);
+		settingsVue = new SettingsVue(settingsModel, settingsCtrl);
+		settingsCtrl.setVue(settingsVue);
 		//soloVue = new SoloVue(soloModel, soloCtrl);
 		//soloCtrl.setVue(soloVue);
 		
@@ -74,15 +80,25 @@ public class MainController implements ActionListener, KeyListener {
 
 				mainVue.setCurrentVue(soloVue);
 				break;
-		
+
 			case "CLICK:MENU:CREDIT":
 				creditVue = new CreditVue(creditModel, creditCtrl);
 				mainVue.setCurrentVue(creditVue);
 				break;
+
+			case "CLICK:MENU:SETTINGS":
+				settingsVue = new SettingsVue(settingsModel, settingsCtrl);
+				mainVue.setCurrentVue(settingsVue);
+				settingsCtrl.setVue(settingsVue);
+				settingsCtrl.enteredVue();
+				break;
+
 			case "CLICK:CREDIT:BACK":
+			case "CLICK:SETTINGS:BACK":
 				menuVue = new MenuVue(menuModel, menuCtrl);
 				mainVue.setCurrentVue(menuVue);
 				break;
+
 			case "CLICK:MENU:QUIT":
 				System.exit(0);
 				break;

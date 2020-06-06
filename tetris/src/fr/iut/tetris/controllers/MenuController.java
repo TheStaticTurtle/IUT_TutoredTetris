@@ -26,6 +26,7 @@ public class MenuController implements ActionListener {
 			case "CLICK:MENU:CREDIT":
 			case "CLICK:MENU:QUIT":
 			case "CLICK:MENU:SOLO":
+			case "CLICK:MENU:SETTINGS":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				mainCtrl.actionPerformed(e);
 				break;
