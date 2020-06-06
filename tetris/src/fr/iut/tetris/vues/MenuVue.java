@@ -318,7 +318,7 @@ public class MenuVue extends JPanel  {
 		JButton soloButton = new MenuButton("Solo",Color.YELLOW,Color.WHITE,ctrl);
 		JButton coopButton = new MenuButton("Coop",Color.RED,Color.WHITE,ctrl);
 		JButton versusButton = new MenuButton("Versus",Color.ORANGE,Color.WHITE,ctrl);
-		JButton settingsButton = new MenuButton("Parametres",Color.CYAN,Color.WHITE,ctrl);
+		JButton settingsButton = new MenuButton("Settings",Color.CYAN,Color.WHITE,ctrl);
 
 		soloButton.addActionListener(ctrl);
 		soloButton.setActionCommand("CLICK:MENU:SOLO");
@@ -326,7 +326,7 @@ public class MenuVue extends JPanel  {
 		settingsButton.addActionListener(ctrl);
 		settingsButton.setActionCommand("CLICK:MENU:SETTINGS");
 		
-		JButton quitButton = new MenuButton("Quitter",Color.LIGHT_GRAY,Color.WHITE,ctrl);
+		JButton quitButton = new MenuButton("Quit",Color.LIGHT_GRAY,Color.WHITE,ctrl);
 		JButton creditButton = new MenuButton("Credits",Color.LIGHT_GRAY,Color.WHITE,ctrl);
 
 		creditButton.addActionListener(ctrl);

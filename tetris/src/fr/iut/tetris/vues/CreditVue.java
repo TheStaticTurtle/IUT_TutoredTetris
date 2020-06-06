@@ -31,7 +31,7 @@ public class CreditVue extends JPanel  {
 		mainPanel.setPreferredSize(new Dimension(450,600));
 
 		JPanel myLabel = new TetrisLogo(this,450);
-		JButton backButton = new MenuButton("Retour",Color.ORANGE,Color.WHITE,ctrl);
+		JButton backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE,ctrl);
 
 		backButton.addActionListener(ctrl);
 		backButton.setActionCommand("CLICK:CREDIT:BACK");

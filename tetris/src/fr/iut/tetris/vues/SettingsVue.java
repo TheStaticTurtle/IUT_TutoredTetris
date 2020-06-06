@@ -149,7 +149,7 @@ public class SettingsVue extends JPanel{
 		JLabel soundSFXMusicLabel = new JLabel("<html>SFX: ");
 		soundSFXMusicLevel = new CustomSlider(-50,5,Color.WHITE,Color.GREEN);
 
-		JButton backButton = new MenuButton("Retour",Color.ORANGE,Color.WHITE,ctrl);
+		JButton backButton = new MenuButton("Save",Color.GREEN,Color.WHITE,ctrl);
 
 
 		myLabel.setFont(bigFont);
