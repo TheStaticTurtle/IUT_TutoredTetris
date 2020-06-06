@@ -155,7 +155,6 @@ public class SoloModel {
 		}
 		return false;
 	}
-
 	public boolean rotateCurrent(Direction dir) {
 		if(fallingPiece != null) {
 			fallingPiece.rotateModel(dir.step);
@@ -169,7 +168,6 @@ public class SoloModel {
 		}
 		return false;
 	}
-
 	public void fallCurrent() {
 		if(fallingPiece != null) {
 			fallingPiece.y++;

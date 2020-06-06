@@ -14,7 +14,7 @@ public class BlockModel {
 	public Point standAlonePos = new Point(0,0);
 	public PieceModel parent;
 
-	private static BufferedImage dye(BufferedImage image, Color color) {
+	public static BufferedImage dye(BufferedImage image, Color color) {
 		int w = image.getWidth();
 		int h = image.getHeight();
 		BufferedImage dyed = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
@@ -26,7 +26,7 @@ public class BlockModel {
 		g.dispose();
 		return dyed;
 	}
-	private static BufferedImage toBufferedImage(Image img) {
+	public static BufferedImage toBufferedImage(Image img) {
 		if (img instanceof BufferedImage) { return (BufferedImage) img; }
 		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D bGr = bimage.createGraphics();
@@ -43,12 +43,15 @@ public class BlockModel {
 		this.parent = parent;
 	}
 
-	public void recalculate() {
+	void setBaseImage() {
 		try {
 			URL piece = getClass().getResource( "/res/piece_grayscale.png" );
 			this.base_image = toBufferedImage(ImageIO.read(piece).getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
 		} catch (IOException ignored) {
 		}
+	}
+
+	public void recalculate() {
 
 		Color c = new Color(this.color.getRed(),this.color.getGreen(),this.color.getBlue(),190);
 		image = dye(this.base_image,c);
@@ -59,6 +62,7 @@ public class BlockModel {
 	}
 
 	public BlockModel(Color color) {
+		setBaseImage();
 		this.color = color;
 	}
 	public BlockModel(Color color,BufferedImage base_image,Dimension size,Point standAlonePos, PieceModel parent) {

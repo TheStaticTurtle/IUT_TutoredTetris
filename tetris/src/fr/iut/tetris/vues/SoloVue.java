@@ -2,8 +2,11 @@ package fr.iut.tetris.vues;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.xml.bind.ValidationEventLocator;
 
@@ -260,6 +263,7 @@ class PiecePanel extends JPanel {
 	BufferedImage img = null;
 	JPanel mainPanel;
 	NextPiecePanel nextPiecePanel;
+	BlockModel noBlockModel;
 
 	public PiecePanel(SoloModel model, int xp, int yp, int width, int height) {
 		setLocation(xp, yp);
@@ -267,15 +271,16 @@ class PiecePanel extends JPanel {
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		setOpaque(false);
 
-		this.model = model;
+		noBlockModel = new BlockModel(Color.BLACK);
+		noBlockModel.recalculate();
 
+		this.model = model;
 		mainPanel = new JPanel();
-		GridLayout mainLayout = new GridLayout(0,model.witdh);
+		GridLayout mainLayout = new GridLayout(0,model.witdh);//ROW = 0 IF Else bug
 		mainPanel.setLocation(0, 0);
 		mainPanel.setPreferredSize(new Dimension((model.witdh)*squareSize,(model.height)*squareSize));
 		mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
-		//mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
-		mainPanel.setLayout(mainLayout); //ROW = 0 IF Else bug
+		mainPanel.setLayout(mainLayout);
 		mainPanel.setVisible(true);
 		mainPanel.setOpaque(true);
 		mainPanel.setBackground(Color.DARK_GRAY);
@@ -288,15 +293,10 @@ class PiecePanel extends JPanel {
 		nextPiecePanel.setOpaque(true);
 		nextPiecePanel.setBackground(Color.MAGENTA);
 
-		/*setPreferredSize(new Dimension((model.witdh)*squareSize,(model.height)*squareSize));
-		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
-		setOpaque(false);
-		setLayout(new GridLayout(0,model.witdh)); //ROW = 0 IF Else bug*/
-
 		try {
 			Object[][] grid = model.computeMixedGrid();
-			for (int y = 0; y < grid.length; y++) {
-				for (int x = 0; x < grid[y].length; x++) {
+			for (Object[] objects : grid) {
+				for (int x = 0; x < objects.length; x++) {
 					mainPanel.add(new TetrisBlock(squareSize));
 				}
 			}
@@ -310,11 +310,13 @@ class PiecePanel extends JPanel {
 		SpringLayout layout = new SpringLayout();
 
 		layout.putConstraint(SpringLayout.WEST, mainPanel, 10, SpringLayout.WEST, this);
-		layout.putConstraint(SpringLayout.NORTH, mainPanel, 10, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.SOUTH, mainPanel, -10, SpringLayout.SOUTH, this);
+		//layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 
-		layout.putConstraint(SpringLayout.EAST, nextPiecePanel, 10, SpringLayout.EAST, this);
-		layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
+		layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 0, SpringLayout.NORTH, mainPanel);
 		setLayout(layout);
+
 
 		recalculate();
 	}
@@ -333,7 +335,7 @@ class PiecePanel extends JPanel {
 						if(grid[y][x] != null) {
 							p.recalulate(grid[y][x]);
 						} else {
-							p.recalulate(null);
+							p.recalulate(noBlockModel);
 						}
 					}
 				}
