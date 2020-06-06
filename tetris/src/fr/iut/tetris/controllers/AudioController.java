@@ -1,6 +1,7 @@
 package fr.iut.tetris.controllers;
 
 import fr.iut.tetris.Config;
+import fr.iut.tetris.Log;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.sound.sampled.*;
@@ -29,7 +30,7 @@ public class AudioController {
 			public void run() {
 				try {
 					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-					System.out.println("Started sfx: "+file.getFile());
+					Log.info(this,"Started sfx: "+file.getFile());
 
 					Clip clip = AudioSystem.getClip();
 					clip.open(audioInputStream);
@@ -52,7 +53,7 @@ public class AudioController {
 			public void run() {
 				try {
 					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-					System.out.println("Started bg music playing: "+file.getFile());
+					Log.info(this,"Started bg music playing: "+file.getFile());
 
 					Clip clip = AudioSystem.getClip();
 					clip.open(audioInputStream);

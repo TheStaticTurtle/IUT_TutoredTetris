@@ -1,5 +1,6 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
@@ -118,7 +119,7 @@ public class SoloModel {
 				if(isLineFull) {
 					lineCount++;
 					lastLineY = Math.max(y,lastLineY);
-					System.out.println("Line "+y+" is full");
+					Log.info(this,"Line "+y+" is full");
 					fallDownOver(y);
 					for (BlockModel block: grid[y]) {
 						pieceList.remove(block);

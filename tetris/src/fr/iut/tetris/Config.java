@@ -18,15 +18,15 @@ public class Config {
 		config = new Properties();
 		try {
 			config.load(new FileInputStream(appConfigPath));
-			System.out.println("Loaded config at: "+appConfigPath);
+			Log.info(this,"Loaded config at: "+appConfigPath);
 		} catch (IOException e) {
-			System.out.println("Failed to load config file");
+			Log.warning(this,"Failed to load config file");
 			config = defaultConfig();
 			try {
 				config.store(new FileWriter(appConfigPath),null);
-				System.out.println("Generated default config file");
+				Log.info(this,"Generated default config file");
 			} catch (IOException ex) {
-				System.out.println("Failed to save default config file");
+				Log.critical(this,"Failed to save default config file");
 			}
 		}
 	}
@@ -36,8 +36,9 @@ public class Config {
 			@Override public void run() {
 				try {
 					config.store(new FileWriter(appConfigPath),null);
+					Log.info(this,"Config saved");
 				} catch (IOException e) {
-					System.out.println("Failed to save config");
+					Log.critical(this,"Failed to save config");
 				}
 			}
 		}).start();
