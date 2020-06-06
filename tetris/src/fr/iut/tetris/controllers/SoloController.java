@@ -66,22 +66,22 @@ public class SoloController implements ActionListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(model.gameState == GameState.WAITING && e.getKeyCode()==32) {
+		if(model.gameState == GameState.WAITING && e.getKeyCode()==config.getInt("KEYCODE_STARTGAME")) {
 			model.gameState = GameState.PLAYING;
 			vue.recalculate();
 		}
-		if(model.gameState == GameState.FINISHED && e.getKeyCode()==32) { //HACKY
+		if(model.gameState == GameState.FINISHED && e.getKeyCode()==config.getInt("KEYCODE_STARTGAME")) { //HACKY
 			this.actionPerformed(new ActionEvent(this,0,"CLICK:MENU:SOLO"));
 		}
-		if(model.gameState == GameState.FINISHED && e.getKeyCode()==27)  {
+		if(model.gameState == GameState.FINISHED && e.getKeyCode()==config.getInt("KEYCODE_GOBACK"))  {
 			this.actionPerformed(new ActionEvent(this,0,"CLICK:SOLO:BACK"));
 		}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==37)  { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==40)  { model.fallCurrent(); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==10)  { model.fallCurrentAtBottom(); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_DOWN"))     { model.fallCurrent(); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottom(); vue.recalculate();}
 
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==38)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_ROTATE"))  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
 		//if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
 
 		/*

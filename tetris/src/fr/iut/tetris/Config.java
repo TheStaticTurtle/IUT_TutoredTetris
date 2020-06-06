@@ -67,6 +67,7 @@ public class Config {
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
 		p.put("KEYCODE_P1_DOWN"    ,"40"); // Down key
 		p.put("KEYCODE_P1_FASTDOWN","10"); // Enter key
+		p.put("KEYCODE_P1_ROTATE"  ,"38"); // Enter key
 		p.put("KEYCODE_GOBACK"     ,"27"); // Esc key
 		p.put("KEYCODE_STARTGAME"  ,"32"); // Space key
 		p.put("VOLUME_MUSIC", "0"); //0Gain
