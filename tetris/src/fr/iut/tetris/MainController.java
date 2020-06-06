@@ -37,8 +37,11 @@ public class MainController implements ActionListener, KeyListener {
 	SettingsVue settingsVue;
 
 	AudioController audio;
+	Config config;
 
 	public MainController() {
+		config = new Config();
+
 		audio = new AudioController();
 		audio.setMusicTrack(getClass().getResource( "/res/sounds/music2.wav"));
 
