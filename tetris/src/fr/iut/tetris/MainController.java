@@ -42,7 +42,7 @@ public class MainController implements ActionListener, KeyListener {
 	public MainController() {
 		config = new Config();
 
-		audio = new AudioController();
+		audio = new AudioController(config);
 		audio.setMusicTrack(getClass().getResource( "/res/sounds/music2.wav"));
 
 

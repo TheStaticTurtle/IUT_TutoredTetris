@@ -1,22 +1,31 @@
 package fr.iut.tetris.controllers;
 
+import fr.iut.tetris.Config;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AudioController {
 	float soundEffetLineVolumeControl=0;
 	float musicLineVolumeControl=0;
 
 	Thread bgMusicThread;
+	ExecutorService sfxThreadPool = Executors.newFixedThreadPool(10);
 
-	public AudioController() {
+	Config config;
+
+	public AudioController(Config config) {
+		this.config = config;
+		this.setGain_SFX(this.config.getInt("VOLUME_SFX"));
+		this.setGain_MUSIC(this.config.getInt("VOLUME_MUSIC"));
 	}
 
 	public void playSFX(URL file) {
-		Runnable r = new Runnable() {
+		sfxThreadPool.submit(new Runnable() {
 			public void run() {
 				try {
 					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
@@ -33,9 +42,7 @@ public class AudioController {
 					e.printStackTrace();
 				}
 			}
-		};
-		Thread sfx = new Thread(r);
-		sfx.start();
+		});
 	}
 	public void setMusicTrack(URL file) {
 		if(bgMusicThread != null) {
@@ -54,12 +61,8 @@ public class AudioController {
 
 					clip.loop(Clip.LOOP_CONTINUOUSLY);
 					clip.start();
-					float old = musicLineVolumeControl;
 					while (! Thread.currentThread().isInterrupted()) {
-						if(old != musicLineVolumeControl) {
-							old = musicLineVolumeControl;
-							ctrl.setValue(musicLineVolumeControl);
-						}
+						ctrl.setValue(musicLineVolumeControl);
 					}
 					clip.stop();
 

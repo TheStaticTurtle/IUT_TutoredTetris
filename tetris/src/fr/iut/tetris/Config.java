@@ -29,9 +29,19 @@ public class Config {
 				System.out.println("Failed to save default config file");
 			}
 		}
-
 	}
 
+	void saveAsync() {
+		new Thread(new Runnable() {
+			@Override public void run() {
+				try {
+					config.store(new FileWriter(appConfigPath),null);
+				} catch (IOException e) {
+					System.out.println("Failed to save config");
+				}
+			}
+		}).start();
+	}
 	public void putString(String key, String value) {
 		config.put(key,value);
 	}
@@ -39,13 +49,14 @@ public class Config {
 		config.put(key,String.valueOf(value));
 	}
 	public String getString(String key) {
-		if(config.contains(key)) {
+		if(config.containsKey(key)) {
 			return (String)config.get(key);
 		}
 		return "";
 	}
 	public int getInt(String key) {
-		if(config.contains(key)) {
+		if(config.containsKey(key)) {
+			System.out.println((String)config.get(key));
 			return Integer.parseInt((String)config.get(key));
 		}
 		return 0;
