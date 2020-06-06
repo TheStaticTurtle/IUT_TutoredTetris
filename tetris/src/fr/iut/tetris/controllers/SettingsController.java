@@ -1,5 +1,6 @@
 package fr.iut.tetris.controllers;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.models.CreditModel;
 import fr.iut.tetris.models.SettingsModel;
@@ -16,12 +17,14 @@ public class SettingsController implements ActionListener, ChangeListener {
 	SettingsModel model;
 	SettingsVue vue;
 	AudioController audio;
+	Config config;
 
-	public SettingsController(MainController mainCtrl, SettingsModel model, SettingsVue vue, AudioController audio) {
+	public SettingsController(MainController mainCtrl, Config config, SettingsModel model, SettingsVue vue, AudioController audio) {
 		this.model = model;
 		this.mainCtrl = mainCtrl;
 		this.vue = vue;
 		this.audio = audio;
+		this.config = config;
 	}
 
 	public void setVue(SettingsVue vue) {
@@ -33,6 +36,12 @@ public class SettingsController implements ActionListener, ChangeListener {
 		vue.soundSFXMusicLevel.setValue( (int)audio.soundEffetLineVolumeControl );
 	}
 
+	void saveConfig() {
+		this.config.putInt("VOLUME_SFX",(int)audio.soundEffetLineVolumeControl);
+		this.config.putInt("VOLUME_MUSIC",(int)audio.musicLineVolumeControl);
+		this.config.saveAsync();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
@@ -41,6 +50,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 				break;
 			case "CLICK:SETTINGS:BACK":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
+				saveConfig();
 				mainCtrl.actionPerformed(e);
 				break;
 			default:

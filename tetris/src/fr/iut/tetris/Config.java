@@ -31,7 +31,7 @@ public class Config {
 		}
 	}
 
-	void saveAsync() {
+	public void saveAsync() {
 		new Thread(new Runnable() {
 			@Override public void run() {
 				try {

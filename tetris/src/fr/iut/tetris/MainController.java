@@ -55,7 +55,7 @@ public class MainController implements ActionListener, KeyListener {
 		
 		menuCtrl = new MenuController(this, menuModel, audio);
 		creditCtrl = new CreditController(this, creditModel, audio);
-		settingsCtrl = new SettingsController(this, settingsModel,settingsVue, audio);
+		settingsCtrl = new SettingsController(this, config, settingsModel,settingsVue, audio);
 		//soloCtrl = new SoloController(this, soloModel);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
