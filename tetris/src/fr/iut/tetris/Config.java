@@ -56,7 +56,6 @@ public class Config {
 	}
 	public int getInt(String key) {
 		if(config.containsKey(key)) {
-			System.out.println((String)config.get(key));
 			return Integer.parseInt((String)config.get(key));
 		}
 		return 0;
