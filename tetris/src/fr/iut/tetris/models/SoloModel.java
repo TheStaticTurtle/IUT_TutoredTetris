@@ -16,9 +16,9 @@ public class SoloModel {
 	public int height = 20;
 	public int witdh = 10;
 	public int fallSpeed = 1000; //ms
-	ArrayList<Object> pieceList = new ArrayList<Object>();
+	ArrayList<Object> pieceList = new ArrayList<>();
 	public PieceModel fallingPiece = null;
-	public PieceModel nextPiece = null;
+	public PieceModel nextPiece;
 	public GameState gameState = GameState.WAITING;
 	SoloController ctrl;
 
@@ -38,8 +38,7 @@ public class SoloModel {
 
 	public PieceModel getRandomPiece() {
 		Log.info(this,"Spawned a new random piece");
-		PieceModel p = ((PieceModel)getRandomElement(PieceModel.Pieces)).clone();
-		return p;
+		return ((PieceModel)getRandomElement(PieceModel.Pieces)).clone();
 	}
 	public void spawnPiece() {
 		Log.info(this,"Spawned a new piece");
@@ -79,43 +78,24 @@ public class SoloModel {
 			}
 
 		}
-		//System.out.println(Arrays.deepToString(table));
 		return table;
 	}
 
-	/*void fallDownOver(int miny) {
+	Object checkForFullLineAndRemoveIt(boolean firstCall){
 		try {
 			BlockModel[][] grid = computeMixedGrid();
-			for (int y = miny; y >= 0; y--) {
-
-				for (BlockModel block: grid[y]) {
-					if(block != null) {
-						block.standAlonePos.y = Math.min(block.standAlonePos.y+1,this.height-1);
-					}
-				}
-
-			}
-		} catch (PieceOutOfBoardException | OverlappedPieceException e) {
-			e.printStackTrace();
-		}
-	}*/
-
-
-	LineCompleted checkForFullLineAndRemoveIt(){
-		try {
-			BlockModel[][] grid = computeMixedGrid();
-
+			int firstLineY = 0;
+			Integer lineCount = 0;
 
 			for (int y = grid.length-1; y >= 0; y--) {
 				boolean isLineFull = true;
 				for (BlockModel block: grid[y]) {
-					if(block == null){
-						isLineFull = false;
-						break;
-					}
+					if (block == null) {isLineFull = false; break;}
 				}
 
 				if(isLineFull) {
+					lineCount += 1;
+					firstLineY = y;
 					Log.info(this,"Line "+y+" is full");
 
 					for (BlockModel block: grid[y]) {
@@ -131,38 +111,17 @@ public class SoloModel {
 							}
 						}
 					}
-					checkForFullLineAndRemoveIt();
+					// Line has fallen down recheck to see if there is more lines but tel the function to spit out an integer instead of the LineCompleted enum
+					lineCount += (Integer)checkForFullLineAndRemoveIt(false);
 					break;
 				}
 			}
 
-
-
-			/*
-			int lineCount = 0;
-			int lastLineY = height-1;
-
-			for (int y = grid.length-1; y >= 0; y--) {
-				boolean isLineFull = true;
-				for (BlockModel block: grid[y]) {
-					if(block == null){
-						isLineFull = false;
-						break;
-					}
-				}
-
-				if(isLineFull) {
-					lineCount++;
-					lastLineY = Math.max(y,lastLineY);
-					Log.info(this,"Line "+y+" is full");
-					fallDownOver(y,lineCount);
-					for (BlockModel block: grid[y]) {
-						pieceList.remove(block);
-					}
-				}
-			}*/
-
-			return LineCompleted.NO_LINE; //LineCompleted.getScore(lineCount,lastLineY,height-1);
+			if(firstCall) {
+				return LineCompleted.getScore(lineCount,firstLineY,this.height);
+			} else {
+				return lineCount;
+			}
 		} catch (PieceOutOfBoardException | OverlappedPieceException ignored) {}
 		return LineCompleted.NO_LINE;
 	}
@@ -219,7 +178,8 @@ public class SoloModel {
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.y--;
 				convertFullPiecesToBlocks(fallingPiece);
-				LineCompleted score = checkForFullLineAndRemoveIt();
+				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
+				Log.info(this,"Got score: "+score.toString());
 				this.ctrl.lineCompleted(score);
 				fallingPiece = null; // The piece can not fall anymore
 			}
@@ -239,6 +199,4 @@ public class SoloModel {
 	public void setScore(int score) {
 		this.score = score;
 	}*/
-	
-	
 }

@@ -20,7 +20,7 @@ public enum LineCompleted {
 
 	static public LineCompleted getScore(int lineCount, int lastLineY, int gameHeight) {
 		if(lineCount == 0) return NO_LINE;
-		if(lastLineY == gameHeight) {
+		if(lastLineY == gameHeight-1) {
 			switch (lineCount) {
 				case 1:
 					return BOTTOM_NORMAL_LINE;
