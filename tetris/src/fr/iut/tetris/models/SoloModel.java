@@ -165,6 +165,7 @@ public class SoloModel {
 				return true;
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.x -= dir.step;
+				this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:FAILED_ACTION"));
 				return false;
 			}
 		}

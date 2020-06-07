@@ -99,6 +99,7 @@ public class SoloController implements ActionListener, KeyListener {
 			case "GAME:LINE_COMPLETE":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/line_completed.wav"));
 				break;
+			case "GAME:FAILED_ACTION":
 			case "GAME:PIECE_PLACE":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/piece_place.wav"));
 				break;
