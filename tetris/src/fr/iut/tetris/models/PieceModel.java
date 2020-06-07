@@ -1,7 +1,5 @@
 package fr.iut.tetris.models;
 
-import fr.iut.tetris.enums.Direction;
-
 import java.awt.*;
 import java.util.Arrays;
 
@@ -74,7 +72,7 @@ class PieceModel {
 	}
 
 	@Override
-	protected PieceModel clone(){
+	protected PieceModel clone() {
 		return new PieceModel(Arrays.copyOf(this.childs,this.childs.length), new Point(this.spawnPoint.x,this.spawnPoint.y), new Point(this.centerOfgravity.x,this.centerOfgravity.y));
 	}
 

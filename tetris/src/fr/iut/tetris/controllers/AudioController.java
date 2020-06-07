@@ -31,7 +31,12 @@ public class AudioController {
 					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
 					Log.info(this,"Started sfx: "+file.getFile());
 
-					Clip clip = AudioSystem.getClip();
+					Clip clip = null;
+					try {
+						clip = AudioSystem.getClip();
+					} catch (LineUnavailableException e) {
+						e.printStackTrace();
+					}
 					clip.open(audioInputStream);
 
 					FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);

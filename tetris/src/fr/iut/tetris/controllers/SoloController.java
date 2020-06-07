@@ -20,7 +20,7 @@ public class SoloController implements ActionListener, KeyListener {
 	MainController mainCtrl;
 	SoloModel model;
 	public SoloVue vue;
-	AudioController audio;
+	public AudioController audio;
 	Config config;
 
 
@@ -98,6 +98,15 @@ public class SoloController implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
+			case "GAME:LINE_COMPLETE":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/line_completed.wav"));
+				break;
+			case "GAME:PIECE_PLACE":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/piece_place.wav"));
+				break;
+			case "GAME:PIECE_SPAWN":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/piece_spawn.wav"));
+				break;
 			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;

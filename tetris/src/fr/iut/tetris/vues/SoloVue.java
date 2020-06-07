@@ -309,7 +309,6 @@ class GamePanel extends JPanel {
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setVisible(true);
 		mainPanel.setOpaque(false);
-		//mainPanel.setBackground(Color.DARK_GRAY);
 
 		nextPiecePanel = new NextPiecePanel(squareSize);
 		nextPiecePanel.setVisible(true);
@@ -398,10 +397,10 @@ class GamePanel extends JPanel {
 		repaint();
 	}
 
-	@Override public void paintComponent(Graphics g) {
+	/*@Override public void paintComponent(Graphics g) {
 		Dimension d = getPreferredSize();
 		Graphics2D g2 = (Graphics2D) g;
-		/*g2.setColor(Color.gray);
-		g2.fillRect(0,0,d.width,d.height);*/
-	}
+		g2.setColor(Color.gray);
+		g2.fillRect(0,0,d.width,d.height);
+	}*/
 }

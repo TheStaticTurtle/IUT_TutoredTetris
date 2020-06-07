@@ -1,10 +1,9 @@
 package fr.iut.tetris.models;
 
-import javax.imageio.ImageIO;
+import fr.iut.tetris.Config;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 
 public class BlockModel {
 	public Color color;
@@ -44,10 +43,10 @@ public class BlockModel {
 	}
 
 	void setBaseImage() {
-		try {
-			URL piece = getClass().getResource( "/res/piece_grayscale.png" );
-			this.base_image = toBufferedImage(ImageIO.read(piece).getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
-		} catch (IOException ignored) {
+		this.base_image = (BufferedImage) Config.getInstance().getCachedObject("piece_grayscale_scaled");
+		if(this.base_image == null) {
+			this.base_image = toBufferedImage(Config.getInstance().getRessourceImage("/res/piece_grayscale.png").getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
+			Config.getInstance().cacheObject("piece_grayscale_scaled",this.base_image);
 		}
 	}
 

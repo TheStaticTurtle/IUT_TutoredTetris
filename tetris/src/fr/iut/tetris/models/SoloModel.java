@@ -9,6 +9,7 @@ import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -44,10 +45,12 @@ public class SoloModel {
 	public void spawnPiece() {
 		Log.info(this,"Spawned a new piece");
 
+
 		PieceModel p = nextPiece.clone();
 		pieceList.add(p);
 		fallingPiece = p;
 		nextPiece = getRandomPiece();
+		this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN"));
 
 		try {
 			computeMixedGrid();
@@ -129,6 +132,8 @@ public class SoloModel {
 			}
 
 			if(firstCall) {
+				if(lineCount>0)
+					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_COMPLETE"));
 				return LineCompleted.getScore(lineCount,firstLineY,this.height);
 			} else {
 				return lineCount;
@@ -188,6 +193,7 @@ public class SoloModel {
 				convertFullPiecesToBlocks(fallingPiece);
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
+				this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
 				Log.info(this,"Got score: "+score.toString());
 
 				fallingPiece = null; // The piece can not fall anymore

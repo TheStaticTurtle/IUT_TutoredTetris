@@ -12,8 +12,6 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 import java.util.Random;
 
 class Spacer extends Box {
@@ -175,14 +173,7 @@ class TetrisLogo extends JPanel {
 		this.width = baseWidth;
 		this.height = baseHeight;
 
-		try {
-
-			URL logo = getClass().getResource( "/res/logo.png" );
-			img = ImageIO.read(logo);
-			
-		} catch (IOException e) {
-			Log.critical(this,"Failed to load logo.png image");
-		}
+		img = Config.getInstance().getRessourceImage("/res/logo.png");
 		
 
 		final TetrisLogo p = this;
@@ -267,22 +258,14 @@ class StarsAnimation extends JPanel {
 			stars[i] = new StarModel(rn,size,s+2);
 		}
 
-		
-		try {
 
-			URL star = getClass().getResource( "/res/star.png" );
-			img = ImageIO.read(star);
+		img = Config.getInstance().getRessourceImage("/res/star.png");
 
-			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-			tx.translate(-img.getWidth(null), 0);
-			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-			img = op.filter((BufferedImage) img, null);
-			resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
-			
-		} catch (IOException e) {
-			Log.critical(this,"Failed to load star.png image");
-		}
-		
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-img.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		img = op.filter((BufferedImage) img, null);
+		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 
 		StarsAnimation p = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
