@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 
 import fr.iut.tetris.Log;
 import fr.iut.tetris.Main;
-import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;

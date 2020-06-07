@@ -10,7 +10,6 @@ import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
-import fr.iut.tetris.enums.LineCompleted;
 import fr.iut.tetris.models.SoloModel;
 import fr.iut.tetris.vues.SoloVue;
 

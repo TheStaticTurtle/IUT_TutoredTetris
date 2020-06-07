@@ -1,14 +1,12 @@
 package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.models.CreditModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.InputStream;
 
 public class CreditVue extends JPanel  {
 

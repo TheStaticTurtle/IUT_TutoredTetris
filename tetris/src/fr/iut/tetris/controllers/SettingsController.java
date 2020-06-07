@@ -2,11 +2,9 @@ package fr.iut.tetris.controllers;
 
 import fr.iut.tetris.Config;
 import fr.iut.tetris.MainController;
-import fr.iut.tetris.models.CreditModel;
 import fr.iut.tetris.models.SettingsModel;
 import fr.iut.tetris.vues.SettingsVue;
 
-import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;

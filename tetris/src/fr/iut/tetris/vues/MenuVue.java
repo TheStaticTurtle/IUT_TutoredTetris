@@ -2,7 +2,6 @@ package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
-import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.*;
 import fr.iut.tetris.models.MenuModel;
 
@@ -14,7 +13,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Random;
 

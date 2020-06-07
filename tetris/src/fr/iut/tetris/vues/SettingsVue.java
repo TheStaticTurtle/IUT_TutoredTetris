@@ -2,20 +2,15 @@ package fr.iut.tetris.vues;
 
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.SettingsController;
 import fr.iut.tetris.models.SettingsModel;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.InputStream;
 
 class CustomSlider extends JSlider implements MouseListener {
 
