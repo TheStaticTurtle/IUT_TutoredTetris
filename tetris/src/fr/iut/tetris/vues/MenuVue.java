@@ -50,14 +50,14 @@ class HoveredButtonIcon implements Icon {
 		x = getIconWidth() /2;
 		y = getIconHeight()/2;
 
-		int width = 12;
-		int length = 35;
+		int width = 12;//12
+		int length = 35;//35
 
 		g2.setColor(this.backGroundColor);
 		g2.fillRect(0, 0, length, width);
 		g2.fillRect(0, 0, width, length);
 		g2.fillRect(getIconWidth()-length, getIconHeight()-width, length, width);
-		g2.fillRect(getIconWidth()-width, getIconHeight()-length, 12, length);
+		g2.fillRect(getIconWidth()-width, getIconHeight()-length, width, length);
 
 		g2.setColor(foreGroundColor);
 		g2.setFont(this.font);

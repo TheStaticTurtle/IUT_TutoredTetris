@@ -100,7 +100,6 @@ class SplashScreenPanel extends JPanel {
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		setOpaque(false);
 
-		System.out.println(getPreferredSize());
 		mainPanel = new JPanel();
 		GridLayout mainLayout = new GridLayout(0,1,0,0);
 		GridLayout subLayout = new GridLayout(1,2);
@@ -122,6 +121,7 @@ class SplashScreenPanel extends JPanel {
 		replayButton.setActionCommand("CLICK:MENU:SOLO"); //HACKY
 		backButton.addActionListener(ctrl);
 		replayButton.addActionListener(ctrl);
+
 
 		backReplayPanel.setOpaque(false);
 		backReplayPanel.setLayout(subLayout);
@@ -156,12 +156,15 @@ class SplashScreenPanel extends JPanel {
 
 		testPane.setLayout(lyt);
 
+		Dimension yt = replayButton.getPreferredSize(); yt.width +=35; yt.height +=15;
+		replayButton.setPreferredSize(yt);
+
 		add(testPane);
 
 		setVisible(true);
 
 		JPanel t = this;
-		new Timer(1, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
 			t.repaint();
 			t.revalidate();
 		}}).start();
