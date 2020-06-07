@@ -38,9 +38,9 @@ public class MainController implements ActionListener, KeyListener {
 	Config config;
 
 	public MainController() {
-		config = new Config();
+		config = new Config(); //Need's to be instentiated first in order to be able to use Config.getInstance() on other methods
 
-		audio = new AudioController(config);
+		audio = new AudioController();
 		audio.setMusicTrack(getClass().getResource( "/res/sounds/music2.wav"));
 
 
@@ -51,9 +51,9 @@ public class MainController implements ActionListener, KeyListener {
 		settingsModel = new SettingsModel();
 		//soloModel = new SoloModel();
 		
-		menuCtrl = new MenuController(this, config, menuModel, audio);
-		creditCtrl = new CreditController(this, config, creditModel, audio);
-		settingsCtrl = new SettingsController(this, config, settingsModel,settingsVue, audio);
+		menuCtrl = new MenuController(this, menuModel, audio);
+		creditCtrl = new CreditController(this, creditModel, audio);
+		settingsCtrl = new SettingsController(this, settingsModel,settingsVue, audio);
 		//soloCtrl = new SoloController(this, soloModel);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
@@ -75,7 +75,7 @@ public class MainController implements ActionListener, KeyListener {
 		
 			case "CLICK:MENU:SOLO":
 				soloModel = new SoloModel();
-				soloCtrl = new SoloController(this, config, soloModel,audio);
+				soloCtrl = new SoloController(this, soloModel,audio);
 				soloVue = new SoloVue(soloModel, soloCtrl);
 				soloCtrl.setVue(soloVue);
 

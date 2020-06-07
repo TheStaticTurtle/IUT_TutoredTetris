@@ -20,16 +20,14 @@ public class SoloController implements ActionListener, KeyListener {
 	MainController mainCtrl;
 	SoloModel model;
 	public SoloVue vue;
-	public AudioController audio;
-	Config config;
+	AudioController audio;
 
 
-	public SoloController(MainController mainCtrl, Config config, SoloModel model,AudioController audio) {
+	public SoloController(MainController mainCtrl, SoloModel model,AudioController audio) {
 		this.model = model;
 		model.setCtrl(this);
 		this.mainCtrl = mainCtrl;
 		this.audio = audio;
-		this.config = config;
 
 		SoloController me = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
@@ -42,11 +40,11 @@ public class SoloController implements ActionListener, KeyListener {
 	}
 
 	public int gameEnded() {
-		int bestScore = this.config.getInt("SCORE_SOLO_BEST");
+		int bestScore = Config.getInstance().getInt("SCORE_SOLO_BEST");
 		if(model.currentScore > bestScore) {
 			bestScore = model.currentScore;
-			this.config.putInt("SCORE_SOLO_BEST",model.currentScore);
-			this.config.saveAsync();
+			Config.getInstance().putInt("SCORE_SOLO_BEST",model.currentScore);
+			Config.getInstance().saveAsync();
 		}
 		return bestScore;
 	}
@@ -72,16 +70,16 @@ public class SoloController implements ActionListener, KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(model.gameState == GameState.WAITING && e.getKeyCode()==config.getInt("KEYCODE_STARTGAME")) {
+		if(model.gameState == GameState.WAITING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_STARTGAME")) {
 			model.gameState = GameState.PLAYING;
 			vue.recalculate();
 		}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_DOWN"))     { model.fallCurrent(); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottom(); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { model.fallCurrent(); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottom(); vue.recalculate();}
 
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==config.getInt("KEYCODE_P1_ROTATE"))  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
+		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
 		//if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
 
 		/*

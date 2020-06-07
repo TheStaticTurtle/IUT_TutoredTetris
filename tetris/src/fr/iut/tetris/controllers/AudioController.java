@@ -16,12 +16,10 @@ public class AudioController {
 	Thread bgMusicThread;
 	ExecutorService sfxThreadPool = Executors.newFixedThreadPool(10);
 
-	Config config;
 
-	public AudioController(Config config) {
-		this.config = config;
-		this.setGain_SFX(this.config.getInt("VOLUME_SFX"));
-		this.setGain_MUSIC(this.config.getInt("VOLUME_MUSIC"));
+	public AudioController() {
+		this.setGain_SFX(Config.getInstance().getInt("VOLUME_SFX"));
+		this.setGain_MUSIC(Config.getInstance().getInt("VOLUME_MUSIC"));
 	}
 
 	public void playSFX(URL file) {

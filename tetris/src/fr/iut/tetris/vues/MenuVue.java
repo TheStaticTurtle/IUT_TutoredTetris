@@ -149,8 +149,6 @@ class MenuButton extends JButton implements MouseListener {
 }
 class TetrisLogo extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-
 	int offset = 10;
 
 	int canvasWidth = 450;

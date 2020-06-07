@@ -11,13 +11,11 @@ public class CreditController implements ActionListener {
 	MainController mainCtrl;
 	CreditModel model;
 	AudioController audio;
-	Config config;
 
-	public CreditController(MainController mainCtrl, Config config, CreditModel model, AudioController audio) {
+	public CreditController(MainController mainCtrl, CreditModel model, AudioController audio) {
 		this.model = model;
 		this.mainCtrl = mainCtrl;
 		this.audio = audio;
-		this.config = config;
 	}
 
 	@Override

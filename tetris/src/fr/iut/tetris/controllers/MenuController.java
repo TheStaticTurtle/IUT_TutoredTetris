@@ -1,6 +1,5 @@
 package fr.iut.tetris.controllers;
 
-import fr.iut.tetris.Config;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.models.MenuModel;
 
@@ -11,13 +10,11 @@ public class MenuController implements ActionListener {
 	MainController mainCtrl;
 	MenuModel model;
 	AudioController audio;
-	Config config;
 
-	public MenuController(MainController mainCtrl, Config config, MenuModel model, AudioController audio) {
+	public MenuController(MainController mainCtrl, MenuModel model, AudioController audio) {
 		this.model = model;
 		this.mainCtrl = mainCtrl;
 		this.audio = audio;
-		this.config = config;
 	}
 
 	@Override
