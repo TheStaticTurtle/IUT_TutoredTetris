@@ -18,6 +18,13 @@ public class MainVue extends JFrame {
 
 		addKeyListener(ctrl);
 		setFocusable(true);
+
+
+	}
+
+	public void setCurrentVueAndCenterWindows(JPanel p) {
+		setCurrentVue(p);
+		setLocationRelativeTo(null);
 	}
 
 	public void setCurrentVue(JPanel p) {
@@ -27,7 +34,6 @@ public class MainVue extends JFrame {
 		setContentPane(this.currentVue);
 		validate();
 		pack();
-		setLocationRelativeTo(null);
 	}
 
 	public void display() {

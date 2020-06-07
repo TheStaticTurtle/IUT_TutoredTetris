@@ -65,14 +65,14 @@ public class MainController implements ActionListener, KeyListener {
 		
 		// gameVue = new GameVue();
 
-		mainVue.setCurrentVue(menuVue);
+		mainVue.setCurrentVueAndCenterWindows(menuVue);
 		mainVue.display();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
-		
+
 			case "CLICK:MENU:SOLO":
 				soloModel = new SoloModel();
 				soloCtrl = new SoloController(this, soloModel,audio);
