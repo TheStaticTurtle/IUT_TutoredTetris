@@ -1,6 +1,7 @@
 package fr.iut.tetris.vues;
 
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.SettingsController;
 import fr.iut.tetris.models.SettingsModel;
@@ -118,30 +119,18 @@ public class SettingsVue extends JPanel{
 		GridLayout mainLayout = new GridLayout(13,1);
 		GridLayout subLayout = new GridLayout(1,2);
 
-		setPreferredSize(new Dimension( 640, 870 ));
+		int wh = Config.getInstance().getInt("WINDOW_HEIGHT");
+		int ww = Config.getInstance().getInt("WINDOW_WIDTH");
+		setPreferredSize(new Dimension( ww, wh ));
 		setBackground(bg);
-		mainPanel.setPreferredSize(new Dimension(450,700));
+		mainPanel.setPreferredSize(new Dimension((int) (ww*0.7), (int) (wh*0.85)));
+
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setOpaque(false);
 		mainLayout.setVgap(5);
 
-		Font font = new JLabel().getFont();
-		Font bigFont = font.deriveFont(67f);
-		Font mormalFont = font.deriveFont(40f);
-		try {
-			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, is);
-			bigFont = font.deriveFont(67f);
-			mormalFont = font.deriveFont(40f);
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(mormalFont);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-
-
-
-		JPanel myLabel = new TetrisLogo(this,450);
+		JPanel myLabel = new TetrisLogo(this, (int) (ww*0.7));
 
 		JLabel soundSettingsLabel = new JLabel("Sound");
 		JLabel soundMusicLabel = new JLabel("<html>Music: ");
@@ -151,17 +140,16 @@ public class SettingsVue extends JPanel{
 
 		JButton backButton = new MenuButton("Save",Color.GREEN,Color.WHITE,ctrl);
 
-
-		myLabel.setFont(bigFont);
-		soundSettingsLabel.setFont(bigFont);
+		myLabel.setFont(Config.getInstance().getFont("FONT_ULTRABIG"));
+		soundSettingsLabel.setFont(Config.getInstance().getFont("FONT_BIG"));
 		soundSettingsLabel.setForeground(Color.white);
 
-		soundMusicLabel.setFont(mormalFont);
+		soundMusicLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		soundMusicLabel.setForeground(Color.white);
-		soundSFXMusicLabel.setFont(mormalFont);
+		soundSFXMusicLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		soundSFXMusicLabel.setForeground(Color.white);
 
-		backButton.setFont(mormalFont);
+		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
 		backButton.addActionListener(ctrl);
 		backButton.setActionCommand("CLICK:SETTINGS:BACK");

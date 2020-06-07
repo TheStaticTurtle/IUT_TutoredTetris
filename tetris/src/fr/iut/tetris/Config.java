@@ -62,6 +62,7 @@ public class Config {
 		fonts.put("FONT_BIG",font.deriveFont((float)this.getInt("FONT_BIG")));
 		fonts.put("FONT_NORMAL",font.deriveFont((float)this.getInt("FONT_NORMAL")));
 		fonts.put("FONT_TINY",font.deriveFont((float)this.getInt("FONT_TINY")));
+		GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(fonts.get("FONT_NORMAL"));
 
 		inst = this;
 	}
