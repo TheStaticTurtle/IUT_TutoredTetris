@@ -240,14 +240,24 @@ class StarModel {
 }
 
 class StarsAnimation extends JPanel {
-
-	private static final long serialVersionUID = 1L;
-	
 	Random rn = new Random();
 	StarModel[] stars = new StarModel[35];
 	Dimension size;
 	Image img;
 	Image resize_img;
+	Color bgColor = null;
+
+	public StarsAnimation(Dimension size, Color bgColor, int count) {
+		this(size);
+
+		stars = new StarModel[count];
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new StarModel(rn,size,s+2);
+		}
+
+		this.bgColor = bgColor;
+	}
 
 	public StarsAnimation(Dimension size) {
 		this.size = size;
@@ -283,11 +293,25 @@ class StarsAnimation extends JPanel {
 
 	}
 
+	public void resetSize(Dimension size) {
+		this.size = size;
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new StarModel(rn,size,s+2);
+		}
+	}
+
+	@Override public Dimension getPreferredSize() {return size;}
+
 	@Override public int getHeight() { return size.height; }
 	@Override public int getWidth() { return size.width; }
 
 	@Override public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
+		if(this.bgColor != null) {
+			g2.setColor(this.bgColor);
+			g2.fillRect(0,0,this.getWidth(),this.getHeight());
+		}
 		for (StarModel star : stars) {
 			g2.drawImage(resize_img,star.position.x-star.offset, star.position.y, this);
 		}

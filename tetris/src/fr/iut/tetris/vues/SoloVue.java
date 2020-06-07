@@ -1,6 +1,8 @@
 package fr.iut.tetris.vues;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
@@ -88,6 +90,7 @@ class SplashScreenPanel extends JPanel {
 	JPanel backReplayPanel;
 	SoloController ctrl;
 	SoloModel model;
+	StarsAnimation animation;
 
 	public SplashScreenPanel(int x, int y, int width, int height,SoloController ctrl,SoloModel model) {
 		this.ctrl= ctrl;
@@ -105,7 +108,6 @@ class SplashScreenPanel extends JPanel {
 		mainPanel.setLocation(0, 0);
 		mainPanel.setVisible(true);
 		mainPanel.setOpaque(false);
-		mainPanel.setBackground(Color.BLACK);
 
 		pressSpace = new JLabel("<html><div style='text-align: center;'>Press \"SPACE\" to start</div></html>");
 		pressSpace.setFont(Config.getInstance().getFont("FONT_NORMAL"));
@@ -138,18 +140,31 @@ class SplashScreenPanel extends JPanel {
 		bestScoreLabel.setText("<html>Best Score: 0");
 
 
-		SpringLayout layout = new SpringLayout();
+		animation = new StarsAnimation(mainPanel.getPreferredSize(),Color.black,20);
 
-		mainPanel.setOpaque(true);
+		JLayeredPane testPane = new JLayeredPane();
+		testPane.add(animation,JLayeredPane.DEFAULT_LAYER);
+		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
+		testPane.setPreferredSize(getPreferredSize());
 
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		layout.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, this);
+		SpringLayout lyt = new SpringLayout();
+		lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
+		lyt.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, testPane);
 
+		lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, animation, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
+		lyt.putConstraint(SpringLayout.VERTICAL_CENTER, animation, 0, SpringLayout.VERTICAL_CENTER, testPane);
 
-		setLayout(layout);
+		testPane.setLayout(lyt);
+
+		add(testPane);
+
 		setVisible(true);
 
-		add(mainPanel);
+		JPanel t = this;
+		new Timer(1, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			t.repaint();
+			t.revalidate();
+		}}).start();
 	}
 
 	public void recalculate(boolean visible, GameState state) {
@@ -170,6 +185,10 @@ class SplashScreenPanel extends JPanel {
 			mainPanel.removeAll();
 			mainPanel.add(pressSpace);
 		}
+		Log.debug(this,mainPanel.getPreferredSize());
+		animation.resetSize(mainPanel.getPreferredSize());
+		/*revalidate();
+		repaint();*/
 	}
 }
 
