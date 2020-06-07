@@ -7,6 +7,14 @@ import java.util.Arrays;
 
 public
 class PieceModel {
+	public static final Color COLOR_AQUA = Color.decode("#00FFFF");
+	public static final Color COLOR_GREEN = Color.decode("#00F823");
+	public static final Color COLOR_RED = Color.decode("#FF0000");
+	public static final Color COLOR_PURPLE = Color.decode("#B200FF");
+	public static final Color COLOR_ORANGE = Color.decode("#FFAF00");
+	public static final Color COLOR_BLUE = Color.decode("#0026FF");
+	public static final Color COLOR_YELLOW = Color.decode("#FFF500");
+
 	public BlockModel[][] childs= new BlockModel[4][4];
 
 	//Position represent top-left corner of the 4x4 grid
@@ -69,32 +77,33 @@ class PieceModel {
 	protected PieceModel clone(){
 		return new PieceModel(Arrays.copyOf(this.childs,this.childs.length), new Point(this.spawnPoint.x,this.spawnPoint.y), new Point(this.centerOfgravity.x,this.centerOfgravity.y));
 	}
+
 	static PieceModel PieceT = new PieceModel(
 			new BlockModel[][] {
-					{null                     , null                     , null                     , null},
-					{null                     , null                     , null                     , null},
-					{new BlockModel(Color.red), new BlockModel(Color.red), new BlockModel(Color.red), null},
-					{null                     , new BlockModel(Color.red), null                     , null}
+					{null                        , null                        , null                        , null},
+					{null                        , null                        , null                        , null},
+					{new BlockModel(COLOR_PURPLE), new BlockModel(COLOR_PURPLE), new BlockModel(COLOR_PURPLE), null},
+					{null                        , new BlockModel(COLOR_PURPLE), null                        , null}
 			},
 			new Point(3,-2),
 			new Point(2,2)
 	);
 	static PieceModel PieceL = new PieceModel(
 			new BlockModel[][] {
-					{null                       , null                       , null                       , null},
-					{null                       , new BlockModel(Color.green), null                       , null},
-					{null                       , new BlockModel(Color.green), null                       , null},
-					{null                       , new BlockModel(Color.green), new BlockModel(Color.green), null}
+					{null                       , null                        , null                        , null},
+					{null                       , new BlockModel(COLOR_ORANGE), null                        , null},
+					{null                       , new BlockModel(COLOR_ORANGE), null                        , null},
+					{null                       , new BlockModel(COLOR_ORANGE), new BlockModel(COLOR_ORANGE), null}
 			},
 			new Point(3,-1),
 			new Point(2,2)
 	);
-	static PieceModel Piece7 = new PieceModel(
+	static PieceModel PieceJ = new PieceModel(
 			new BlockModel[][] {
-					{null                       , null                       , null                       , null},
-					{null                       , new BlockModel(Color.CYAN), null                       , null},
-					{null                       , new BlockModel(Color.CYAN), null                       , null},
-					{new BlockModel(Color.CYAN) , new BlockModel(Color.CYAN), null                       , null}
+					{null                       , null                      , null                       , null},
+					{null                       , new BlockModel(COLOR_BLUE), null                       , null},
+					{null                       , new BlockModel(COLOR_BLUE), null                       , null},
+					{new BlockModel(COLOR_BLUE) , new BlockModel(COLOR_BLUE), null                       , null}
 			},
 			new Point(4,-1),
 			new Point(2,2)
@@ -103,41 +112,41 @@ class PieceModel {
 			new BlockModel[][] {
 					{null                       , null                        , null                        , null},
 					{null                       , null                        , null                        , null},
-					{null                       , new BlockModel(Color.yellow), new BlockModel(Color.yellow), null},
-					{null                       , new BlockModel(Color.yellow), new BlockModel(Color.yellow), null}
+					{null                       , new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW), null},
+					{null                       , new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW), null}
 			},
 			new Point(3,-2),
 			new Point(1,2)
 	);
 	static PieceModel PieceS = new PieceModel(
 			new BlockModel[][] {
-					{null                      , null                      , null                      , null},
-					{null                      , null                      , null                      , null},
-					{null                      , new BlockModel(Color.BLUE), new BlockModel(Color.BLUE), null},
-					{new BlockModel(Color.BLUE), new BlockModel(Color.BLUE), null                      , null}
+					{null                       , null                       , null                       , null},
+					{null                       , null                       , null                       , null},
+					{null                       , new BlockModel(COLOR_GREEN), new BlockModel(COLOR_GREEN), null},
+					{new BlockModel(COLOR_GREEN), new BlockModel(COLOR_GREEN), null                       , null}
 			},
 			new Point(4,-2),
 			new Point(1,2)
 	);
 	static PieceModel PieceZ = new PieceModel(
 			new BlockModel[][] {
-					{null                         , null                         , null                         , null},
-					{null                         , null                         , null                         , null},
-					{new BlockModel(Color.MAGENTA), new BlockModel(Color.MAGENTA), null                         , null},
-					{null                         , new BlockModel(Color.MAGENTA), new BlockModel(Color.MAGENTA), null}
+					{null                     , null                     , null                     , null},
+					{null                     , null                     , null                     , null},
+					{new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null                     , null},
+					{null                     , new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null}
 			},
 			new Point(3,-2),
 			new Point(1,2)
 	);
-	static PieceModel Piece_ = new PieceModel(
+	static PieceModel PieceI = new PieceModel(
 			new BlockModel[][] {
-					{null                         , null                         , null                         , null},
-					{null                         , null                         , null                         , null},
-					{new BlockModel(Color.WHITE), new BlockModel(Color.WHITE), new BlockModel(Color.WHITE), new BlockModel(Color.WHITE)},
-					{null                         , null                         , null                         , null},
+					{null                      , null                      , null                      , null},
+					{null                      , null                      , null                      , null},
+					{new BlockModel(COLOR_AQUA), new BlockModel(COLOR_AQUA), new BlockModel(COLOR_AQUA), new BlockModel(COLOR_AQUA)},
+					{null                      , null                      , null                      , null},
 			},
 			new Point(3,-2),
 			new Point(1,2)
 	);
-	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.Piece_,PieceModel.Piece7};
+	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.PieceI,PieceModel.PieceJ};
 }
