@@ -117,6 +117,13 @@ public class SoloModel {
 					}
 					// Line has fallen down recheck to see if there is more lines but tel the function to spit out an integer instead of the LineCompleted enum
 					lineCount += (Integer)checkForFullLineAndRemoveIt(false);
+					if(fallSpeed-currentScore > 250) {
+						fallSpeed -= currentScore;
+						Log.debug(this, "FallSpeed = " + this.fallSpeed);
+					}
+					else {
+						fallSpeed = 250;
+					}
 					break;
 				}
 			}
