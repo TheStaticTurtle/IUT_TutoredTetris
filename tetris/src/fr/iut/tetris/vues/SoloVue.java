@@ -119,11 +119,11 @@ class SplashScreenPanel extends JPanel {
 		mainPanel.setBackground(Color.BLACK);
 
 		Font font = new JLabel().getFont();
-		Font mormalFont = font.deriveFont(40f);
+		Font mormalFont = font.deriveFont(32f);
 		try {
 			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
 			font = Font.createFont(Font.TRUETYPE_FONT, is);
-			mormalFont = font.deriveFont(40f);
+			mormalFont = font.deriveFont(32f);
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(mormalFont);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -298,13 +298,13 @@ class GamePanel extends JPanel {
 		noBlockModel.recalculate();
 
 		Font font = new JLabel().getFont();
-		Font bigFont = font.deriveFont(55f);
-		Font mormalFont = font.deriveFont(40f);
+		Font bigFont = font.deriveFont(48f);
+		Font mormalFont = font.deriveFont(32f);
 		try {
 			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
 			font = Font.createFont(Font.TRUETYPE_FONT, is);
-			bigFont = font.deriveFont(55f);
-			mormalFont = font.deriveFont(40f);
+			bigFont = font.deriveFont(48f);
+			mormalFont = font.deriveFont(32f);
 			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(mormalFont);
 		} catch (Exception e) {
 			e.printStackTrace();

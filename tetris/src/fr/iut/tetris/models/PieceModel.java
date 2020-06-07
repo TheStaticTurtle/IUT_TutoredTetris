@@ -15,7 +15,7 @@ class PieceModel {
 	public static final Color COLOR_BLUE = Color.decode("#0026FF");
 	public static final Color COLOR_YELLOW = Color.decode("#FFF500");
 
-	public BlockModel[][] childs= new BlockModel[4][4];
+	public BlockModel[][] childs = new BlockModel[4][4];
 
 	//Position represent top-left corner of the 4x4 grid
 	int x = 0;
@@ -90,30 +90,30 @@ class PieceModel {
 	);
 	static PieceModel PieceL = new PieceModel(
 			new BlockModel[][] {
-					{null                       , null                        , null                        , null},
-					{null                       , new BlockModel(COLOR_ORANGE), null                        , null},
-					{null                       , new BlockModel(COLOR_ORANGE), null                        , null},
-					{null                       , new BlockModel(COLOR_ORANGE), new BlockModel(COLOR_ORANGE), null}
+					{null, null                        , null                        , null},
+					{null, new BlockModel(COLOR_ORANGE), null                        , null},
+					{null, new BlockModel(COLOR_ORANGE), null                        , null},
+					{null, new BlockModel(COLOR_ORANGE), new BlockModel(COLOR_ORANGE), null}
 			},
 			new Point(3,-1),
 			new Point(1,2)
 	);
 	static PieceModel PieceJ = new PieceModel(
 			new BlockModel[][] {
-					{null                       , null                      , null                       , null},
-					{null                       , new BlockModel(COLOR_BLUE), null                       , null},
-					{null                       , new BlockModel(COLOR_BLUE), null                       , null},
-					{new BlockModel(COLOR_BLUE) , new BlockModel(COLOR_BLUE), null                       , null}
+					{null, null                       , null                      , null},
+					{null, null                       , new BlockModel(COLOR_BLUE), null},
+					{null, null                       , new BlockModel(COLOR_BLUE), null},
+					{null, new BlockModel(COLOR_BLUE) , new BlockModel(COLOR_BLUE), null}
 			},
 			new Point(4,-1),
-			new Point(2,2)
+			new Point(1,2)
 	);
 	static PieceModel PieceO = new PieceModel(
 			new BlockModel[][] {
-					{null                       , null                        , null                        , null},
-					{null                       , null                        , null                        , null},
-					{null                       , new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW), null},
-					{null                       , new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW), null}
+					{null, null, null                        , null                        },
+					{null, null, null                        , null                        },
+					{null, null, new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW)},
+					{null, null, new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW)}
 			},
 			new Point(3,-2),
 			new Point(1,2)

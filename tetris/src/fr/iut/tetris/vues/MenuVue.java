@@ -344,8 +344,8 @@ public class MenuVue extends JPanel  {
 			e.printStackTrace();
 		}
 
-		Font bigFont = font.deriveFont(96f);
-		Font mormalFont = font.deriveFont(40f);
+		Font bigFont = font.deriveFont(80f);
+		Font mormalFont = font.deriveFont(32f);
 		myLabel.setFont(bigFont);
 		soloButton.setFont(mormalFont);
 		coopButton.setFont(mormalFont);
