@@ -7,6 +7,7 @@ import java.io.InputStream;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.SoloController;
@@ -30,20 +31,10 @@ public class SoloVue extends JPanel {
 		this.ctrl = ctrl;
 
 		Color bg = Color.BLACK;
-		setPreferredSize(new Dimension( 640, 870 ));
+		int wh = Config.getInstance().getInt("WINDOW_HEIGHT");
+		int ww = Config.getInstance().getInt("WINDOW_WIDTH");
+		setPreferredSize(new Dimension( ww, wh ));
 		setBackground(bg);
-
-		JPanel mainPanel = new JPanel();
-		GridLayout mainLayout = new GridLayout(11,1);
-		mainPanel.setLayout(mainLayout);
-		mainPanel.setOpaque(false);
-		mainLayout.setVgap(5);
-
-		mainPanel.setPreferredSize(new Dimension(450,600));
-		mainPanel.setLocation(0, 0);
-		mainPanel.setPreferredSize(mainPanel.getPreferredSize());
-		mainPanel.setBounds(0, 0, (int) mainPanel.getPreferredSize().getWidth(), (int) mainPanel.getPreferredSize().getHeight());
-		mainPanel.setVisible(true);
 
 
 		gamePanel = new GamePanel(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight());
@@ -63,10 +54,10 @@ public class SoloVue extends JPanel {
 
 		SpringLayout lyt = new SpringLayout();
 		SpringLayout lyt2 = new SpringLayout();
-		lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
+		/*lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
 		lyt.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, testPane);
 		lyt2.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		lyt2.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, this);
+		lyt2.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, this);*/
 
 
 		lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, splashScreen, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
@@ -88,7 +79,6 @@ public class SoloVue extends JPanel {
 		gamePanel.recalculate();
 	}
 }
-
 
 class SplashScreenPanel extends JPanel {
 	JPanel mainPanel;
@@ -117,20 +107,8 @@ class SplashScreenPanel extends JPanel {
 		mainPanel.setOpaque(false);
 		mainPanel.setBackground(Color.BLACK);
 
-		Font font = new JLabel().getFont();
-		Font mormalFont = font.deriveFont(32f);
-		try {
-			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, is);
-			mormalFont = font.deriveFont(32f);
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(mormalFont);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-
 		pressSpace = new JLabel("<html><div style='text-align: center;'>Press \"SPACE\" to start</div></html>");
-		pressSpace.setFont(mormalFont);
+		pressSpace.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		pressSpace.setForeground(Color.white);
 		mainPanel.add(pressSpace);
 		mainPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white),new EmptyBorder(10, 10, 10, 10)));
@@ -147,16 +125,16 @@ class SplashScreenPanel extends JPanel {
 		backReplayPanel.setLayout(subLayout);
 		backReplayPanel.add(backButton);
 		backReplayPanel.add(replayButton);
-		backButton.setFont(mormalFont);
-		replayButton.setFont(mormalFont);
+		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		replayButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
 		currentScoreLabel = new JLabel();
 		currentScoreLabel.setForeground(Color.white);
-		currentScoreLabel.setFont(mormalFont);
+		currentScoreLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		currentScoreLabel.setText("<html>Current Score: 0");
 		bestScoreLabel = new JLabel();
 		bestScoreLabel.setForeground(Color.white);
-		bestScoreLabel.setFont(mormalFont);
+		bestScoreLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		bestScoreLabel.setText("<html>Best Score: 0");
 
 
@@ -247,11 +225,17 @@ class NextPiecePanel extends JPanel {
 	BlockModel noBlockModel;
 
 	NextPiecePanel(int blockSize) {
-		this.canvasWidth = blockSize*6;
-		this.canvasHeight = blockSize*6;
+		this.canvasWidth = blockSize*8;
+		this.canvasHeight = blockSize*8;
 		this.blockSize = this.canvasHeight/4;
 		noBlockModel = new BlockModel(Color.DARK_GRAY);
 		noBlockModel.recalculate();
+	}
+	public void resetSize(int blockSize) {
+		this.canvasWidth = blockSize*8;
+		this.canvasHeight = blockSize*8;
+		this.blockSize = this.canvasHeight/4;
+		recalulate(null);
 	}
 
 	public void recalulate(PieceModel model) {
@@ -296,45 +280,27 @@ class GamePanel extends JPanel {
 		noBlockModel = new BlockModel(Color.BLACK);
 		noBlockModel.recalculate();
 
-		Font font = new JLabel().getFont();
-		Font bigFont = font.deriveFont(48f);
-		Font mormalFont = font.deriveFont(32f);
-		try {
-			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, is);
-			bigFont = font.deriveFont(48f);
-			mormalFont = font.deriveFont(32f);
-			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(mormalFont);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		this.model = model;
 		mainPanel = new JPanel();
 		GridLayout mainLayout = new GridLayout(0,model.witdh);//ROW = 0 IF Else bug
-		//mainPanel.setLocation(0, 0);
-		mainPanel.setPreferredSize(new Dimension((model.witdh)*squareSize,(model.height)*squareSize));
-		//mainPanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setVisible(true);
-		mainPanel.setOpaque(true);
-		mainPanel.setBackground(Color.DARK_GRAY);
+		mainPanel.setOpaque(false);
+		//mainPanel.setBackground(Color.DARK_GRAY);
 
-		nextPiecePanel = new NextPiecePanel(squareSize/2);
-		//nextPiecePanel.setLocation(0, 0);
-		//nextPiecePanel.setPreferredSize(new Dimension(2*squareSize,2*squareSize));
-		//nextPiecePanel.setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		nextPiecePanel = new NextPiecePanel(squareSize);
 		nextPiecePanel.setVisible(true);
 		nextPiecePanel.setOpaque(true);
 		nextPiecePanel.setBackground(Color.MAGENTA);
 
 		JLabel labelNextPiece = new JLabel("<html>Next:");
 		labelNextPiece.setForeground(Color.white);
-		labelNextPiece.setFont(mormalFont);
+		labelNextPiece.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
 		scoreLabel = new JLabel("<html>Score: "+this.model.currentScore);
 		scoreLabel.setForeground(Color.white);
-		scoreLabel.setFont(bigFont);
+		scoreLabel.setFont(Config.getInstance().getFont("FONT_BIG"));
 
 		add(mainPanel);
 		add(nextPiecePanel);
@@ -363,7 +329,7 @@ class GamePanel extends JPanel {
 
 		layout.putConstraint(SpringLayout.WEST, mainPanel, 10, SpringLayout.WEST, this);
 		layout.putConstraint(SpringLayout.NORTH, mainPanel, 10, SpringLayout.SOUTH, scoreLabel);
-		//layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
+		layout.putConstraint(SpringLayout.SOUTH, mainPanel, -10, SpringLayout.SOUTH, this);
 
 		layout.putConstraint(SpringLayout.NORTH, labelNextPiece, 0, SpringLayout.NORTH, mainPanel);
 		layout.putConstraint(SpringLayout.WEST, labelNextPiece, 10, SpringLayout.EAST, mainPanel);
@@ -372,7 +338,12 @@ class GamePanel extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
 		setLayout(layout);
 
-
+		//Recalculate panel width
+		Dimension t = mainPanel.getPreferredSize();
+		squareSize = t.height / model.height;
+		t.width = t.height * (model.height / model.witdh);
+		mainPanel.setPreferredSize(t);
+		nextPiecePanel.resetSize((int)(squareSize*1.5));
 		recalculate();
 	}
 
