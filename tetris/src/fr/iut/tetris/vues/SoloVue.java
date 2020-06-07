@@ -7,8 +7,6 @@ import java.io.InputStream;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.CreditController;
@@ -211,7 +209,7 @@ class TetrisBlock extends JPanel {
 		this.canvasHeight = size;
 	}
 
-	public void recalulate(@Nullable BlockModel model) {
+	public void recalulate(BlockModel model) {
 		if(model != null) {
 			if(model.size.width != this.canvasWidth || model.size.height != this.canvasHeight) {
 				model.setSize(new Dimension(this.canvasWidth,this.canvasHeight));
@@ -257,7 +255,7 @@ class NextPiecePanel extends JPanel {
 		noBlockModel.recalculate();
 	}
 
-	public void recalulate(@NotNull PieceModel model) {
+	public void recalulate(PieceModel model) {
 		this.piece = model;
 		invalidate();
 		repaint();
