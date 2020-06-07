@@ -138,7 +138,7 @@ class SplashScreenPanel extends JPanel {
 
 		backReplayPanel = new JPanel();
 		JButton backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE, ctrl);
-		JButton replayButton = new MenuButton("Replay",Color.RED,Color.WHITE, ctrl);
+		JButton replayButton = new MenuButton("Restart",Color.RED,Color.WHITE, ctrl);
 		backButton.setActionCommand("CLICK:SOLO:BACK");
 		replayButton.setActionCommand("CLICK:MENU:SOLO"); //HACKY
 		backButton.addActionListener(ctrl);

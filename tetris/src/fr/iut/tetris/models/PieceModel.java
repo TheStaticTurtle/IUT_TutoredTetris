@@ -86,7 +86,7 @@ class PieceModel {
 					{null                        , new BlockModel(COLOR_PURPLE), null                        , null}
 			},
 			new Point(3,-2),
-			new Point(2,2)
+			new Point(3,1)
 	);
 	static PieceModel PieceL = new PieceModel(
 			new BlockModel[][] {
@@ -96,7 +96,7 @@ class PieceModel {
 					{null                       , new BlockModel(COLOR_ORANGE), new BlockModel(COLOR_ORANGE), null}
 			},
 			new Point(3,-1),
-			new Point(2,2)
+			new Point(1,2)
 	);
 	static PieceModel PieceJ = new PieceModel(
 			new BlockModel[][] {
