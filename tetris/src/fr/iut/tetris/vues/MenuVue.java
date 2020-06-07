@@ -297,9 +297,6 @@ class StarsAnimation extends JPanel {
 }
 
 public class MenuVue extends JPanel  {
-
-	private static final long serialVersionUID = 1L;
-	
 	MenuModel model;
 	MenuController ctrl;
 

@@ -1,5 +1,6 @@
 package fr.iut.tetris.vues;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.models.CreditModel;
@@ -22,34 +23,27 @@ public class CreditVue extends JPanel  {
 
 		Color bg = Color.BLACK;
 
-		setPreferredSize(new Dimension( 640, 870 ));
+		int wh = Config.getInstance().getInt("WINDOW_HEIGHT");
+		int ww = Config.getInstance().getInt("WINDOW_WIDTH");
+		setPreferredSize(new Dimension( ww, wh ));
 		setBackground(bg);
 
 		JPanel mainPanel = new JPanel();
 		GridLayout mainLayout = new GridLayout(11,1);
 
-		mainPanel.setPreferredSize(new Dimension(450,600));
+		mainPanel.setPreferredSize(new Dimension((int) (ww*0.7), (int) (wh*0.7)));
 
-		JPanel myLabel = new TetrisLogo(this,450);
+		JPanel myLabel = new TetrisLogo(this,(int) (ww*0.7));
 		JButton backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE,ctrl);
 
 		backButton.addActionListener(ctrl);
 		backButton.setActionCommand("CLICK:CREDIT:BACK");
 
-		Font font = new JLabel().getFont();
-		try {
-			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, is);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
 		JLabel[] creditsLabel = new JLabel[6];
 
-		Font bigFont = font.deriveFont(96f);
-		Font mormalFont = font.deriveFont(40f);
-		myLabel.setFont(bigFont);
-		backButton.setFont(mormalFont);
+		myLabel.setFont(Config.getInstance().getFont("FONT_BIG"));
+		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setOpaque(false);
@@ -67,7 +61,7 @@ public class CreditVue extends JPanel  {
 		mainPanel.add( new Spacer());
 
 		for(JLabel lbl : creditsLabel) {
-			lbl.setFont(mormalFont);
+			lbl.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 			lbl.setForeground(Color.white);
 			mainPanel.add(lbl);
 		}
