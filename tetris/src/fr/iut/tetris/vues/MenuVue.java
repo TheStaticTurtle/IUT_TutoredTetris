@@ -1,5 +1,6 @@
 package fr.iut.tetris.vues;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.Main;
 import fr.iut.tetris.controllers.*;
@@ -173,6 +174,8 @@ class TetrisLogo extends JPanel {
 		this.canvasHeight = (int)(this.canvasWidth*0.333);
 		this.baseWidth = this.canvasWidth-offset;
 		this.baseHeight = this.canvasHeight-offset;
+		this.width = baseWidth;
+		this.height = baseHeight;
 
 		try {
 
@@ -197,8 +200,8 @@ class TetrisLogo extends JPanel {
 		if(width<(baseWidth-offset) || height<(baseHeight-offset)) { direction = speed; }
 	}
 
-	@Override public int getHeight() { return canvasHeight; }
-	@Override public int getWidth() { return canvasWidth; }
+	@Override public int getHeight() { return baseHeight +offset; }
+	@Override public int getWidth() { return baseWidth+offset; }
 
 	@Override public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
@@ -219,7 +222,7 @@ class StarModel {
 	Dimension parent;
 	Random rng;
 	int speed = 0;
-	int size = 96;
+	int offset = 150;
 	public StarModel(Random rng, Dimension parent, int speed) {
 		this.parent = parent;
 		this.speed = speed;
@@ -227,12 +230,11 @@ class StarModel {
 		this.position = new Point();
 		this.position.y = rng.nextInt(this.parent.height);
 		this.position.x = rng.nextInt(this.parent.width);
-		this.size = 100;
 	}
 
 	public void move() {
 		position.x += speed;
-		if(position.x>parent.width+size) {
+		if(position.x>parent.width+offset) {
 			position.x=0;
 			this.position.y = this.rng.nextInt(this.parent.height);
 		}
@@ -244,7 +246,7 @@ class StarsAnimation extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	Random rn = new Random();
-	StarModel[] stars = new StarModel[25];
+	StarModel[] stars = new StarModel[35];
 	Dimension size;
 	Image img;
 	Image resize_img;
@@ -289,7 +291,7 @@ class StarsAnimation extends JPanel {
 	@Override public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
 		for (StarModel star : stars) {
-			g2.drawImage(resize_img,star.position.x-star.size, star.position.y, this);
+			g2.drawImage(resize_img,star.position.x-star.offset, star.position.y, this);
 		}
 	}
 }
@@ -306,17 +308,19 @@ public class MenuVue extends JPanel  {
 		this.ctrl = ctrl;
 		Color bg = Color.BLACK;
 
-		setPreferredSize(new Dimension( 640, 870 ));
+		int wh = Config.getInstance().getInt("WINDOW_HEIGHT");
+		int ww = Config.getInstance().getInt("WINDOW_WIDTH");
+		setPreferredSize(new Dimension( ww, wh ));
 		setBackground(bg);
 
 
 		JPanel mainPanel = new JPanel();
-		GridLayout mainLayout = new GridLayout(10,1);
+		GridLayout mainLayout = new GridLayout(0,1);
 		GridLayout subLayout = new GridLayout(1,2);
 
-		mainPanel.setPreferredSize(new Dimension(450,600));
+		mainPanel.setPreferredSize(new Dimension((int) (ww*0.7), (int) (wh*0.7)));
 
-		JPanel myLabel = new TetrisLogo(this,450);
+		JPanel myLabel = new TetrisLogo(this, (int) (ww*0.7));
 		JButton soloButton = new MenuButton("Solo",Color.YELLOW,Color.WHITE,ctrl);
 		JButton coopButton = new MenuButton("Coop",Color.RED,Color.WHITE,ctrl);
 		JButton versusButton = new MenuButton("Versus",Color.ORANGE,Color.WHITE,ctrl);
@@ -336,43 +340,32 @@ public class MenuVue extends JPanel  {
 		quitButton.addActionListener(ctrl);
 		quitButton.setActionCommand("CLICK:MENU:QUIT");
 
-		Font font = new JLabel().getFont();
-		try {
-			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, is);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		Font bigFont = font.deriveFont(80f);
-		Font mormalFont = font.deriveFont(32f);
-		myLabel.setFont(bigFont);
-		soloButton.setFont(mormalFont);
-		coopButton.setFont(mormalFont);
-		versusButton.setFont(mormalFont);
-		settingsButton.setFont(mormalFont);
-		quitButton.setFont(mormalFont);
-		creditButton.setFont(mormalFont);
+		myLabel.setFont(Config.getInstance().getFont("FONT_ULTRABIG"));
+		soloButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		coopButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		versusButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		settingsButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		quitButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		creditButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setOpaque(false);
-		//mainPanel.setBackground(bg);
+		mainPanel.setBackground(bg);
 		mainLayout.setVgap(5);
 		subLayout.setHgap(10);
 
 		JPanel soloCoopPanel = new JPanel();
-		//soloCoopPanel.setBackground(bg);
 		soloCoopPanel.setOpaque(false);
 		soloCoopPanel.setLayout(subLayout);
 		soloCoopPanel.add(coopButton);
 		soloCoopPanel.add(versusButton);
 
 		JPanel quitCreditsPanel = new JPanel();
-		//quitCreditsPanel.setBackground(bg);
 		quitCreditsPanel.setOpaque(false);
 		quitCreditsPanel.setLayout(subLayout);
 		quitCreditsPanel.add(quitButton);
 		quitCreditsPanel.add(creditButton);
+
 
 		mainPanel.add(myLabel);
 		mainPanel.add( new Spacer());
@@ -384,6 +377,7 @@ public class MenuVue extends JPanel  {
 		mainPanel.add( new Spacer());
 		mainPanel.add(quitCreditsPanel);
 		mainPanel.add( new Spacer());
+
 
 		mainPanel.setLocation(0, 0);
 		mainPanel.setPreferredSize(mainPanel.getPreferredSize());

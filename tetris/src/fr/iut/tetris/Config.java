@@ -1,14 +1,33 @@
 package fr.iut.tetris;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class Config {
 	String rootPath;
 	String appConfigPath;
 	Properties config;
+
+	private static volatile Config inst;
+	public static Config getInstance() {
+		if (inst == null) {
+			synchronized (Config.class) {
+				if (inst == null) {
+					inst = new Config();
+				}
+			}
+		}
+		return inst;
+	}
+
+	Map<String, Font> fonts = new HashMap<>();
 
 	public Config() {
 		rootPath = System.getProperty("user.home")+"/";
@@ -29,6 +48,29 @@ public class Config {
 				Log.critical(this,"Failed to save default config file");
 			}
 		}
+
+		Font font = new JLabel().getFont();
+		try {
+			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
+			font = Font.createFont(Font.TRUETYPE_FONT, is);
+			Log.info(this,"Loaded font: /res/retro.ttf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		fonts.put("FONT_ULTRABIG",font.deriveFont((float)this.getInt("FONT_ULTRABIG")));
+		fonts.put("FONT_BIG",font.deriveFont((float)this.getInt("FONT_BIG")));
+		fonts.put("FONT_NORMAL",font.deriveFont((float)this.getInt("FONT_NORMAL")));
+		fonts.put("FONT_TINY",font.deriveFont((float)this.getInt("FONT_TINY")));
+
+		inst = this;
+	}
+
+	public Font getFont(String key) {
+		if(fonts.containsKey(key)) {
+			return fonts.get(key);
+		}
+		return fonts.get("FONT_NORMAL");
 	}
 
 	public void saveAsync() {
@@ -74,6 +116,12 @@ public class Config {
 		p.put("VOLUME_MUSIC", "0"); //0Gain
 		p.put("VOLUME_SFX"  , "0"); //0Gain
 		p.put("SCORE_SOLO_BEST" ,"0"); // Enter key
+		p.put("WINDOW_HEIGHT"  ,"870");
+		p.put("WINDOW_WIDTH"   ,"640");
+		p.put("FONT_ULTRABIG" ,"72");
+		p.put("FONT_BIG"      ,"48");
+		p.put("FONT_NORMAL"   ,"32");
+		p.put("FONT_TINY"     ,"16");
 		return p;
 	}
 }
