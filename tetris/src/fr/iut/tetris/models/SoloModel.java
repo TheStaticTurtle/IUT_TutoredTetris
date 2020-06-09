@@ -85,6 +85,7 @@ public class SoloModel {
 
 			if(obj instanceof BlockModel) {
 				BlockModel block = (BlockModel)obj;
+				if(table[block.standAlonePos.y][block.standAlonePos.x] != null) throw new OverlappedPieceException();
 				table[block.standAlonePos.y][block.standAlonePos.x] = block;
 			}
 
