@@ -41,14 +41,25 @@ public class Config {
 		rootPath = System.getProperty("user.home")+"/";
 		appConfigPath = rootPath + "tetris_projtut.properties";
 
-
+		Properties defConf = defaultConfig();
 		config = new Properties();
 		try {
 			config.load(new FileInputStream(appConfigPath));
-			Log.info(this,"Loaded config at: "+appConfigPath);
+			if(config.get("CONFIG_VERSION") != null && config.get("CONFIG_VERSION").equals(defConf.get("CONFIG_VERSION"))) {
+				Log.info(this,"Loaded config at: "+appConfigPath);
+			} else {
+				Log.warning(this,"The stored config file has not the same version number as the default config file, overwriting it (L:"+config.get("CONFIG_VERSION")+" D:"+defConf.get("CONFIG_VERSION")+")");
+				config = defConf;
+				try {
+					config.store(new FileWriter(appConfigPath),null);
+					Log.info(this,"Saved the new config");
+				} catch (IOException ex) {
+					Log.critical(this,"Failed to saved the new config");
+				}
+			}
 		} catch (IOException e) {
 			Log.warning(this,"Failed to load config file");
-			config = defaultConfig();
+			config = defConf;
 			try {
 				config.store(new FileWriter(appConfigPath),null);
 				Log.info(this,"Generated default config file");
@@ -210,11 +221,20 @@ public class Config {
 	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
+		p.put("CONFIG_VERSION"     ,"4");
+
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
 		p.put("KEYCODE_P1_DOWN"    ,"40"); // Down key
 		p.put("KEYCODE_P1_FASTDOWN","10"); // Enter key
 		p.put("KEYCODE_P1_ROTATE"  ,"38"); // Enter key
+
+		p.put("KEYCODE_P2_LEFT"    ,"81"); // Q key
+		p.put("KEYCODE_P2_RIGHT"   ,"68"); // D key
+		p.put("KEYCODE_P2_DOWN"    ,"83"); // S key
+		p.put("KEYCODE_P2_FASTDOWN","65"); // A key
+		p.put("KEYCODE_P2_ROTATE"  ,"90"); // Z key
+
 		p.put("KEYCODE_GOBACK"     ,"27"); // Esc key
 		p.put("KEYCODE_STARTGAME"  ,"32"); // Space key
 		p.put("VOLUME_MUSIC", "0"); //0Gain

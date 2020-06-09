@@ -12,11 +12,13 @@ import javax.swing.border.EmptyBorder;
 import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.Main;
+import fr.iut.tetris.controllers.CoopController;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 import fr.iut.tetris.models.BlockModel;
+import fr.iut.tetris.models.CoopModel;
 import fr.iut.tetris.models.PieceModel;
 import fr.iut.tetris.models.SoloModel;
 
@@ -88,13 +90,17 @@ class SplashScreenPanel extends JPanel {
 	JLabel currentScoreLabel;
 	JLabel bestScoreLabel;
 	JPanel backReplayPanel;
-	SoloController ctrl;
-	SoloModel model;
+	Object ctrl;
+	Object model;
 	StarsAnimation animation;
 
-	public SplashScreenPanel(int x, int y, int width, int height,SoloController ctrl,SoloModel model) {
-		this.ctrl= ctrl;
+	JButton backButton;
+	JButton replayButton;
+
+	public SplashScreenPanel(int x, int y, int width, int height,Object ctrl,Object model) {
+		this.ctrl = ctrl;
 		this.model = model;
+
 		setLocation(x, y);
 		setPreferredSize(new Dimension(width,height));
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
@@ -115,12 +121,12 @@ class SplashScreenPanel extends JPanel {
 		mainPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white),new EmptyBorder(10, 10, 10, 10)));
 
 		backReplayPanel = new JPanel();
-		JButton backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE, ctrl);
-		JButton replayButton = new MenuButton("Restart",Color.RED,Color.WHITE, ctrl);
+		backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE, (ActionListener)ctrl);
+		replayButton = new MenuButton("Restart",Color.RED,Color.WHITE, (ActionListener)ctrl);
 		backButton.setActionCommand("CLICK:SOLO:BACK");
 		replayButton.setActionCommand("CLICK:MENU:SOLO"); //HACKY
-		backButton.addActionListener(ctrl);
-		replayButton.addActionListener(ctrl);
+		backButton.addActionListener((ActionListener)ctrl);
+		replayButton.addActionListener((ActionListener)ctrl);
 
 
 		backReplayPanel.setOpaque(false);
@@ -175,8 +181,14 @@ class SplashScreenPanel extends JPanel {
 		setVisible(visible);
 		if(state == GameState.FINISHED) {
 			pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
-			currentScoreLabel.setText("<html>Current score: "+this.model.currentScore);
-			bestScoreLabel.setText("<html>Best score: "+this.model.bestScore);
+			if(this.model instanceof SoloModel) {
+				currentScoreLabel.setText("<html>Current score: "+((SoloModel)this.model).currentScore);
+				bestScoreLabel.setText("<html>Best score: "+((SoloModel)this.model).bestScore);
+			}
+			if(this.model instanceof CoopModel) {
+				currentScoreLabel.setText("<html>Current score: "+((CoopModel)this.model).currentScore);
+				bestScoreLabel.setText("<html>Best score: "+((CoopModel)this.model).bestScore);
+			}
 			mainPanel.removeAll();
 			mainPanel.add(pressSpace);
 			mainPanel.add(new Spacer());

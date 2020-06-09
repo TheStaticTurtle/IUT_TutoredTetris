@@ -83,6 +83,10 @@ class MenuButton extends JButton implements MouseListener {
 		this(text);
 		listener = ctrl;
 	}
+	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, ActionListener ctrl) {
+		this(text,foreGroundColor,backGroundColor);
+		listener = ctrl;
+	}
 	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, SoloController ctrl) {
 		this(text,foreGroundColor,backGroundColor);
 		listener = ctrl;
@@ -328,6 +332,9 @@ public class MenuVue extends JPanel  {
 
 		soloButton.addActionListener(ctrl);
 		soloButton.setActionCommand("CLICK:MENU:SOLO");
+
+		coopButton.addActionListener(ctrl);
+		coopButton.setActionCommand("CLICK:MENU:COOP");
 
 		settingsButton.addActionListener(ctrl);
 		settingsButton.setActionCommand("CLICK:MENU:SETTINGS");

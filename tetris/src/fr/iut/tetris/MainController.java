@@ -6,14 +6,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import fr.iut.tetris.controllers.*;
-import fr.iut.tetris.models.CreditModel;
-import fr.iut.tetris.models.MenuModel;
-import fr.iut.tetris.models.SettingsModel;
-import fr.iut.tetris.models.SoloModel;
-import fr.iut.tetris.vues.CreditVue;
-import fr.iut.tetris.vues.MenuVue;
-import fr.iut.tetris.vues.SettingsVue;
-import fr.iut.tetris.vues.SoloVue;
+import fr.iut.tetris.models.*;
+import fr.iut.tetris.vues.*;
 
 
 public class MainController implements ActionListener, KeyListener {
@@ -22,16 +16,19 @@ public class MainController implements ActionListener, KeyListener {
 	MenuModel menuModel;
 	CreditModel creditModel;
 	SoloModel soloModel;
+	CoopModel coopModel;
 	SettingsModel settingsModel;
 	
 	MenuController menuCtrl;
 	CreditController creditCtrl;
 	SoloController soloCtrl;
+	CoopController coopController;
 	SettingsController settingsCtrl;
 	
 	MenuVue menuVue;
 	CreditVue creditVue;
 	SoloVue soloVue;
+	CoopVue coopVue;
 	SettingsVue settingsVue;
 
 	AudioController audio;
@@ -43,27 +40,20 @@ public class MainController implements ActionListener, KeyListener {
 		audio = new AudioController();
 		audio.setMusicTrack(getClass().getResource( "/res/sounds/music2.wav"));
 
-
 		mainVue = new MainVue(this);
 
 		menuModel = new MenuModel();
 		creditModel = new CreditModel();
 		settingsModel = new SettingsModel();
-		//soloModel = new SoloModel();
 		
 		menuCtrl = new MenuController(this, menuModel, audio);
 		creditCtrl = new CreditController(this, creditModel, audio);
 		settingsCtrl = new SettingsController(this, settingsModel,settingsVue, audio);
-		//soloCtrl = new SoloController(this, soloModel);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
 		creditVue = new CreditVue(creditModel, creditCtrl);
 		settingsVue = new SettingsVue(settingsModel, settingsCtrl);
 		settingsCtrl.setVue(settingsVue);
-		//soloVue = new SoloVue(soloModel, soloCtrl);
-		//soloCtrl.setVue(soloVue);
-		
-		// gameVue = new GameVue();
 
 		mainVue.setCurrentVueAndCenterWindows(menuVue);
 		mainVue.display();
@@ -80,6 +70,15 @@ public class MainController implements ActionListener, KeyListener {
 				soloCtrl.setVue(soloVue);
 
 				mainVue.setCurrentVue(soloVue);
+				break;
+
+			case "CLICK:MENU:COOP":
+				coopModel = new CoopModel();
+				coopController = new CoopController(this, coopModel,audio);
+				coopVue = new CoopVue(coopModel, coopController);
+				coopController.setVue(coopVue);
+
+				mainVue.setCurrentVue(coopVue);
 				break;
 
 			case "CLICK:MENU:CREDIT":
@@ -114,6 +113,9 @@ public class MainController implements ActionListener, KeyListener {
 		if(soloCtrl != null) {
 			soloCtrl.keyTyped(e);
 		}
+		if(coopController != null) {
+			coopController.keyTyped(e);
+		}
 	}
 
 	@Override
@@ -121,12 +123,18 @@ public class MainController implements ActionListener, KeyListener {
 		if(soloCtrl != null) {
 			soloCtrl.keyPressed(e);
 		}
+		if(coopController != null) {
+			coopController.keyPressed(e);
+		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(soloCtrl != null) {
 			soloCtrl.keyReleased(e);
+		}
+		if(coopController != null) {
+			coopController.keyReleased(e);
 		}
 	}
 }

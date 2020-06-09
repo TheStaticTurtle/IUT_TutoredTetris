@@ -40,6 +40,21 @@ class PieceModel {
 	}
 
 	/**
+	 * Change the color of piece
+	 * @param color the color to change to
+	 */
+	public void changeColor(Color color) {
+		for (int y = 0; y < childs.length; y++) {
+			for (int x = 0; x < childs[y].length; x++) {
+				if(childs[y][x] != null) {
+					childs[y][x].color = color;
+					childs[y][x].recalculate();
+				}
+			}
+		}
+	}
+
+	/**
 	 * Rotate a given array of blocks
 	 * @param matrix the arrays
 	 * @param name
@@ -108,7 +123,22 @@ class PieceModel {
 
 	@Override
 	protected PieceModel clone() {
-		return new PieceModel(Arrays.copyOf(this.childs,this.childs.length), new Point(this.spawnPoint.x,this.spawnPoint.y), new Point(this.centerOfgravity.x,this.centerOfgravity.y), this.name);
+		BlockModel[][] c = new BlockModel[4][4];
+
+		for (int y = 0; y < childs.length; y++) {
+			for (int x = 0; x < childs[y].length; x++) {
+				if(childs[y][x] != null) {
+					c[y][x] = childs[y][x].clone();
+				}
+			}
+		}
+
+		return new PieceModel(
+				c,
+				new Point(this.spawnPoint.x,this.spawnPoint.y),
+				new Point(this.centerOfgravity.x,this.centerOfgravity.y),
+				this.name
+		);
 	}
 
 	static PieceModel PieceT = new PieceModel(
