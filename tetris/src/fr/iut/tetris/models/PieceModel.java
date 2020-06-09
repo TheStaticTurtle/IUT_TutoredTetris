@@ -20,13 +20,15 @@ class PieceModel {
 	int y = 0;
 	Point centerOfgravity;
 	Point spawnPoint; //Just for the clone()
+	String name;
 
-	public PieceModel(BlockModel[][] childs, Point spawnPoint, Point centerOfgravity) {
+	public PieceModel(BlockModel[][] childs, Point spawnPoint, Point centerOfgravity, String name) {
 		this.childs = childs;
 		this.x = spawnPoint.x;
 		this.y = spawnPoint.y;
 		this.spawnPoint = spawnPoint; //Just for the clone()
 		this.centerOfgravity = centerOfgravity;
+		this.name = name;
 		for (int y = 0; y < childs.length; y++) {
 			for (int x = 0; x < childs[y].length; x++) {
 				if(childs[y][x] != null) {
@@ -42,17 +44,27 @@ class PieceModel {
 		this.y = y;
 	}
 
-	private static BlockModel[][] rotateClockWise(BlockModel[][] matrix) {
+	private static BlockModel[][] rotateClockWise(BlockModel[][] matrix, String name) {
 		int size = matrix.length;
 		BlockModel[][] ret = new BlockModel[size][size];
 
-		for (int i = 0; i < size; ++i)
-			for (int j = 0; j < size; ++j)
-				ret[i][j] = matrix[size - j - 1][i]; //***
+		if (name.equals("PieceO")) { return matrix; }
+
+		if(name.equals("PieceI")) {
+			for (int i = 0; i < size; ++i)
+				for (int j = 0; j < size; ++j)
+					ret[i][j] = matrix[size - j - 1][i]; //***
+			return ret;
+		}
+
+		for (int i = 0; i < size-1; ++i)
+			for (int j = 0; j < size-1; ++j)
+				ret[i][j] = matrix[size - j - 2][i]; //***
+
 
 		return ret;
 	}
-	private static BlockModel[][] rotateConterClockWise(BlockModel[][] matrix) {
+	private static BlockModel[][] rotateConterClockWise(BlockModel[][] matrix, String name) {
 		int size = matrix.length;
 		BlockModel[][] ret = new BlockModel[size][size];
 
@@ -63,78 +75,90 @@ class PieceModel {
 		return ret;
 	}
 
-	void rotateModel(int direction) { // -1LEFT / 1RIGHT
+	void rotateModel(int direction, String name) { // -1LEFT / 1RIGHT
 		if(direction == -1) {
-			this.childs = rotateConterClockWise(this.childs);
+			this.childs = rotateConterClockWise(this.childs, name);
 		} else if (direction == 1){
-			this.childs = rotateClockWise(this.childs);
+			this.childs = rotateClockWise(this.childs, name);
 		}
 	}
 
 	@Override
 	protected PieceModel clone() {
-		return new PieceModel(Arrays.copyOf(this.childs,this.childs.length), new Point(this.spawnPoint.x,this.spawnPoint.y), new Point(this.centerOfgravity.x,this.centerOfgravity.y));
+		return new PieceModel(Arrays.copyOf(this.childs,this.childs.length), new Point(this.spawnPoint.x,this.spawnPoint.y), new Point(this.centerOfgravity.x,this.centerOfgravity.y), this.name);
 	}
 
 	static PieceModel PieceT = new PieceModel(
 			new BlockModel[][] {
-					{null                        , null                        , null                        , null},
-					{null                        , null                        , null                        , null},
+
+					{null						 , null						   , null						 , null},
 					{new BlockModel(COLOR_PURPLE), new BlockModel(COLOR_PURPLE), new BlockModel(COLOR_PURPLE), null},
-					{null                        , new BlockModel(COLOR_PURPLE), null                        , null}
+					{null                        , new BlockModel(COLOR_PURPLE), null                        , null},
+					{null						 , null						   , null						 , null}
 			},
-			new Point(3,-2),
-			new Point(3,1)
+			new Point(3,-1),
+			new Point(3,1),
+			"PieceT"
 	);
 	static PieceModel PieceL = new PieceModel(
 			new BlockModel[][] {
-					{null, null                        , null                        , null},
 					{null, new BlockModel(COLOR_ORANGE), null                        , null},
 					{null, new BlockModel(COLOR_ORANGE), null                        , null},
-					{null, new BlockModel(COLOR_ORANGE), new BlockModel(COLOR_ORANGE), null}
+					{null, new BlockModel(COLOR_ORANGE), new BlockModel(COLOR_ORANGE), null},
+					{null, null                        , null                        , null}
+
 			},
-			new Point(3,-1),
-			new Point(1,2)
+			new Point(3,0),
+			new Point(1,2),
+			"PieceL"
 	);
 	static PieceModel PieceJ = new PieceModel(
 			new BlockModel[][] {
-					{null, null                       , null                      , null},
-					{null, null                       , new BlockModel(COLOR_BLUE), null},
-					{null, null                       , new BlockModel(COLOR_BLUE), null},
-					{null, new BlockModel(COLOR_BLUE) , new BlockModel(COLOR_BLUE), null}
+					{null                       , new BlockModel(COLOR_BLUE) , null, null},
+					{null                       , new BlockModel(COLOR_BLUE) , null, null},
+					{new BlockModel(COLOR_BLUE) , new BlockModel(COLOR_BLUE) , null, null},
+					{null                       , null                       , null, null}
+
 			},
-			new Point(4,-1),
-			new Point(1,2)
+			new Point(4,0),
+			new Point(1,2),
+			"PieceJ"
 	);
 	static PieceModel PieceO = new PieceModel(
 			new BlockModel[][] {
 					{null, null, null                        , null                        },
-					{null, null, null                        , null                        },
-					{null, null, new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW)},
-					{null, null, new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW)}
+					{null, new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW), null},
+					{null, new BlockModel(COLOR_YELLOW), new BlockModel(COLOR_YELLOW), null},
+					{null, null, null                        , null                        }
+
 			},
-			new Point(3,-2),
-			new Point(1,2)
+			new Point(3,-1),
+			new Point(1,2),
+			"PieceO"
 	);
 	static PieceModel PieceS = new PieceModel(
 			new BlockModel[][] {
 					{null                       , null                       , null                       , null},
-					{null                       , null                       , null                       , null},
 					{null                       , new BlockModel(COLOR_GREEN), new BlockModel(COLOR_GREEN), null},
-					{new BlockModel(COLOR_GREEN), new BlockModel(COLOR_GREEN), null                       , null}
+					{new BlockModel(COLOR_GREEN), new BlockModel(COLOR_GREEN), null                       , null},
+					{null                       , null                       , null                       , null}
+
 			},
-			new Point(4,-2),
-			new Point(1,2)
+			new Point(4,-1),
+			new Point(1,2),
+			"PieceS"
 	);
 	static PieceModel PieceZ = new PieceModel(
 			new BlockModel[][] {
 					{null                     , null                     , null                     , null},
-					{null                     , null                     , null                     , null},
 					{new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null                     , null},
-					{null                     , new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null}
+					{null                     , new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null},
+					{null                     , null                     , null                     , null}
+
 			},
-			new Point(3,-2),
-			new Point(1,2)
+			new Point(3,-1),
+			new Point(1,2),
+			"PieceZ"
 	);
 	static PieceModel PieceI = new PieceModel(
 			new BlockModel[][] {
@@ -144,7 +168,8 @@ class PieceModel {
 					{null                      , null                      , null                      , null},
 			},
 			new Point(3,-2),
-			new Point(1,2)
+			new Point(1,2),
+			"PieceI"
 	);
 	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.PieceI,PieceModel.PieceJ};
 }
