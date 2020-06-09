@@ -173,12 +173,12 @@ public class SoloModel {
 	}
 	public boolean rotateCurrent(Direction dir) {
 		if(fallingPiece != null) {
-			fallingPiece.rotateModel(dir.step);
+			fallingPiece.rotateModel(dir.step, fallingPiece.name);
 			try {
 				computeMixedGrid();
 				return true;
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
-				fallingPiece.rotateModel(dir.step * -1);
+				fallingPiece.rotateModel(dir.step * -1, fallingPiece.name);
 				return false;
 			}
 		}
