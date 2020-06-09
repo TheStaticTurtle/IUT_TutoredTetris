@@ -49,6 +49,10 @@ public class CoopModel{
 		return list[rand.nextInt(list.length)];
 	}
 
+	/**
+	 * Return a random pieces from PieceModel.Pieces and colors it according to which player
+	 * @return a PieceModel
+	 */
 	public PieceModel getRandomPiece(int player) { //0=PlayerA 1=PlayerB
 		PieceModel piece = ((PieceModel)getRandomElement(PieceModel.Pieces,rand)).clone();
 		if(player == 0) {
@@ -59,6 +63,9 @@ public class CoopModel{
 		return piece;
 	}
 
+	/**
+	 * Spawn a new piece for the 1st player. Transfer the `nextPiecePlayerA` to `fallingPiecePlayerA` and generate a new piece for `nextPiecePlayerA`
+	 */
 	public void spawnPlayerAPiece() {
 		if(fallingPiecePlayerA == null) {
 			PieceModel p = nextPiecePlayerA.clone();
@@ -75,6 +82,10 @@ public class CoopModel{
 			this.bestScore = this.ctrl.gameEnded();
 		}
 	}
+
+	/**
+	 * Spawn a new piece for the 2nd player. Transfer the `nextPiecePlayerB` to `fallingPiecePlayerB` and generate a new piece for `nextPiecePlayerB`
+	 */
 	public void spawnPlayerBPiece() {
 		if(fallingPiecePlayerB == null) {
 			PieceModel p = nextPiecePlayerB.clone();
@@ -206,6 +217,11 @@ public class CoopModel{
 		}
 	}
 
+	/**
+	 * Move the current piece for the correct player in the X axis also send a "GAME:FAILED_ACTION" event to the controller if the movement is impossible
+	 * @param dir the direction
+	 * @return if the movment was successful
+	 */
 	public boolean moveCurrentX(int player, Direction dir) {
 		if(player==0) {
 			if(fallingPiecePlayerA != null) {
@@ -238,6 +254,11 @@ public class CoopModel{
 		return false;
 	}
 
+	/**
+	 * Rotate the current piece for the correct player also send a "GAME:FAILED_ACTION" event to the controller if the rotation is impossible
+	 * @param dir the direction of the rotation
+	 * @return if the rotation was successful
+	 */
 	public boolean rotateCurrent(int player, Direction dir) {
 		if(player==0) {
 			if(fallingPiecePlayerA != null) {
@@ -270,6 +291,9 @@ public class CoopModel{
 		return false;
 	}
 
+	/**
+	 * Fall the current piece down by one for the player A. Also test if the fall is possible if else the piece get converted to blocks and we check for a full line, we send a event to the controller for sound effects and we calculate the score
+	 */
 	public void fallCurrentForPlayerA() {
 		if(fallingPiecePlayerA != null) {
 			fallingPiecePlayerA.y++;
@@ -287,6 +311,9 @@ public class CoopModel{
 			}
 		}
 	}
+	/**
+	 * Fall the current piece down by one for the player B. Also test if the fall is possible if else the piece get converted to blocks and we check for a full line, we send a event to the controller for sound effects and we calculate the score
+	 */
 	public void fallCurrentForPlayerB() {
 		if(fallingPiecePlayerB != null) {
 			fallingPiecePlayerB.y++;
@@ -305,11 +332,17 @@ public class CoopModel{
 		}
 	}
 
+	/**
+	 * Execute fallCurrentForPlayerA() until the `fallingPiecePlayerA` is no more
+	 */
 	public void fallCurrentAtBottomForPlayerA() {
 		while(fallingPiecePlayerA != null) {
 			fallCurrentForPlayerA();
 		}
 	}
+	/**
+	 * Execute fallCurrentForPlayerB() until the `fallingPiecePlayerB` is no more
+	 */
 	public void fallCurrentAtBottomForPlayerB() {
 		while(fallingPiecePlayerB != null) {
 			fallCurrentForPlayerB();

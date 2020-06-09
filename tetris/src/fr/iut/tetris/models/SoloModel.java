@@ -45,7 +45,7 @@ public class SoloModel {
 	}
 
 	/**
-	 * Return a random piecs from PieceModel.Pieces
+	 * Return a random pieces from PieceModel.Pieces
 	 * @return a PieceModel
 	 */
 	public PieceModel getRandomPiece() {
@@ -54,7 +54,7 @@ public class SoloModel {
 	}
 
 	/**
-	 * Spawn a new piece to the game take the `nextPiece` and the it to `fallingPiece` also generate a new piece for `nextPiece`
+	 * Spawn a new piece for the player. Transfer the `nextPiece` to `fallingPiece` and generate a new piece for `nextPiece`
 	 */
 	public void spawnPiece() {
 		Log.info(this,"Spawned a new piece");

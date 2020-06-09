@@ -43,10 +43,10 @@ public class CoopController implements ActionListener, KeyListener {
 	 * @return the best score
 	 */
 	public int gameEnded() {
-		int bestScore = Config.getInstance().getInt("SCORE_SOLO_BEST");
+		int bestScore = Config.getInstance().getInt("SCORE_COOP_BEST");
 		if(model.currentScore > bestScore) {
 			bestScore = model.currentScore;
-			Config.getInstance().putInt("SCORE_SOLO_BEST",model.currentScore);
+			Config.getInstance().putInt("SCORE_COOP_BEST",model.currentScore);
 			Config.getInstance().saveAsync();
 		}
 		return bestScore;

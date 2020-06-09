@@ -49,7 +49,9 @@ public class Config {
 				Log.info(this,"Loaded config at: "+appConfigPath);
 			} else {
 				Log.warning(this,"The stored config file has not the same version number as the default config file, overwriting it (L:"+config.get("CONFIG_VERSION")+" D:"+defConf.get("CONFIG_VERSION")+")");
-				config = defConf;
+				//Merge the two configs
+				defConf.forEach((key, value) -> config.merge(key, value, (v1, v2) -> v1) );
+
 				try {
 					config.store(new FileWriter(appConfigPath),null);
 					Log.info(this,"Saved the new config");
@@ -221,7 +223,7 @@ public class Config {
 	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
-		p.put("CONFIG_VERSION"     ,"4");
+		p.put("CONFIG_VERSION"     ,"5");
 
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
@@ -237,9 +239,13 @@ public class Config {
 
 		p.put("KEYCODE_GOBACK"     ,"27"); // Esc key
 		p.put("KEYCODE_STARTGAME"  ,"32"); // Space key
+
 		p.put("VOLUME_MUSIC", "0"); //0Gain
 		p.put("VOLUME_SFX"  , "0"); //0Gain
-		p.put("SCORE_SOLO_BEST" ,"0"); // Enter key
+
+		p.put("SCORE_SOLO_BEST" ,"0");
+		p.put("SCORE_COOP_BEST" ,"0");
+
 		p.put("WINDOW_HEIGHT"  ,"870");
 		p.put("WINDOW_WIDTH"   ,"640");
 		p.put("FONT_ULTRABIG" ,"72");
