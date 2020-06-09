@@ -13,6 +13,12 @@ public class BlockModel {
 	public Point standAlonePos = new Point(0,0);
 	public PieceModel parent;
 
+	/**
+	 * Colorize an image based on a specified color (Took from: https://stackoverflow.com/a/21385150/8165282)
+	 * @param image the base image
+	 * @param color the color you want to adjust to
+	 * @return the colorized image
+	 */
 	public static BufferedImage dye(BufferedImage image, Color color) {
 		int w = image.getWidth();
 		int h = image.getHeight();
@@ -25,6 +31,12 @@ public class BlockModel {
 		g.dispose();
 		return dyed;
 	}
+
+	/**
+	 * Convert a normal image of type Image to a BufferedImage to be used with graphics/dye
+	 * @param img the raw image
+	 * @return the buffer image
+	 */
 	public static BufferedImage toBufferedImage(Image img) {
 		if (img instanceof BufferedImage) { return (BufferedImage) img; }
 		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -34,14 +46,25 @@ public class BlockModel {
 		return bimage;
 	}
 
+	/**
+	 * Change the size of the block (used for the image calculation)
+	 * @param size the size
+	 */
 	public void setSize(Dimension size) {
 		this.size = size;
 	}
 
+	/**
+	 * Set to which piece this perticular block is linked
+	 * @param parent the piece
+	 */
 	public void setParent(PieceModel parent) {
 		this.parent = parent;
 	}
 
+	/**
+	 * Load the image of the block
+	 */
 	void setBaseImage() {
 		this.base_image = (BufferedImage) Config.getInstance().getCachedObject("piece_grayscale_scaled");
 		if(this.base_image == null) {
@@ -50,8 +73,10 @@ public class BlockModel {
 		}
 	}
 
+	/**
+	 * Recalculate the piece color based on the stored color variable
+	 */
 	public void recalculate() {
-
 		Color c = new Color(this.color.getRed(),this.color.getGreen(),this.color.getBlue(),190);
 		image = dye(this.base_image,c);
 	}

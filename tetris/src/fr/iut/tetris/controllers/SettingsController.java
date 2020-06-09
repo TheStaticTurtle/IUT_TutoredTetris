@@ -27,17 +27,27 @@ public class SettingsController implements ActionListener, ChangeListener {
 		this.vue = vue;
 	}
 
+	/**
+	 * set the vue audio level when loaded
+	 */
 	public void enteredVue() {
 		vue.soundMusicLevel.setValue( (int)audio.musicLineVolumeControl );
 		vue.soundSFXMusicLevel.setValue( (int)audio.soundEffetLineVolumeControl );
 	}
 
+	/**
+	 * Save the config file when the button is pressed
+	 */
 	void saveConfig() {
 		Config.getInstance().putInt("VOLUME_SFX",(int)audio.soundEffetLineVolumeControl);
 		Config.getInstance().putInt("VOLUME_MUSIC",(int)audio.musicLineVolumeControl);
 		Config.getInstance().saveAsync();
 	}
 
+	/**
+	 * Listen for incoming event and do some action accordingly
+	 * @param e the event
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
@@ -54,6 +64,9 @@ public class SettingsController implements ActionListener, ChangeListener {
 		}
 	}
 
+	/**
+	 * Update our level when the sliders have moved
+	 */
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		audio.musicLineVolumeControl = (float)vue.soundMusicLevel.getValue();

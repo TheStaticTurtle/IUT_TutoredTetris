@@ -39,11 +39,12 @@ class PieceModel {
 
 	}
 
-	void spawnPoint(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-
+	/**
+	 * Rotate a given array of blocks
+	 * @param matrix the arrays
+	 * @param name
+	 * @return the array rotated clockwise
+	 */
 	private static BlockModel[][] rotateClockWise(BlockModel[][] matrix, String name) {
 		int size = matrix.length;
 		BlockModel[][] ret = new BlockModel[size][size];
@@ -64,6 +65,13 @@ class PieceModel {
 
 		return ret;
 	}
+
+	/**
+	 * Rotate a given array of blocks
+	 * @param matrix the arrays
+	 * @param name
+	 * @return the array rotated counter clockwise
+	 */
 	private static BlockModel[][] rotateConterClockWise(BlockModel[][] matrix, String name) {
 		int size = matrix.length;
 		BlockModel[][] ret = new BlockModel[size][size];
@@ -85,6 +93,11 @@ class PieceModel {
 		return ret;
 	}
 
+	/**
+	 * Rotate the piece based on the given direction
+	 * @param direction the direction
+	 * @param name
+	 */
 	void rotateModel(int direction, String name) { // -1LEFT / 1RIGHT
 		if(direction == -1) {
 			this.childs = rotateConterClockWise(this.childs, name);

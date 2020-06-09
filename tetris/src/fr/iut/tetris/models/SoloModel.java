@@ -24,6 +24,7 @@ public class SoloModel {
 	SoloController ctrl;
 	public int bestScore = 0;
 	public int currentScore = 0;
+	Random rand = new Random();
 
 	public SoloModel() {
 		nextPiece = getRandomPiece();
@@ -33,18 +34,30 @@ public class SoloModel {
 		this.ctrl = ctrl;
 	}
 
-	static Object getRandomElement(Object[] list)  {
-		Random rand = new Random();
+	/**
+	 * Fetch a random element from a list
+	 * @param list the list of objects
+	 * @param rand the Random class
+	 * @return a random object
+	 */
+	static Object getRandomElement(Object[] list,Random rand)  {
 		return list[rand.nextInt(list.length)];
 	}
 
+	/**
+	 * Return a random piecs from PieceModel.Pieces
+	 * @return a PieceModel
+	 */
 	public PieceModel getRandomPiece() {
 		Log.info(this,"Spawned a new random piece");
-		return ((PieceModel)getRandomElement(PieceModel.Pieces)).clone();
+		return ((PieceModel)getRandomElement(PieceModel.Pieces,rand)).clone();
 	}
+
+	/**
+	 * Spawn a new piece to the game take the `nextPiece` and the it to `fallingPiece` also generate a new piece for `nextPiece`
+	 */
 	public void spawnPiece() {
 		Log.info(this,"Spawned a new piece");
-
 
 		PieceModel p = nextPiece.clone();
 		pieceList.add(p);
@@ -60,7 +73,12 @@ public class SoloModel {
 		}
 	}
 
-	//the mega function who does everything
+	/**
+	 * This is the function that the game is based on throws an error if the board is impossible if else return the grid for the vue
+	 * @return an arrays of the game size that contains BlockModels for the vue to display
+	 * @throws OverlappedPieceException in case a piece collide with an other one
+	 * @throws PieceOutOfBoardException if a piece has a position outside of the board
+	 */
 	public BlockModel[][] computeMixedGrid() throws OverlappedPieceException, PieceOutOfBoardException {
 		BlockModel[][] table = new BlockModel[height][witdh];
 		for (Object obj: pieceList) {
@@ -88,6 +106,11 @@ public class SoloModel {
 		return table;
 	}
 
+	/**
+	 * A recursive function that check for line that are completed and falls down every line over it then recursively calls itself with the parm `firstCall` at true which make the function return an integer instead of a LineCompleted
+	 * @param firstCall In the program should be set to false only used by the function for the socre multiplier calculation
+	 * @return When use in the program return LineCompleted if not it return an Integer of the umber of line removed
+	 */
 	Object checkForFullLineAndRemoveIt(boolean firstCall){
 		try {
 			BlockModel[][] grid = computeMixedGrid();
@@ -141,6 +164,11 @@ public class SoloModel {
 		} catch (PieceOutOfBoardException | OverlappedPieceException ignored) {}
 		return LineCompleted.NO_LINE;
 	}
+
+	/**
+	 * When a piece has fallen down to it's maximum it needs to be converted to individual blocks so that we can adjust individuals Y's of blocks instead of moving the whole piece (useful when a piece is cut in the middle for example)
+	 * @param piece the piece to transform
+	 */
 	void convertFullPiecesToBlocks(PieceModel piece) {
 		Log.info(this,"Converting the fallling piece to individual blocks");
 		pieceList.remove(piece);
@@ -157,6 +185,11 @@ public class SoloModel {
 		}
 	}
 
+	/**
+	 * Move the current piece in the X axis also send a "GAME:FAILED_ACTION" event to the controller if the movement is impossible
+	 * @param dir the direction
+	 * @return if the movment was successful
+	 */
 	public boolean moveCurrentX(Direction dir) {
 		if(fallingPiece != null) {
 			fallingPiece.x += dir.step;
@@ -171,6 +204,11 @@ public class SoloModel {
 		}
 		return false;
 	}
+	/**
+	 * Rotate the current piece also send a "GAME:FAILED_ACTION" event to the controller if the rotation is impossible
+	 * @param dir the direction of the rotation
+	 * @return if the rotation was successful
+	 */
 	public boolean rotateCurrent(Direction dir) {
 		if(fallingPiece != null) {
 			fallingPiece.rotateModel(dir.step, fallingPiece.name);
@@ -179,11 +217,16 @@ public class SoloModel {
 				return true;
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.rotateModel(dir.step * -1, fallingPiece.name);
+				this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:FAILED_ACTION"));
 				return false;
 			}
 		}
 		return false;
 	}
+
+	/**
+	 * Fall the current piece down by one. Also test if the fall is possible if else the piece get converted to blocks and we check for a full line, we send a event to the controller for sound effects and we calculate the score
+	 */
 	public void fallCurrent() {
 		if(fallingPiece != null) {
 			fallingPiece.y++;
@@ -201,13 +244,20 @@ public class SoloModel {
 			}
 		}
 	}
+
+	/**
+	 * Execute fallCurrent() until the `fallingPiece` is no more
+	 */
 	public void fallCurrentAtBottom() {
 		while(fallingPiece != null) {
 			fallCurrent();
 		}
 	}
 
-
+	/**
+	 * Calculate the current score based of the point multiplier of the LineCompleted parameter
+	 * @param lc what multiplier should we use
+	 */
 	public void calculateScore(LineCompleted lc) {
 		this.currentScore += 10 * lc.pointMultiplier;
 	}

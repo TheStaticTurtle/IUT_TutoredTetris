@@ -16,6 +16,10 @@ public class Config {
 	Properties config;
 
 	private static volatile Config inst;
+	/**
+	 * Return the first instance of the config instead of re instantiation every time which would defeat the purpose of the caching mechanism
+	 * @return Config
+	 */
 	public static Config getInstance() {
 		if (inst == null) {
 			synchronized (Config.class) {
@@ -30,6 +34,9 @@ public class Config {
 	Map<String, Font> fonts = new HashMap<>();
 	Map<String, Object> cachedRessources = new HashMap<>();
 
+	/**
+	 * Load the config and generate fonts used by the program
+	 */
 	public Config() {
 		rootPath = System.getProperty("user.home")+"/";
 		appConfigPath = rootPath + "tetris_projtut.properties";
@@ -68,10 +75,21 @@ public class Config {
 		inst = this;
 	}
 
+	/**
+	 * Put an object into memory
+	 * @param key a string which you can use to retrive the key later
+	 * @param obj the object in question
+	 */
 	public void cacheObject(String key, Object obj) {
 		Log.info(this,"Saving object to cache : "+key);
 		cachedRessources.put(key,obj);
 	}
+
+	/**
+	 * Read an object from memory
+	 * @param key the key used when using cacheObject
+	 * @return the object that have been cached
+	 */
 	public Object getCachedObject(String key) {
 		Log.info(this,"Loading cached object: "+key);
 		if(cachedRessources.containsKey(key)) {
@@ -80,6 +98,11 @@ public class Config {
 		return null;
 	}
 
+	/**
+	 * Load an image into memory for faster loading time later if the image is already cached when loading it if the image is not found a dummy will be loaded instead
+	 * @param name the path of the image you wann read
+	 * @return The image at the path
+	 */
 	public BufferedImage getRessourceImage(String name) {
 		if(cachedRessources.containsKey(name)) {
 			Log.info(this,"Loading ressource: "+name+" from memory");
@@ -112,6 +135,11 @@ public class Config {
 		}
 	}
 
+	/**
+	 * Return a font with correct size specified in the config
+	 * @param key name of the font you want to get
+	 * @return the font
+	 */
 	public Font getFont(String key) {
 		if(fonts.containsKey(key)) {
 			return fonts.get(key);
@@ -119,6 +147,9 @@ public class Config {
 		return fonts.get("FONT_NORMAL");
 	}
 
+	/**
+	 * Save the config asynchronously to a file
+	 */
 	public void saveAsync() {
 		new Thread(new Runnable() {
 			@Override public void run() {
@@ -131,18 +162,41 @@ public class Config {
 			}
 		}).start();
 	}
+
+	/**
+	 * Save a string a the emplacement "key" in th config file
+	 * @param key The emplacement of the string
+	 * @param value The string
+	 */
 	public void putString(String key, String value) {
 		config.put(key,value);
 	}
+	/**
+	 * Save a int a the emplacement "key" in th config file
+	 * @param key The emplacement of the int
+	 * @param value The int
+	 */
 	public void putInt(String key, int value) {
 		config.put(key,String.valueOf(value));
 	}
+
+	/**
+	 * Read a string from the config file
+	 * @param key
+	 * @return the string a the emplacement "key"
+	 */
 	public String getString(String key) {
 		if(config.containsKey(key)) {
 			return (String)config.get(key);
 		}
 		return "";
 	}
+
+	/**
+	 * Read a int from the config file
+	 * @param key
+	 * @return the int a the emplacement "key"
+	 */
 	public int getInt(String key) {
 		if(config.containsKey(key)) {
 			return Integer.parseInt((String)config.get(key));
@@ -150,6 +204,10 @@ public class Config {
 		return 0;
 	}
 
+	/**
+	 * Generate a default config in case the user don't have one
+	 * @return the default config
+	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key

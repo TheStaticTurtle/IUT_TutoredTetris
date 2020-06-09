@@ -17,6 +17,10 @@ public class MenuController implements ActionListener {
 		this.audio = audio;
 	}
 
+	/**
+	 * Listen for incoming event and do some action accordingly
+	 * @param e the event
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {

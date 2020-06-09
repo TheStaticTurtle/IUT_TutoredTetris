@@ -39,6 +39,10 @@ public class SoloController implements ActionListener, KeyListener {
 		this.vue = vue;
 	}
 
+	/**
+	 * Fonction executed by the model when the game ends and return the best scrore (and save it to the config)
+	 * @return the best score
+	 */
 	public int gameEnded() {
 		int bestScore = Config.getInstance().getInt("SCORE_SOLO_BEST");
 		if(model.currentScore > bestScore) {
@@ -49,6 +53,9 @@ public class SoloController implements ActionListener, KeyListener {
 		return bestScore;
 	}
 
+	/**
+	 * The main game timer ticks every 10 ms but to set adjustable times we increment the variable timerCounter by 10 and can then compare it with model.fallSpeed to seed if we should do something
+	 */
 	private long timerCounter;
 	void timerTicked() {
 		timerCounter += 10;
@@ -68,6 +75,10 @@ public class SoloController implements ActionListener, KeyListener {
 	@Override public void keyTyped(KeyEvent e) { }
 	@Override public void keyReleased(KeyEvent e) {}
 
+	/**
+	 * Listen for key presses and do action according to the keys in the config file
+	 * @param e the event
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(model.gameState == GameState.WAITING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_STARTGAME")) {
@@ -93,6 +104,10 @@ public class SoloController implements ActionListener, KeyListener {
 		Log.debug(this,e.toString());
 	}
 
+	/**
+	 * Listen for incoming event and do some action accordingly
+	 * @param e the event
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
