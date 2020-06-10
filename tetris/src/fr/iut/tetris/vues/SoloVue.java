@@ -29,6 +29,7 @@ public class SoloVue extends JPanel {
 	GamePanel gamePanel;
 	SplashScreenPanel splashScreen;
 	JLayeredPane testPane;
+	PauseMenu pauseMenu;
 
 	public SoloVue(SoloModel model, SoloController ctrl) {
 		this.model = model;
@@ -48,11 +49,15 @@ public class SoloVue extends JPanel {
 		splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
 		splashScreen.setVisible(true);
 
+		pauseMenu = new PauseMenu(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
+
 		//ICI Pour ajoutter des couches
 		testPane = new JLayeredPane();
 		//testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
 		testPane.add(gamePanel,JLayeredPane.PALETTE_LAYER);
 		testPane.add(splashScreen,JLayeredPane.MODAL_LAYER);
+		testPane.add(pauseMenu,JLayeredPane.POPUP_LAYER);
+
 		testPane.setPreferredSize(getPreferredSize());
 
 
@@ -83,6 +88,132 @@ public class SoloVue extends JPanel {
 		gamePanel.recalculate();
 	}
 }
+
+class PauseMenu extends JPanel {
+	JPanel mainPanel;
+	Object ctrl;
+	Object model;
+
+	public PauseMenu(int x, int y, int width, int height,Object ctrl,Object model) {
+		this.ctrl = ctrl;
+		this.model = model;
+
+		setLocation(x, y);
+		setPreferredSize(new Dimension(width,height));
+		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
+		setOpaque(false);
+
+		mainPanel = new JPanel();
+		GridLayout mainLayout = new GridLayout(0,1,0,0);
+		mainPanel.setLayout(mainLayout);
+		mainPanel.setLocation(0, 0);
+		mainPanel.setVisible(true);
+		mainPanel.setOpaque(false);
+
+		mainPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white),new EmptyBorder(10, 10, 10, 10)));
+
+		GridLayout subLayout = new GridLayout(1,2);
+		subLayout.setHgap(10);
+
+		JLabel paused = new JLabel("<html><div style='text-align: center;'>PAUSED</div></html>");
+		paused.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		paused.setForeground(Color.white);
+		paused.setHorizontalAlignment(JLabel.CENTER);
+		mainPanel.add(paused);
+
+		JPanel backResumePanel = new JPanel();
+		backResumePanel.setOpaque(false);
+		MenuButton backButton = new MenuButton("Resume",Color.GREEN,Color.WHITE, (ActionListener)ctrl);
+		backButton.setActionCommand("CLICK:RESUME");
+		backButton.addActionListener((ActionListener)ctrl);
+		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		backResumePanel.add(backButton);
+
+		MenuButton resumeButton = new MenuButton("Menu",Color.RED,Color.WHITE, (ActionListener)ctrl);
+		resumeButton.setActionCommand("CLICK:SOLO:BACK");
+		resumeButton.addActionListener((ActionListener)ctrl);
+		resumeButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		backResumePanel.add(resumeButton);
+		backResumePanel.setLayout(subLayout);
+		mainPanel.add(backResumePanel);
+
+		StarsAnimation animation = new StarsAnimation(mainPanel.getPreferredSize(),Color.black,10,Color.red);
+
+		JLayeredPane testPane = new JLayeredPane();
+		testPane.add(animation,JLayeredPane.DEFAULT_LAYER);
+		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
+		testPane.setPreferredSize(getPreferredSize());
+
+		SpringLayout lyt = new SpringLayout();
+		lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
+		lyt.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, testPane);
+
+		lyt.putConstraint(SpringLayout.EAST, animation, 0, SpringLayout.EAST, mainPanel);
+		lyt.putConstraint(SpringLayout.NORTH, animation, 0, SpringLayout.NORTH, mainPanel);
+
+		testPane.setLayout(lyt);
+		add(testPane);
+		setVisible(true);
+
+
+		Dimension yt1 = resumeButton.getPreferredSize(); yt1.width +=35; yt1.height +=15;
+		resumeButton.setPreferredSize(yt1);
+		Dimension yt2 = backButton.getPreferredSize(); yt2.width +=35; yt2.height +=15;
+		backButton.setPreferredSize(yt2);
+
+		animation.size = mainPanel.getPreferredSize();
+
+		JPanel t = this;
+		new Timer(100, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			t.repaint();
+			t.revalidate();
+		}}).start();
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		Graphics2D g2d = (Graphics2D)g;
+		g2d.setColor(new Color(0f,0f,0f,.7f ));
+
+		g2d.fillRect(0,0,getWidth(),getHeight());
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(mainPanel.getX(),mainPanel.getY()+5,mainPanel.getWidth(),mainPanel.getHeight());
+
+		super.paintComponent(g2d);
+	}
+
+	/*public void recalculate(boolean visible, GameState state) {
+		mainPanel.setVisible(visible);
+		setVisible(visible);
+		if(state == GameState.FINISHED) {
+			pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
+			if(this.model instanceof SoloModel) {
+				currentScoreLabel.setText("<html>Current score: "+((SoloModel)this.model).currentScore);
+				bestScoreLabel.setText("<html>Best score: "+((SoloModel)this.model).bestScore);
+			}
+			if(this.model instanceof CoopModel) {
+				currentScoreLabel.setText("<html>Current score: "+((CoopModel)this.model).currentScore);
+				bestScoreLabel.setText("<html>Best score: "+((CoopModel)this.model).bestScore);
+			}
+			mainPanel.removeAll();
+			mainPanel.add(pressSpace);
+			mainPanel.add(new Spacer());
+			mainPanel.add(currentScoreLabel);
+			mainPanel.add(bestScoreLabel);
+			mainPanel.add(new Spacer());
+			mainPanel.add(backReplayPanel);
+		} else {
+			mainPanel.removeAll();
+			mainPanel.add(pressSpace);
+		}
+		Log.debug(this,mainPanel.getPreferredSize());
+		animation.resetSize(mainPanel.getPreferredSize());
+		revalidate();
+		repaint();
+	}*/
+}
+
+
 
 class SplashScreenPanel extends JPanel {
 	JPanel mainPanel;

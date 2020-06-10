@@ -240,6 +240,19 @@ class StarsAnimation extends JPanel {
 	Image resize_img;
 	Color bgColor = null;
 
+	public static BufferedImage dye(BufferedImage image, Color color) {
+		int w = image.getWidth();
+		int h = image.getHeight();
+		BufferedImage dyed = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = dyed.createGraphics();
+		g.drawImage(image, 0,0, null);
+		g.setComposite(AlphaComposite.SrcAtop);
+		g.setColor(color);
+		g.fillRect(0,0,w,h);
+		g.dispose();
+		return dyed;
+	}
+
 	public StarsAnimation(Dimension size, Color bgColor, int count) {
 		this(size);
 
@@ -250,6 +263,42 @@ class StarsAnimation extends JPanel {
 		}
 
 		this.bgColor = bgColor;
+	}
+
+	public StarsAnimation(Dimension size, Color bgColor, int count,Color colorize) {
+		this(size,colorize);
+
+		stars = new StarModel[count];
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new StarModel(rn,size,s+2);
+		}
+
+		this.bgColor = bgColor;
+	}
+
+	public StarsAnimation(Dimension size,Color colorize) {
+		this.size = size;
+
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new StarModel(rn,size,s+2);
+		}
+
+		img = dye(Config.getInstance().getRessourceImage("/res/star.png"),colorize);
+
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-img.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		img = op.filter((BufferedImage) img, null);
+		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
+
+		StarsAnimation p = this;
+		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			for (StarModel star : p.stars) {
+				star.move();
+			}
+		}}).start();
 	}
 
 	public StarsAnimation(Dimension size) {
@@ -275,7 +324,6 @@ class StarsAnimation extends JPanel {
 				star.move();
 			}
 		}}).start();
-
 	}
 
 	public void resetSize(Dimension size) {
