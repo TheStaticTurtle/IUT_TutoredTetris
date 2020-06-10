@@ -20,7 +20,7 @@ public class CoopModel{
 	public int height = 20;
 	public int witdh = 10;
 	public int fallSpeed = 1000; //ms
-	ArrayList<Object> pieceList = new ArrayList<>();
+	public ArrayList<Object> pieceList = new ArrayList<>();
 	public GameState gameState = GameState.WAITING;
 	public PieceModel fallingPiecePlayerA = null;
 	public PieceModel fallingPiecePlayerB = null;

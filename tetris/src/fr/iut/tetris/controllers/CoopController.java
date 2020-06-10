@@ -18,15 +18,18 @@ import java.awt.event.KeyListener;
 
 public class CoopController implements ActionListener, KeyListener {
 	MainController mainCtrl;
-	CoopModel model;
+	public CoopModel model;
 	public CoopVue vue;
 	AudioController audio;
+
+	NeworkingManager network;
 
 	public CoopController(MainController mainCtrl, CoopModel model,AudioController audio) {
 		this.model = model;
 		model.setCtrl(this);
 		this.mainCtrl = mainCtrl;
 		this.audio = audio;
+		this.network = new NeworkingManager("192.168.1.77",1111, this);
 
 		CoopController me = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
@@ -61,7 +64,7 @@ public class CoopController implements ActionListener, KeyListener {
 		if(timerCounter > model.fallSpeed) {
 			timerCounter -= model.fallSpeed;
 
-			if(model.gameState == GameState.PLAYING) {
+			if(model.gameState == GameState.PLAYING && this.network.server) {
 				model.fallCurrentForPlayerA();
 				model.fallCurrentForPlayerB();
 				if(model.fallingPiecePlayerA == null) {
@@ -84,32 +87,28 @@ public class CoopController implements ActionListener, KeyListener {
 	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(model.gameState == GameState.WAITING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_STARTGAME")) {
-			model.gameState = GameState.PLAYING;
-			vue.recalculate();
+		if(this.network.server) {
+			if(model.gameState == GameState.WAITING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_STARTGAME")) {
+				model.gameState = GameState.PLAYING;
+				vue.recalculate();
+				network.sendData("BEGIN\n");
+			}
+
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(0,Direction.LEFT);}
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(0,Direction.RIGHT);}
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { model.fallCurrentForPlayerA();}
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottomForPlayerA();}
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))   { model.rotateCurrent(0,Direction.RIGHT);}
+
+		} else {
+
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT"))     { network.sendData("MOVEX,-1\n"); }
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT"))    { network.sendData("MOVEX,1\n"); }
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { network.sendData("DOWN\n"); }
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { network.sendData("FDOWN\n"); }
+			if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))   { network.sendData("ROTATE,1\n"); }
+
 		}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(0,Direction.LEFT); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(0,Direction.RIGHT); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { model.fallCurrentForPlayerA(); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottomForPlayerA(); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))   { model.rotateCurrent(0,Direction.RIGHT); vue.recalculate();}
-
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_LEFT"))     { model.moveCurrentX(1,Direction.LEFT); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT"))    { model.moveCurrentX(1,Direction.RIGHT); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_DOWN"))     { model.fallCurrentForPlayerB(); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_FASTDOWN")) { model.fallCurrentAtBottomForPlayerB(); vue.recalculate();}
-		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_ROTATE"))   { model.rotateCurrent(1,Direction.RIGHT); vue.recalculate();}
-
-		//if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
-
-		/*
-			SPACE = 32
-			LEFT = 37
-			RIGHT = 39
-			UP = 38
-			DOWN = 40
-			ENTER = 10
-		*/
 		Log.debug(this,e.toString());
 	}
 
