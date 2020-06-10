@@ -77,7 +77,7 @@ public class VersusModel {
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN_PLAYER_A"));
         }
         try {
-            computeMixedGrid(1);
+            computeMixedGrid(0);
         } catch (OverlappedPieceException | PieceOutOfBoardException e) {
             gameState = GameState.FINISHED;
             /*this.bestScore = this.ctrl.gameEnded();*/
@@ -97,7 +97,7 @@ public class VersusModel {
         }
 
         try {
-            computeMixedGrid(2);
+            computeMixedGrid(1);
         } catch (OverlappedPieceException | PieceOutOfBoardException e) {
             gameState = GameState.FINISHED;
             /*this.bestScore = this.ctrl.gameEnded();*/
@@ -114,7 +114,7 @@ public class VersusModel {
         BlockModel[][] table = new BlockModel[height][witdh];
 
         ArrayList<Object> pieceList;
-        if (player == 1) { pieceList = pieceListPlayerA; }
+        if (player == 0) { pieceList = pieceListPlayerA; }
         else { pieceList = pieceListPlayerB; }
 
         for (Object obj: pieceList) {
@@ -167,7 +167,7 @@ public class VersusModel {
 
                     for (BlockModel block: grid[y]) {
                         grid[y] = null;
-                        if (player == 1) { pieceListPlayerA.remove(block); }
+                        if (player == 0) { pieceListPlayerA.remove(block); }
                         else { pieceListPlayerB.remove(block); }
                     }
 
@@ -181,7 +181,7 @@ public class VersusModel {
                     }
                     // Line has fallen down recheck to see if there is more lines but tel the function to spit out an integer instead of the LineCompleted enum
                     lineCount += (Integer)checkForFullLineAndRemoveIt(false, player);
-                    if (player == 1) {
+                    if (player == 0) {
                         if(fallSpeedPlayerA-currentScorePlayerA > 250) {
                             fallSpeedPlayerA -= currentScorePlayerA;
                             Log.debug(this, "FallSpeed = " + this.fallSpeedPlayerA);
@@ -221,7 +221,7 @@ public class VersusModel {
      */
     void convertFullPiecesToBlocks(PieceModel piece, int player) {
         Log.info(this,"Converting the fallling piece to individual blocks");
-        if (player == 1) { pieceListPlayerA.remove(piece); }
+        if (player == 0) { pieceListPlayerA.remove(piece); }
         else { pieceListPlayerB.remove(piece); }
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {
@@ -229,7 +229,7 @@ public class VersusModel {
                     BlockModel block = piece.childs[y][x];
                     if(block != null) {
                         block.standAlonePos = new Point(piece.x +x, piece.y+y);
-                        if (player == 1) { pieceListPlayerA.add(block.clone()); }
+                        if (player == 0) { pieceListPlayerA.add(block.clone()); }
                         else { pieceListPlayerB.add(block.clone()); }
                     }
                 }
@@ -247,7 +247,7 @@ public class VersusModel {
             if(fallingPiecePlayerA != null) {
                 fallingPiecePlayerA.x += dir.step;
                 try {
-                    computeMixedGrid(1);
+                    computeMixedGrid(0);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerA.x -= dir.step;
@@ -261,7 +261,7 @@ public class VersusModel {
             if(fallingPiecePlayerB != null) {
                 fallingPiecePlayerB.x += dir.step;
                 try {
-                    computeMixedGrid(2);
+                    computeMixedGrid(1);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerB.x -= dir.step;
@@ -284,7 +284,7 @@ public class VersusModel {
             if(fallingPiecePlayerA != null) {
                 fallingPiecePlayerA.rotateModel(dir.step, fallingPiecePlayerA.name);
                 try {
-                    computeMixedGrid(1);
+                    computeMixedGrid(0);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerA.rotateModel(dir.step * -1, fallingPiecePlayerA.name);
@@ -298,7 +298,7 @@ public class VersusModel {
             if(fallingPiecePlayerB != null) {
                 fallingPiecePlayerB.rotateModel(dir.step, fallingPiecePlayerB.name);
                 try {
-                    computeMixedGrid(2);
+                    computeMixedGrid(1);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerB.rotateModel(dir.step * -1, fallingPiecePlayerB.name);
@@ -318,12 +318,12 @@ public class VersusModel {
         if(fallingPiecePlayerA != null) {
             fallingPiecePlayerA.y++;
             try {
-                computeMixedGrid(1);
+                computeMixedGrid(0);
             } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                 fallingPiecePlayerA.y--;
-                convertFullPiecesToBlocks(fallingPiecePlayerA, 1);
-                LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 1);
-                this.calculateScore(score, 1);
+                convertFullPiecesToBlocks(fallingPiecePlayerA, 0);
+                LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 0);
+                this.calculateScore(score, 0);
                 this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
                 Log.info(this,"Got score: "+score.toString());
 
@@ -338,12 +338,12 @@ public class VersusModel {
         if(fallingPiecePlayerB != null) {
             fallingPiecePlayerB.y++;
             try {
-                computeMixedGrid(2);
+                computeMixedGrid(1);
             } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                 fallingPiecePlayerB.y--;
                 convertFullPiecesToBlocks(fallingPiecePlayerB, 2);
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 1);
-                this.calculateScore(score, 2);
+                this.calculateScore(score, 1);
                 this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
                 Log.info(this,"Got score: "+score.toString());
 
@@ -374,7 +374,7 @@ public class VersusModel {
      * @param lc what multiplier should we use
      */
     public void calculateScore(LineCompleted lc, int player) {
-        if (player == 1) { this.currentScorePlayerA += 10 * lc.pointMultiplier; }
+        if (player == 0) { this.currentScorePlayerA += 10 * lc.pointMultiplier; }
         else { this.currentScorePlayerB += 10 * lc.pointMultiplier; }
     }
 

@@ -32,11 +32,11 @@ public class VersusVue extends JPanel {
         setBackground(bg);
 
 
-        gamePanelPlayer1 = new GamePanelVersus(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(), 1);
+        gamePanelPlayer1 = new GamePanelVersus(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(), 0);
         gamePanelPlayer1.setLocation(0, 0);
         gamePanelPlayer1.setVisible(true);
 
-        gamePanelPlayer2 = new GamePanelVersus(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(), 2);
+        gamePanelPlayer2 = new GamePanelVersus(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(), 1);
         gamePanelPlayer2.setLocation(0, 0);
         gamePanelPlayer2.setVisible(true);
 
@@ -141,9 +141,9 @@ class GamePanelVersus extends JPanel {
         add(nextPiecePanel);
         add(scoreLabel);
 
-        if (this.player == 1) {
+        if (this.player == 0) {
             try {
-                Object[][] grid = model.computeMixedGrid(1);
+                Object[][] grid = model.computeMixedGrid(0);
                 for (Object[] objects : grid) {
                     for (int x = 0; x < objects.length; x++) {
                         TetrisBlock b = new TetrisBlock(squareSize);
@@ -157,7 +157,7 @@ class GamePanelVersus extends JPanel {
         }
         else {
             try {
-                Object[][] grid = model.computeMixedGrid(2);
+                Object[][] grid = model.computeMixedGrid(1);
                 for (Object[] objects : grid) {
                     for (int x = 0; x < objects.length; x++) {
                         TetrisBlock b = new TetrisBlock(squareSize);
@@ -175,7 +175,7 @@ class GamePanelVersus extends JPanel {
 
         SpringLayout layout = new SpringLayout();
 
-        if (this.player == 1) {
+        if (this.player == 0) {
 
             layout.putConstraint(SpringLayout.NORTH, scoreLabel, 0, SpringLayout.NORTH, this);
             layout.putConstraint(SpringLayout.WEST, scoreLabel, 0, SpringLayout.WEST, mainPanel);
@@ -221,7 +221,7 @@ class GamePanelVersus extends JPanel {
     public void recalculate() {
         setIgnoreRepaint(true);
 
-        if (this.player == 1) {
+        if (this.player == 0) {
             scoreLabel.setText("<html>Score: "+this.model.currentScorePlayerA);
         }
         else {
@@ -229,10 +229,10 @@ class GamePanelVersus extends JPanel {
         }
 
         if(model.gameState==GameState.PLAYING) {
-            if (this.player == 1) {
+            if (this.player == 0) {
                 try {
                     nextPiecePanel.recalulate(model.nextPiecePlayerA);
-                    BlockModel[][] grid = model.computeMixedGrid(1);
+                    BlockModel[][] grid = model.computeMixedGrid(0);
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {
@@ -251,7 +251,7 @@ class GamePanelVersus extends JPanel {
             else {
                 try {
                     nextPiecePanel.recalulate(model.nextPiecePlayerB);
-                    BlockModel[][] grid = model.computeMixedGrid(2);
+                    BlockModel[][] grid = model.computeMixedGrid(1);
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {
