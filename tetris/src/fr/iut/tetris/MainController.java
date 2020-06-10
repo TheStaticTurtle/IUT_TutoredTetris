@@ -105,11 +105,7 @@ public class MainController implements ActionListener, KeyListener {
 				settingsCtrl.enteredVue();
 				break;
 
-			case "CLICK:CREDIT:BACK":
-			case "CLICK:SOLO:BACK":
-			case "CLICK:COOP:BACK":
-			case "CLICK:VERSUS:BACK":
-			case "CLICK:SETTINGS:BACK":
+			case "CLICK:BACK":
 				menuVue = new MenuVue(menuModel, menuCtrl);
 				mainVue.setCurrentVue(menuVue);
 				break;

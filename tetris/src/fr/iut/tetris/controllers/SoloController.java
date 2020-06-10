@@ -138,17 +138,17 @@ public class SoloController implements ActionListener, KeyListener {
 				break;
 
 
-			case "CLICK:RESUME": //HACKY
+			case "CLICK:RESUME":
 				if(model.gameState == GameState.PAUSED) {
 					model.gameState = GameState.PLAYING;
 					vue.recalculate();
 				}
-			case "CLICK:MENU:SOLO": //HACKY
-			case "CLICK:MENU:COOP":
-			case "CLICK:MENU:VERSUS":
-			case "CLICK:SOLO:BACK":
-			case "CLICK:COOP:BACK":
-			case "CLICK:VERSUS:BACK":
+				break;
+			case "CLICK:RESTART": //HACKY
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
+				mainCtrl.actionPerformed(new ActionEvent(this,0,"CLICK:MENU:SOLO"));
+				break;
+			case "CLICK:BACK":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				mainCtrl.actionPerformed(e);
 				break;

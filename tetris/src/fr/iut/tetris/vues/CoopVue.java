@@ -18,6 +18,7 @@ public class CoopVue extends JPanel {
 
 	GamePanelCoop gamePanel;
 	SplashScreenPanel splashScreen;
+	PauseMenu pauseMenu;
 	JLayeredPane testPane;
 
 	public CoopVue(CoopModel model, CoopController ctrl) {
@@ -38,11 +39,14 @@ public class CoopVue extends JPanel {
 		splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
 		splashScreen.setVisible(true);
 
+		pauseMenu = new PauseMenu(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
+
 		//ICI Pour ajoutter des couches
 		testPane = new JLayeredPane();
 		//testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
 		testPane.add(gamePanel,JLayeredPane.PALETTE_LAYER);
 		testPane.add(splashScreen,JLayeredPane.MODAL_LAYER);
+		testPane.add(pauseMenu,JLayeredPane.POPUP_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 
 
@@ -68,8 +72,8 @@ public class CoopVue extends JPanel {
 	}
 
 	public void recalculate() {
-		//panelPiece.recalculate();
-		splashScreen.recalculate(model.gameState != GameState.PLAYING,model.gameState);
+		splashScreen.recalculate(model.gameState == GameState.WAITING || model.gameState == GameState.FINISHED,model.gameState);
+		pauseMenu.recalculate(model.gameState);
 		gamePanel.recalculate();
 	}
 }

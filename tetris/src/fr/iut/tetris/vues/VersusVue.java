@@ -19,6 +19,7 @@ public class VersusVue extends JPanel {
     GamePanelVersus gamePanelPlayer1;
     GamePanelVersus gamePanelPlayer2;
     SplashScreenPanel splashScreen;
+    PauseMenu pauseMenu;
     JLayeredPane testPane;
 
     public VersusVue(VersusModel model, VersusController ctrl) {
@@ -43,12 +44,14 @@ public class VersusVue extends JPanel {
         splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
         splashScreen.setVisible(true);
 
+        pauseMenu = new PauseMenu(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
         //ICI Pour ajoutter des couches
         testPane = new JLayeredPane();
         //testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
         testPane.add(gamePanelPlayer1,JLayeredPane.PALETTE_LAYER);
         testPane.add(gamePanelPlayer2,JLayeredPane.PALETTE_LAYER);
         testPane.add(splashScreen,JLayeredPane.MODAL_LAYER);
+        testPane.add(pauseMenu,JLayeredPane.POPUP_LAYER);
         testPane.setPreferredSize(getPreferredSize());
 
 
@@ -75,7 +78,8 @@ public class VersusVue extends JPanel {
 
     public void recalculate() {
         //panelPiece.recalculate();
-        splashScreen.recalculate(model.gameState != GameState.PLAYING,model.gameState);
+        splashScreen.recalculate(model.gameState == GameState.WAITING || model.gameState == GameState.FINISHED,model.gameState);
+        pauseMenu.recalculate(model.gameState);
         gamePanelPlayer1.recalculate();
         gamePanelPlayer2.recalculate();
     }

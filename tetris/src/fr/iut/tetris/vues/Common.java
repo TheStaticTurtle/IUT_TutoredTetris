@@ -536,17 +536,19 @@ class PauseMenu extends JPanel {
 
 		JPanel backResumePanel = new JPanel();
 		backResumePanel.setOpaque(false);
-		MenuButton backButton = new MenuButton("Resume",Color.GREEN,Color.WHITE, (ActionListener)ctrl);
-		backButton.setActionCommand("CLICK:RESUME");
-		backButton.addActionListener((ActionListener)ctrl);
-		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
-		backResumePanel.add(backButton);
 
-		MenuButton resumeButton = new MenuButton("Menu",Color.RED,Color.WHITE, (ActionListener)ctrl);
-		resumeButton.setActionCommand("CLICK:SOLO:BACK");
+		MenuButton resumeButton = new MenuButton("Resume",Color.GREEN,Color.WHITE, (ActionListener)ctrl);
+		resumeButton.setActionCommand("CLICK:RESUME");
 		resumeButton.addActionListener((ActionListener)ctrl);
 		resumeButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		backResumePanel.add(resumeButton);
+
+		MenuButton backButton = new MenuButton("Menu",Color.RED,Color.WHITE, (ActionListener)ctrl);
+		backButton.setActionCommand("CLICK:BACK");
+		backButton.addActionListener((ActionListener)ctrl);
+		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+
+		backResumePanel.add(backButton);
 		backResumePanel.setLayout(subLayout);
 		mainPanel.add(backResumePanel);
 
@@ -642,8 +644,8 @@ class SplashScreenPanel extends JPanel {
 		backReplayPanel = new JPanel();
 		backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE, (ActionListener)ctrl);
 		replayButton = new MenuButton("Restart",Color.RED,Color.WHITE, (ActionListener)ctrl);
-		backButton.setActionCommand("CLICK:SOLO:BACK");
-		replayButton.setActionCommand("CLICK:MENU:SOLO"); //HACKY
+		backButton.setActionCommand("CLICK:BACK");
+		replayButton.setActionCommand("CLICK:RESTART"); //HACKY
 		backButton.addActionListener((ActionListener)ctrl);
 		replayButton.addActionListener((ActionListener)ctrl);
 
