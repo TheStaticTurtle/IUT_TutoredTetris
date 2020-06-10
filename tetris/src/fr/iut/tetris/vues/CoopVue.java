@@ -7,7 +7,6 @@ import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 import fr.iut.tetris.models.BlockModel;
 import fr.iut.tetris.models.CoopModel;
-import fr.iut.tetris.models.SoloModel;
 
 import javax.swing.*;
 import java.awt.*;

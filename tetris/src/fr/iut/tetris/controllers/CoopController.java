@@ -6,9 +6,7 @@ import fr.iut.tetris.MainController;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.models.CoopModel;
-import fr.iut.tetris.models.SoloModel;
 import fr.iut.tetris.vues.CoopVue;
-import fr.iut.tetris.vues.SoloVue;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

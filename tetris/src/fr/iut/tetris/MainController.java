@@ -17,18 +17,21 @@ public class MainController implements ActionListener, KeyListener {
 	CreditModel creditModel;
 	SoloModel soloModel;
 	CoopModel coopModel;
+	VersusModel versusModel;
 	SettingsModel settingsModel;
 	
 	MenuController menuCtrl;
 	CreditController creditCtrl;
 	SoloController soloCtrl;
 	CoopController coopController;
+	VersusController versusController;
 	SettingsController settingsCtrl;
 	
 	MenuVue menuVue;
 	CreditVue creditVue;
 	SoloVue soloVue;
 	CoopVue coopVue;
+	VersusVue versusVue;
 	SettingsVue settingsVue;
 
 	AudioController audio;
@@ -81,6 +84,15 @@ public class MainController implements ActionListener, KeyListener {
 				mainVue.setCurrentVue(coopVue);
 				break;
 
+			case "CLICK:MENU:VERSUS":
+				versusModel = new VersusModel();
+				versusController = new VersusController(this, versusModel,audio);
+				versusVue = new VersusVue(versusModel, versusController);
+				versusController.setVue(versusVue);
+
+				mainVue.setCurrentVue(versusVue);
+				break;
+
 			case "CLICK:MENU:CREDIT":
 				creditVue = new CreditVue(creditModel, creditCtrl);
 				mainVue.setCurrentVue(creditVue);
@@ -116,6 +128,9 @@ public class MainController implements ActionListener, KeyListener {
 		if(coopController != null) {
 			coopController.keyTyped(e);
 		}
+		if(versusController != null) {
+			versusController.keyTyped(e);
+		}
 	}
 
 	@Override
@@ -126,6 +141,9 @@ public class MainController implements ActionListener, KeyListener {
 		if(coopController != null) {
 			coopController.keyPressed(e);
 		}
+		if(versusController != null) {
+			versusController.keyPressed(e);
+		}
 	}
 
 	@Override
@@ -135,6 +153,9 @@ public class MainController implements ActionListener, KeyListener {
 		}
 		if(coopController != null) {
 			coopController.keyReleased(e);
+		}
+		if(versusController != null) {
+			versusController.keyReleased(e);
 		}
 	}
 }
