@@ -247,7 +247,7 @@ class TetrisLogo extends JPanel {
 		}
 	}
 }
-class StarsAnimation extends JPanel {
+class MovingStarsAnimation extends JPanel {
 	Random rn = new Random();
 	StarModel[] stars = new StarModel[35];
 	Dimension size;
@@ -255,7 +255,7 @@ class StarsAnimation extends JPanel {
 	Image resize_img;
 	Color bgColor = null;
 
-	public StarsAnimation(Dimension size, Color bgColor, int count) {
+	public MovingStarsAnimation(Dimension size, Color bgColor, int count) {
 		this(size);
 
 		stars = new StarModel[count];
@@ -267,7 +267,7 @@ class StarsAnimation extends JPanel {
 		this.bgColor = bgColor;
 	}
 
-	public StarsAnimation(Dimension size, Color bgColor, int count,Color colorize) {
+	public MovingStarsAnimation(Dimension size, Color bgColor, int count, Color colorize) {
 		this(size,colorize);
 
 		stars = new StarModel[count];
@@ -279,7 +279,7 @@ class StarsAnimation extends JPanel {
 		this.bgColor = bgColor;
 	}
 
-	public StarsAnimation(Dimension size,Color colorize) {
+	public MovingStarsAnimation(Dimension size, Color colorize) {
 		this.size = size;
 
 		for(int i=0; i<stars.length; i++) {
@@ -295,7 +295,7 @@ class StarsAnimation extends JPanel {
 		img = op.filter((BufferedImage) img, null);
 		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 
-		StarsAnimation p = this;
+		MovingStarsAnimation p = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
 			for (StarModel star : p.stars) {
 				star.move();
@@ -303,7 +303,7 @@ class StarsAnimation extends JPanel {
 		}}).start();
 	}
 
-	public StarsAnimation(Dimension size) {
+	public MovingStarsAnimation(Dimension size) {
 		this.size = size;
 
 		for(int i=0; i<stars.length; i++) {
@@ -320,7 +320,7 @@ class StarsAnimation extends JPanel {
 		img = op.filter((BufferedImage) img, null);
 		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 
-		StarsAnimation p = this;
+		MovingStarsAnimation p = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
 			for (StarModel star : p.stars) {
 				star.move();
@@ -574,7 +574,7 @@ class PauseMenu extends JPanel {
 		backResumePanel.setLayout(subLayout);
 		mainPanel.add(backResumePanel);
 
-		StarsAnimation animation = new StarsAnimation(mainPanel.getPreferredSize(),Color.black,10,Color.red);
+		MovingStarsAnimation animation = new MovingStarsAnimation(mainPanel.getPreferredSize(),Color.black,10,Color.red);
 
 		JLayeredPane testPane = new JLayeredPane();
 		testPane.add(animation,JLayeredPane.DEFAULT_LAYER);
@@ -635,7 +635,7 @@ class SplashScreenPanel extends JPanel {
 	JPanel backReplayPanel;
 	Object ctrl;
 	Object model;
-	StarsAnimation animation;
+	MovingStarsAnimation animation;
 
 	JButton backButton;
 	JButton replayButton;
@@ -689,7 +689,7 @@ class SplashScreenPanel extends JPanel {
 		bestScoreLabel.setText("<html>Best Score: 0");
 
 
-		animation = new StarsAnimation(mainPanel.getPreferredSize(),Color.black,20);
+		animation = new MovingStarsAnimation(mainPanel.getPreferredSize(),Color.black,20);
 
 		JLayeredPane testPane = new JLayeredPane();
 		testPane.add(animation,JLayeredPane.DEFAULT_LAYER);

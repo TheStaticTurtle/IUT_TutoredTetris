@@ -9,8 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 
 public class SettingsVue extends JPanel{
@@ -102,7 +100,7 @@ public class SettingsVue extends JPanel{
 		mainPanel.setVisible(true);
 
 		JLayeredPane testPane = new JLayeredPane();
-		testPane.add(new StarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
+		testPane.add(new MovingStarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 

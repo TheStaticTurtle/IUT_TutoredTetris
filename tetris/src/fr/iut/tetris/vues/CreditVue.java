@@ -73,7 +73,7 @@ public class CreditVue extends JPanel  {
 		mainPanel.setVisible(true);
 
 		JLayeredPane testPane = new JLayeredPane();
-		testPane.add(new StarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
+		testPane.add(new MovingStarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 

@@ -1,17 +1,12 @@
 package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.*;
 import fr.iut.tetris.models.MenuModel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 
@@ -133,7 +128,7 @@ public class MenuVue extends JPanel  {
 		mainPanel.setVisible(true);
 
 		JLayeredPane testPane = new JLayeredPane();
-		testPane.add(new StarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
+		testPane.add(new MovingStarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 
