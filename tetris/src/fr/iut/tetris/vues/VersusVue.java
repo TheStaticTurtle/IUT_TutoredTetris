@@ -187,7 +187,7 @@ class GamePanelVersus extends JPanel {
 
             layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.SOUTH, labelNextPiece);
             layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
-            
+
         }
 
         setLayout(layout);

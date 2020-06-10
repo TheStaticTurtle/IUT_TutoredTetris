@@ -336,6 +336,9 @@ public class MenuVue extends JPanel  {
 		coopButton.addActionListener(ctrl);
 		coopButton.setActionCommand("CLICK:MENU:COOP");
 
+		versusButton.addActionListener(ctrl);
+		versusButton.setActionCommand("CLICK:MENU:VERSUS");
+
 		settingsButton.addActionListener(ctrl);
 		settingsButton.setActionCommand("CLICK:MENU:SETTINGS");
 		

@@ -17,18 +17,21 @@ public class MainController implements ActionListener, KeyListener {
 	CreditModel creditModel;
 	SoloModel soloModel;
 	CoopModel coopModel;
+	VersusModel versusModel;
 	SettingsModel settingsModel;
 	
 	MenuController menuCtrl;
 	CreditController creditCtrl;
 	SoloController soloCtrl;
 	CoopController coopController;
+	VersusController versusController;
 	SettingsController settingsCtrl;
 	
 	MenuVue menuVue;
 	CreditVue creditVue;
 	SoloVue soloVue;
 	CoopVue coopVue;
+	VersusVue versusVue;
 	SettingsVue settingsVue;
 
 	AudioController audio;
@@ -79,6 +82,15 @@ public class MainController implements ActionListener, KeyListener {
 				coopController.setVue(coopVue);
 
 				mainVue.setCurrentVue(coopVue);
+				break;
+
+			case "CLICK:MENU:VERSUS":
+				versusModel = new VersusModel();
+				versusController = new VersusController(this, versusModel,audio);
+				versusVue = new VersusVue(versusModel, versusController);
+				versusController.setVue(versusVue);
+
+				mainVue.setCurrentVue(versusVue);
 				break;
 
 			case "CLICK:MENU:CREDIT":
