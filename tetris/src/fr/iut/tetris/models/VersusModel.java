@@ -57,11 +57,6 @@ public class VersusModel {
      */
     public PieceModel getRandomPiece(int player) { //0=PlayerA 1=PlayerB
         PieceModel piece = ((PieceModel)getRandomElement(PieceModel.Pieces,rand)).clone();
-        if(player == 0) {
-            piece.changeColor(PieceModel.COLOR_BLUE);
-        } else {
-            piece.changeColor(PieceModel.COLOR_RED);
-        }
         return piece;
     }
 
