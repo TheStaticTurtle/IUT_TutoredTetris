@@ -41,7 +41,7 @@ public class VersusVue extends JPanel {
         gamePanelPlayer2.setLocation(0, 0);
         gamePanelPlayer2.setVisible(true);
 
-        splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
+        splashScreen = new SplashScreenPanel(getPreferredSize(), ctrl, model);
         splashScreen.setVisible(true);
 
         pauseMenu = new PauseMenu(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);

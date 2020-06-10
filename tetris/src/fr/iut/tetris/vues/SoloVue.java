@@ -36,7 +36,7 @@ public class SoloVue extends JPanel {
 		gamePanel.setLocation(0, 0);
 		gamePanel.setVisible(true);
 
-		splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
+		splashScreen = new SplashScreenPanel(getPreferredSize(), ctrl, model);
 		splashScreen.setVisible(true);
 
 		pauseMenu = new PauseMenu(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);

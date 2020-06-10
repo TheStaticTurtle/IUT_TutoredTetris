@@ -618,12 +618,12 @@ class SplashScreenPanel extends JPanel {
 	JButton backButton;
 	JButton replayButton;
 
-	public SplashScreenPanel(int x, int y, int width, int height,Object ctrl,Object model) {
+	public SplashScreenPanel(Dimension dimension, Object ctrl, Object model) {
 		this.ctrl = ctrl;
 		this.model = model;
 
-		setLocation(x, y);
-		setPreferredSize(new Dimension(width,height));
+		setLocation(0,0);
+		setPreferredSize(dimension);
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		setOpaque(false);
 
