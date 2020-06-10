@@ -21,6 +21,41 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+public class Common {
+
+	/**
+	 * Colorize an image based on a specified color (Took from: https://stackoverflow.com/a/21385150/8165282)
+	 * @param image the base image
+	 * @param color the color you want to adjust to
+	 * @return the colorized image
+	 */
+	public static BufferedImage dye(BufferedImage image, Color color) {
+		int w = image.getWidth();
+		int h = image.getHeight();
+		BufferedImage dyed = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = dyed.createGraphics();
+		g.drawImage(image, 0,0, null);
+		g.setComposite(AlphaComposite.SrcAtop);
+		g.setColor(color);
+		g.fillRect(0,0,w,h);
+		g.dispose();
+		return dyed;
+	}
+
+	/**
+	 * Convert a normal image of type Image to a BufferedImage to be used with graphics/dye
+	 * @param img the raw image
+	 * @return the buffer image
+	 */
+	public static BufferedImage toBufferedImage(Image img) {
+		if (img instanceof BufferedImage) { return (BufferedImage) img; }
+		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D bGr = bimage.createGraphics();
+		bGr.drawImage(img, 0, 0, null);
+		bGr.dispose();
+		return bimage;
+	}
+}
 
 class Spacer extends Box {
 	private static final long serialVersionUID = 1L;
@@ -220,19 +255,6 @@ class StarsAnimation extends JPanel {
 	Image resize_img;
 	Color bgColor = null;
 
-	public static BufferedImage dye(BufferedImage image, Color color) {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		BufferedImage dyed = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = dyed.createGraphics();
-		g.drawImage(image, 0,0, null);
-		g.setComposite(AlphaComposite.SrcAtop);
-		g.setColor(color);
-		g.fillRect(0,0,w,h);
-		g.dispose();
-		return dyed;
-	}
-
 	public StarsAnimation(Dimension size, Color bgColor, int count) {
 		this(size);
 
@@ -265,7 +287,7 @@ class StarsAnimation extends JPanel {
 			stars[i] = new StarModel(rn,size,s+2);
 		}
 
-		img = dye(Config.getInstance().getRessourceImage("/res/star.png"),colorize);
+		img = Common.dye(Config.getInstance().getRessourceImage("/res/star.png"),colorize);
 
 		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
 		tx.translate(-img.getWidth(null), 0);
@@ -507,12 +529,12 @@ class PauseMenu extends JPanel {
 	Object ctrl;
 	Object model;
 
-	public PauseMenu(int x, int y, int width, int height,Object ctrl,Object model) {
+	public PauseMenu(Dimension dimension, Object ctrl, Object model) {
 		this.ctrl = ctrl;
 		this.model = model;
 
-		setLocation(x, y);
-		setPreferredSize(new Dimension(width,height));
+		setLocation(0,0);
+		setPreferredSize(dimension);
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		setOpaque(false);
 

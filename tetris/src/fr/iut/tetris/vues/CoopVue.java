@@ -32,16 +32,15 @@ public class CoopVue extends JPanel {
 		setBackground(bg);
 
 
-		gamePanel = new GamePanelCoop(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight());
+		gamePanel = new GamePanelCoop(model,getPreferredSize());
 		gamePanel.setLocation(0, 0);
 		gamePanel.setVisible(true);
 
 		splashScreen = new SplashScreenPanel(getPreferredSize(), ctrl, model);
 		splashScreen.setVisible(true);
 
-		pauseMenu = new PauseMenu(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
+		pauseMenu = new PauseMenu(getPreferredSize(), ctrl,model);
 
-		//ICI Pour ajoutter des couches
 		testPane = new JLayeredPane();
 		//testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
 		testPane.add(gamePanel,JLayeredPane.PALETTE_LAYER);
@@ -52,16 +51,12 @@ public class CoopVue extends JPanel {
 
 		SpringLayout lyt = new SpringLayout();
 		SpringLayout lyt2 = new SpringLayout();
-		/*lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
-		lyt.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, testPane);
-		lyt2.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		lyt2.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, this);*/
-
 
 		lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, splashScreen, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
 		lyt.putConstraint(SpringLayout.VERTICAL_CENTER, splashScreen, 0, SpringLayout.VERTICAL_CENTER, testPane);
 		lyt2.putConstraint(SpringLayout.HORIZONTAL_CENTER, splashScreen, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		lyt2.putConstraint(SpringLayout.VERTICAL_CENTER, splashScreen, 0, SpringLayout.VERTICAL_CENTER, this);
+
 		testPane.setLayout(lyt);
 		setLayout(lyt2);
 		add(testPane);
@@ -88,9 +83,9 @@ class GamePanelCoop extends JPanel {
 	BlockModel noBlockModel;
 	JLabel scoreLabel;
 
-	public GamePanelCoop(CoopModel model, int xp, int yp, int width, int height) {
-		setLocation(xp, yp);
-		setPreferredSize(new Dimension(width,height));
+	public GamePanelCoop(CoopModel model, Dimension dimension) {
+		setLocation(0, 0);
+		setPreferredSize(dimension);
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		setOpaque(false);
 
