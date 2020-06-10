@@ -90,17 +90,17 @@ public class VersusController implements ActionListener, KeyListener {
             model.gameState = GameState.PLAYING;
             vue.recalculate();
         }
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(0, Direction.LEFT); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(0,Direction.RIGHT); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { model.fallCurrentForPlayerA(); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottomForPlayerA(); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))   { model.rotateCurrent(0,Direction.RIGHT); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_LEFT"))     { model.moveCurrentX(0, Direction.LEFT); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT"))    { model.moveCurrentX(0,Direction.RIGHT); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_DOWN"))     { model.fallCurrentForPlayerA(); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_FASTDOWN")) { model.fallCurrentAtBottomForPlayerA(); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_ROTATE"))   { model.rotateCurrent(0,Direction.RIGHT); vue.recalculate();}
 
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_LEFT"))     { model.moveCurrentX(1,Direction.LEFT); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT"))    { model.moveCurrentX(1,Direction.RIGHT); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_DOWN"))     { model.fallCurrentForPlayerB(); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_FASTDOWN")) { model.fallCurrentAtBottomForPlayerB(); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_ROTATE"))   { model.rotateCurrent(1,Direction.RIGHT); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(1,Direction.LEFT); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(1,Direction.RIGHT); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { model.fallCurrentForPlayerB(); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottomForPlayerB(); vue.recalculate();}
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))   { model.rotateCurrent(1,Direction.RIGHT); vue.recalculate();}
 
         //if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
 
