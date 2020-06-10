@@ -62,7 +62,7 @@ public class SettingsVue extends JPanel{
 		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
 		backButton.addActionListener(ctrl);
-		backButton.setActionCommand("CLICK:SETTINGS:BACK");
+		backButton.setActionCommand("CLICK:BACK");
 
 		soundMusicLevel.addChangeListener(ctrl);
 		soundSFXMusicLevel.addChangeListener(ctrl);
