@@ -3,6 +3,7 @@ package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
 import fr.iut.tetris.controllers.SettingsController;
+import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.SettingsModel;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class SettingsVue extends JPanel{
 
 	public JSlider soundMusicLevel;
 	public JSlider soundSFXMusicLevel;
+	public JComboBox<Resolution> resolutionDropdown;
 
 	public SettingsVue(SettingsModel model, SettingsController ctrl) {
 		this.model = model;
@@ -47,6 +49,8 @@ public class SettingsVue extends JPanel{
 		soundMusicLevel = new CustomSlider(-50,5,Color.WHITE,Color.ORANGE);
 		JLabel soundSFXMusicLabel = new JLabel("<html>SFX: ");
 		soundSFXMusicLevel = new CustomSlider(-50,5,Color.WHITE,Color.GREEN);
+		JLabel resolutionLabel = new JLabel("<html>Size: ");
+		resolutionDropdown = new JComboBox<Resolution>();
 
 		JButton backButton = new MenuButton("Save",Color.GREEN,Color.WHITE,ctrl);
 
@@ -58,8 +62,16 @@ public class SettingsVue extends JPanel{
 		soundMusicLabel.setForeground(Color.white);
 		soundSFXMusicLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		soundSFXMusicLabel.setForeground(Color.white);
+		resolutionLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		resolutionLabel.setForeground(Color.white);
 
 		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+
+		resolutionDropdown.addItem(Resolution.BIG);
+		resolutionDropdown.addItem(Resolution.NORMAL);
+		resolutionDropdown.addItem(Resolution.TINY);
+		resolutionDropdown.setActionCommand("RESOLUTION_SELECT");
+		resolutionDropdown.addActionListener(ctrl);
 
 		backButton.addActionListener(ctrl);
 		backButton.setActionCommand("CLICK:BACK");
@@ -85,6 +97,13 @@ public class SettingsVue extends JPanel{
 		SFXVolumeCtrlPanel.add(soundSFXMusicLabel);
 		SFXVolumeCtrlPanel.add(soundSFXMusicLevel);
 		mainPanel.add(SFXVolumeCtrlPanel);
+
+		JPanel resolutionCtrlPannel = new JPanel();
+		resolutionCtrlPannel.setOpaque(false);
+		resolutionCtrlPannel.setLayout(subLayout);
+		resolutionCtrlPannel.add(resolutionLabel);
+		resolutionCtrlPannel.add(resolutionDropdown);
+		mainPanel.add(resolutionCtrlPannel);
 
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());

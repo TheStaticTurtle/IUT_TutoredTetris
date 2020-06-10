@@ -149,6 +149,26 @@ public class Config {
 	}
 
 	/**
+	 * Reload fonts (used after a resolution change)
+	 */
+	public void reloadFonts() {
+		Font font = new JLabel().getFont();
+		try {
+			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
+			font = Font.createFont(Font.TRUETYPE_FONT, is);
+			Log.info(this,"Loaded font: /res/retro.ttf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		fonts.put("FONT_ULTRABIG",font.deriveFont((float)this.getInt("FONT_ULTRABIG")));
+		fonts.put("FONT_BIG",font.deriveFont((float)this.getInt("FONT_BIG")));
+		fonts.put("FONT_NORMAL",font.deriveFont((float)this.getInt("FONT_NORMAL")));
+		fonts.put("FONT_TINY",font.deriveFont((float)this.getInt("FONT_TINY")));
+		GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(fonts.get("FONT_NORMAL"));
+	}
+
+	/**
 	 * Return a font with correct size specified in the config
 	 * @param key name of the font you want to get
 	 * @return the font
