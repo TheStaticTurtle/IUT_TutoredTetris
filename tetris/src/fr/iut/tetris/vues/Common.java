@@ -57,6 +57,7 @@ public class Common {
 	}
 }
 
+/* Custom components */
 class Spacer extends Box {
 	private static final long serialVersionUID = 1L;
 
@@ -244,111 +245,6 @@ class TetrisLogo extends JPanel {
 			Image tmp = img.getScaledInstance(width, height, Image.SCALE_REPLICATE);
 			g2.setColor(Color.black);
 			g2.drawImage(tmp, spaceX/2, spaceY/2, width, height,this);
-		}
-	}
-}
-class MovingStarsAnimation extends JPanel {
-	Random rn = new Random();
-	StarModel[] stars = new StarModel[35];
-	Dimension size;
-	Image img;
-	Image resize_img;
-	Color bgColor = null;
-
-	public MovingStarsAnimation(Dimension size, Color bgColor, int count) {
-		this(size);
-
-		stars = new StarModel[count];
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-
-		this.bgColor = bgColor;
-	}
-
-	public MovingStarsAnimation(Dimension size, Color bgColor, int count, Color colorize) {
-		this(size,colorize);
-
-		stars = new StarModel[count];
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-
-		this.bgColor = bgColor;
-	}
-
-	public MovingStarsAnimation(Dimension size, Color colorize) {
-		this.size = size;
-
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-
-		img = Common.dye(Config.getInstance().getRessourceImage("/res/star.png"),colorize);
-
-		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-img.getWidth(null), 0);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		img = op.filter((BufferedImage) img, null);
-		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
-
-		MovingStarsAnimation p = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			for (StarModel star : p.stars) {
-				star.move();
-			}
-		}}).start();
-	}
-
-	public MovingStarsAnimation(Dimension size) {
-		this.size = size;
-
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-
-
-		img = Config.getInstance().getRessourceImage("/res/star.png");
-
-		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-img.getWidth(null), 0);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		img = op.filter((BufferedImage) img, null);
-		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
-
-		MovingStarsAnimation p = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			for (StarModel star : p.stars) {
-				star.move();
-			}
-		}}).start();
-	}
-
-	public void resetSize(Dimension size) {
-		this.size = size;
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-	}
-
-	@Override public Dimension getPreferredSize() {return size;}
-
-	@Override public int getHeight() { return size.height; }
-	@Override public int getWidth() { return size.width; }
-
-	@Override public void paintComponent(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
-		if(this.bgColor != null) {
-			g2.setColor(this.bgColor);
-			g2.fillRect(0,0,this.getWidth(),this.getHeight());
-		}
-		for (StarModel star : stars) {
-			g2.drawImage(resize_img,star.position.x-star.offset, star.position.y, this);
 		}
 	}
 }
@@ -760,5 +656,229 @@ class SplashScreenPanel extends JPanel {
 		animation.resetSize(mainPanel.getPreferredSize());
 		/*revalidate();
 		repaint();*/
+	}
+}
+
+/* Annimations */
+class MovingStarModel {
+	Point position;
+	Dimension parent;
+	Random rng;
+	int speed = 0;
+	int offset = 150;
+	public MovingStarModel(Random rng, Dimension parent, int speed) {
+		this.parent = parent;
+		this.speed = speed;
+		this.rng = rng;
+		this.position = new Point();
+		this.position.y = rng.nextInt(this.parent.height);
+		this.position.x = rng.nextInt(this.parent.width);
+	}
+
+	public void move() {
+		position.x += speed;
+		if(position.x>parent.width+offset) {
+			position.x=0;
+			this.position.y = this.rng.nextInt(this.parent.height);
+		}
+	}
+}
+class MovingStarsAnimation extends JPanel {
+	Random rn = new Random();
+	MovingStarModel[] stars = new MovingStarModel[35];
+	Dimension size;
+	Image img;
+	Image resize_img;
+	Color bgColor = null;
+
+	public MovingStarsAnimation(Dimension size, Color bgColor, int count) {
+		this(size);
+
+		stars = new MovingStarModel[count];
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+
+		this.bgColor = bgColor;
+	}
+
+	public MovingStarsAnimation(Dimension size, Color bgColor, int count, Color colorize) {
+		this(size,colorize);
+
+		stars = new MovingStarModel[count];
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+
+		this.bgColor = bgColor;
+	}
+
+	public MovingStarsAnimation(Dimension size, Color colorize) {
+		this.size = size;
+
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+
+		img = Common.dye(Config.getInstance().getRessourceImage("/res/star.png"),colorize);
+
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-img.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		img = op.filter((BufferedImage) img, null);
+		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
+
+		MovingStarsAnimation p = this;
+		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			for (MovingStarModel star : p.stars) {
+				star.move();
+			}
+		}}).start();
+	}
+
+	public MovingStarsAnimation(Dimension size) {
+		this.size = size;
+
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+
+
+		img = Config.getInstance().getRessourceImage("/res/star.png");
+
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-img.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		img = op.filter((BufferedImage) img, null);
+		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
+
+		MovingStarsAnimation p = this;
+		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			for (MovingStarModel star : p.stars) {
+				star.move();
+			}
+		}}).start();
+	}
+
+	public void resetSize(Dimension size) {
+		this.size = size;
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+	}
+
+	@Override public Dimension getPreferredSize() {return size;}
+
+	@Override public int getHeight() { return size.height; }
+	@Override public int getWidth() { return size.width; }
+
+	@Override public void paintComponent(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		if(this.bgColor != null) {
+			g2.setColor(this.bgColor);
+			g2.fillRect(0,0,this.getWidth(),this.getHeight());
+		}
+		for (MovingStarModel star : stars) {
+			g2.drawImage(resize_img,star.position.x-star.offset, star.position.y, this);
+		}
+	}
+}
+class StaticStarModel {
+	Point position;
+	Dimension parent;
+	Random rng;
+
+	Image img;
+
+
+	Image resize_img;
+
+	double base_size = 0;
+	double size = 0;
+	double max_diff = 0.8;
+	double direction = 0.1;
+
+	public StaticStarModel(Random rng, Dimension parent, double size, Image img) {
+		this.parent = parent;
+		this.base_size = size;
+		this.size = size;
+		this.rng = rng;
+		this.position = new Point();
+		this.position.y = rng.nextInt(this.parent.height);
+		this.position.x = rng.nextInt(this.parent.width);
+		this.img = img;
+	}
+
+	public Image getImage() {
+		return resize_img;
+	}
+
+	public void move() {
+		this.size += direction;
+		if(this.size>base_size+max_diff || this.size<0 || this.size<(base_size-max_diff)) direction *= -1;
+
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-img.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		resize_img =  op.filter((BufferedImage) img, null).getScaledInstance((int)(this.size*5)+1, (int)(this.size*5)+1, Image.SCALE_REPLICATE);
+	}
+}
+class StaticStarAnimation extends JPanel {
+	Random rn = new Random();
+	StaticStarModel[] stars = new StaticStarModel[35];
+	Dimension size;
+
+	Color bgColor = null;
+
+	public StaticStarAnimation(Dimension size, Color bgColor, int count) {
+		this(size);
+
+		Image img = Config.getInstance().getRessourceImage("/res/star_static.png");
+		stars = new StaticStarModel[count];
+		for(int i=0; i<stars.length; i++) {
+			double s = rn.nextDouble()*4;
+			stars[i] = new StaticStarModel(rn,size,s,img);
+		}
+
+		this.bgColor = bgColor;
+	}
+
+	public StaticStarAnimation(Dimension size) {
+		this.size = size;
+
+		Image img = Config.getInstance().getRessourceImage("/res/star_static.png");
+
+		for(int i=0; i<stars.length; i++) {
+			double s = rn.nextDouble()*4;
+			stars[i] = new StaticStarModel(rn,size,s, img);
+		}
+
+		StaticStarAnimation p = this;
+		new Timer(250, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			for (StaticStarModel star : p.stars) {
+				star.move();
+			}
+		}}).start();
+	}
+
+	@Override public Dimension getPreferredSize() {return size;}
+
+	@Override public int getHeight() { return size.height; }
+	@Override public int getWidth() { return size.width; }
+
+	@Override public void paintComponent(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		if(this.bgColor != null) {
+			g2.setColor(this.bgColor);
+			g2.fillRect(0,0,this.getWidth(),this.getHeight());
+		}
+		for (StaticStarModel star : stars) {
+			g2.drawImage(star.getImage(),star.position.x, star.position.y, this);
+		}
 	}
 }

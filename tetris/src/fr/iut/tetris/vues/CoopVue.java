@@ -10,6 +10,8 @@ import fr.iut.tetris.models.CoopModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 public class CoopVue extends JPanel {
@@ -42,7 +44,7 @@ public class CoopVue extends JPanel {
 		pauseMenu = new PauseMenu(getPreferredSize(), ctrl,model);
 
 		testPane = new JLayeredPane();
-		//testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
+		testPane.add(new StaticStarAnimation(getPreferredSize(),new Color(0f,0f,0.1f),55),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(gamePanel,JLayeredPane.PALETTE_LAYER);
 		testPane.add(splashScreen,JLayeredPane.MODAL_LAYER);
 		testPane.add(pauseMenu,JLayeredPane.POPUP_LAYER);
@@ -60,6 +62,12 @@ public class CoopVue extends JPanel {
 		testPane.setLayout(lyt);
 		setLayout(lyt2);
 		add(testPane);
+
+		JPanel t = this;
+		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			t.repaint();
+			t.revalidate();
+		}}).start();
 	}
 
 	public void setModel(CoopModel model) {

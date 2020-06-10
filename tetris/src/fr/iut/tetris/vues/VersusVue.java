@@ -10,6 +10,8 @@ import fr.iut.tetris.models.BlockModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 public class VersusVue extends JPanel {
@@ -47,7 +49,7 @@ public class VersusVue extends JPanel {
         pauseMenu = new PauseMenu(getPreferredSize(), ctrl,model);
 
         testPane = new JLayeredPane();
-        //testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
+        testPane.add(new StaticStarAnimation(getPreferredSize(),new Color(0f,0f,0.1f),55),JLayeredPane.DEFAULT_LAYER);
         testPane.add(gamePanelPlayer1,JLayeredPane.PALETTE_LAYER);
         testPane.add(gamePanelPlayer2,JLayeredPane.PALETTE_LAYER);
         testPane.add(splashScreen,JLayeredPane.MODAL_LAYER);
@@ -66,6 +68,12 @@ public class VersusVue extends JPanel {
         testPane.setLayout(lyt);
         setLayout(lyt2);
         add(testPane);
+
+        JPanel t = this;
+        new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+            t.repaint();
+            t.revalidate();
+        }}).start();
     }
 
     public void setModel(VersusModel model) {
@@ -270,6 +278,7 @@ class GamePanelVersus extends JPanel {
 
         setIgnoreRepaint(false);
         repaint();
+
     }
 
 	/*@Override public void paintComponent(Graphics g) {

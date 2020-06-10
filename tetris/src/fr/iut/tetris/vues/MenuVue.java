@@ -10,29 +10,6 @@ import java.awt.event.*;
 import java.util.Random;
 
 
-class StarModel {
-	Point position;
-	Dimension parent;
-	Random rng;
-	int speed = 0;
-	int offset = 150;
-	public StarModel(Random rng, Dimension parent, int speed) {
-		this.parent = parent;
-		this.speed = speed;
-		this.rng = rng;
-		this.position = new Point();
-		this.position.y = rng.nextInt(this.parent.height);
-		this.position.x = rng.nextInt(this.parent.width);
-	}
-
-	public void move() {
-		position.x += speed;
-		if(position.x>parent.width+offset) {
-			position.x=0;
-			this.position.y = this.rng.nextInt(this.parent.height);
-		}
-	}
-}
 
 
 public class MenuVue extends JPanel  {
@@ -128,6 +105,7 @@ public class MenuVue extends JPanel  {
 		mainPanel.setVisible(true);
 
 		JLayeredPane testPane = new JLayeredPane();
+
 		testPane.add(new MovingStarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
