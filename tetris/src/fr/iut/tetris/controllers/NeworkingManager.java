@@ -6,6 +6,7 @@ import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 import fr.iut.tetris.models.BlockModel;
+import fr.iut.tetris.models.PieceModel;
 import sun.nio.ch.Net;
 
 import javax.swing.event.ChangeListener;
@@ -111,6 +112,7 @@ class ServerListner implements Runnable {
 						continue;
 					}
 					else if(data.toString().startsWith("BOARD") && !this.manager.server) {
+						this.coopController.model.gameState = GameState.PLAYING;
 						String raw = data.toString().split("-")[1];
 						String boardData = raw.substring(0,raw.length()-3);
 						this.manager.ctrl.model.pieceList.clear();
@@ -129,6 +131,52 @@ class ServerListner implements Runnable {
 							x=0;
 						}
 						this.manager.ctrl.vue.recalculate();
+						continue;
+					}
+					else if(data.toString().startsWith("NPIECEA-") && !this.manager.server) {
+						this.coopController.model.gameState = GameState.PLAYING;
+						String raw = data.toString().split("-")[1];
+						String boardData = raw.substring(0,raw.length()-3);
+
+						BlockModel[][] ch = new BlockModel[4][4];
+						int y=0;
+						int x=0;
+						for (String line: boardData.split("__")) {
+							for (String block: line.split("_")) {
+								if(!block.equals("null")) {
+									ch[y][x] = new BlockModel(Color.decode(block));
+								} else {
+									ch[y][x] = null;
+								}
+								x+=1;
+							}
+							y+=1;
+							x=0;
+						}
+						this.manager.ctrl.model.nextPiecePlayerA = new PieceModel(ch, new Point(0,0), new Point(0,0),"nn");
+						continue;
+					}
+					else if(data.toString().startsWith("NPIECEB-") && !this.manager.server) {
+						this.coopController.model.gameState = GameState.PLAYING;
+						String raw = data.toString().split("-")[1];
+						String boardData = raw.substring(0,raw.length()-3);
+
+						BlockModel[][] ch = new BlockModel[4][4];
+						int y=0;
+						int x=0;
+						for (String line: boardData.split("__")) {
+							for (String block: line.split("_")) {
+								if(!block.equals("null")) {
+									ch[y][x] = new BlockModel(Color.decode(block));
+								} else {
+									ch[y][x] = null;
+								}
+								x+=1;
+							}
+							y+=1;
+							x=0;
+						}
+						this.manager.ctrl.model.nextPiecePlayerB = new PieceModel(ch, new Point(0,0), new Point(0,0),"nn");
 						continue;
 					}
 
@@ -178,13 +226,41 @@ class ServerListner implements Runnable {
 						}
 						this.writer.write("\n");
 						this.writer.flush();
+
+						this.writer.write("NPIECEA-");
+						for (BlockModel[] line: this.coopController.model.nextPiecePlayerA.childs) {
+							for (BlockModel block: line) {
+								if(block != null && block.color != null) {
+									this.writer.write("#"+Integer.toHexString(block.color.getRGB()).substring(2)+"_");
+								} else {
+									this.writer.write("null_");
+								}
+							}
+							this.writer.write("_");
+						}
+						this.writer.write("\n");
+						this.writer.flush();
+
+						this.writer.write("NPIECEB-");
+						for (BlockModel[] line: this.coopController.model.nextPiecePlayerB.childs) {
+							for (BlockModel block: line) {
+								if(block != null && block.color != null) {
+									this.writer.write("#"+Integer.toHexString(block.color.getRGB()).substring(2)+"_");
+								} else {
+									this.writer.write("null_");
+								}
+							}
+							this.writer.write("_");
+						}
+						this.writer.write("\n");
+						this.writer.flush();
 					} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 						e.printStackTrace();
 					}
 				}
 
 				try {
-					Thread.sleep(50);
+					Thread.sleep(this.manager.ctrl.model.fallSpeed - 50);
 				} catch (InterruptedException ignored) {}
 
 			} catch (IOException e) {

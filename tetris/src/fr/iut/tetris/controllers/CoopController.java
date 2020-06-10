@@ -60,11 +60,15 @@ public class CoopController implements ActionListener, KeyListener {
 	 */
 	private long timerCounter;
 	void timerTicked() {
+		if(!this.network.server) {
+			vue.recalculate();
+			return;
+		}
 		timerCounter += 10;
 		if(timerCounter > model.fallSpeed) {
 			timerCounter -= model.fallSpeed;
 
-			if(model.gameState == GameState.PLAYING && this.network.server) {
+			if(model.gameState == GameState.PLAYING) {
 				model.fallCurrentForPlayerA();
 				model.fallCurrentForPlayerB();
 				if(model.fallingPiecePlayerA == null) {
