@@ -17,10 +17,7 @@ import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
-import fr.iut.tetris.models.BlockModel;
-import fr.iut.tetris.models.CoopModel;
-import fr.iut.tetris.models.PieceModel;
-import fr.iut.tetris.models.SoloModel;
+import fr.iut.tetris.models.*;
 
 public class SoloVue extends JPanel {
 	SoloModel model;
@@ -180,14 +177,27 @@ class SplashScreenPanel extends JPanel {
 		mainPanel.setVisible(visible);
 		setVisible(visible);
 		if(state == GameState.FINISHED) {
-			pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
+
+			if(this.model instanceof VersusModel) {
+				pressSpace.setText("<html><div style='text-align: center;'>Congratulations :</div> <div style='text-align: center;'>player "+((VersusModel)model).winner+" wins the game</div></html>");
+				mainPanel.removeAll();
+				mainPanel.add(pressSpace);
+				mainPanel.add(new Spacer());
+				mainPanel.add(backReplayPanel);
+				animation.resetSize(mainPanel.getPreferredSize());
+				return;
+			}
 			if(this.model instanceof SoloModel) {
+				pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
 				currentScoreLabel.setText("<html>Current score: "+((SoloModel)this.model).currentScore);
 				bestScoreLabel.setText("<html>Best score: "+((SoloModel)this.model).bestScore);
 			}
 			if(this.model instanceof CoopModel) {
+				pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
 				currentScoreLabel.setText("<html>Current score: "+((CoopModel)this.model).currentScore);
 				bestScoreLabel.setText("<html>Best score: "+((CoopModel)this.model).bestScore);
+				replayButton.setActionCommand("CLICK:MENU:COOP");
+				replayButton.addActionListener((ActionListener)ctrl);
 			}
 			mainPanel.removeAll();
 			mainPanel.add(pressSpace);

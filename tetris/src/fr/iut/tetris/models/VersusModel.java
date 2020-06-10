@@ -30,6 +30,7 @@ public class VersusModel {
     public int bestScore = 0;
     public int currentScorePlayerA = 0;
     public int currentScorePlayerB =0;
+    public String winner;
     Random rand = new Random();
 
     public VersusModel() {
@@ -74,6 +75,7 @@ public class VersusModel {
         try {
             computeMixedGrid(0);
         } catch (OverlappedPieceException | PieceOutOfBoardException e) {
+            winner = "B";
             gameState = GameState.FINISHED;
             /*this.bestScore = this.ctrl.gameEnded();*/
         }
@@ -94,6 +96,7 @@ public class VersusModel {
         try {
             computeMixedGrid(1);
         } catch (OverlappedPieceException | PieceOutOfBoardException e) {
+            winner = "A";
             gameState = GameState.FINISHED;
             /*this.bestScore = this.ctrl.gameEnded();*/
         }

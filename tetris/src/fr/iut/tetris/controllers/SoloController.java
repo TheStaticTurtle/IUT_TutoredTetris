@@ -125,7 +125,11 @@ public class SoloController implements ActionListener, KeyListener {
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
 			case "CLICK:MENU:SOLO": //HACKY
+			case "CLICK:MENU:COOP":
+			case "CLICK:MENU:VERSUS":
 			case "CLICK:SOLO:BACK":
+			case "CLICK:COOP:BACK":
+			case "CLICK:VERSUS:BACK":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				mainCtrl.actionPerformed(e);
 				break;
