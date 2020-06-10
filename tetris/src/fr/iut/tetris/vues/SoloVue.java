@@ -84,7 +84,8 @@ public class SoloVue extends JPanel {
 
 	public void recalculate() {
 		//panelPiece.recalculate();
-		splashScreen.recalculate(model.gameState != GameState.PLAYING,model.gameState);
+		splashScreen.recalculate(model.gameState == GameState.WAITING || model.gameState == GameState.FINISHED,model.gameState);
+		pauseMenu.recalculate(model.gameState);
 		gamePanel.recalculate();
 	}
 }
@@ -163,8 +164,9 @@ class PauseMenu extends JPanel {
 
 		animation.size = mainPanel.getPreferredSize();
 
+		recalculate(GameState.WAITING);
 		JPanel t = this;
-		new Timer(100, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
 			t.repaint();
 			t.revalidate();
 		}}).start();
@@ -182,38 +184,13 @@ class PauseMenu extends JPanel {
 		super.paintComponent(g2d);
 	}
 
-	/*public void recalculate(boolean visible, GameState state) {
-		mainPanel.setVisible(visible);
-		setVisible(visible);
-		if(state == GameState.FINISHED) {
-			pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
-			if(this.model instanceof SoloModel) {
-				currentScoreLabel.setText("<html>Current score: "+((SoloModel)this.model).currentScore);
-				bestScoreLabel.setText("<html>Best score: "+((SoloModel)this.model).bestScore);
-			}
-			if(this.model instanceof CoopModel) {
-				currentScoreLabel.setText("<html>Current score: "+((CoopModel)this.model).currentScore);
-				bestScoreLabel.setText("<html>Best score: "+((CoopModel)this.model).bestScore);
-			}
-			mainPanel.removeAll();
-			mainPanel.add(pressSpace);
-			mainPanel.add(new Spacer());
-			mainPanel.add(currentScoreLabel);
-			mainPanel.add(bestScoreLabel);
-			mainPanel.add(new Spacer());
-			mainPanel.add(backReplayPanel);
-		} else {
-			mainPanel.removeAll();
-			mainPanel.add(pressSpace);
-		}
-		Log.debug(this,mainPanel.getPreferredSize());
-		animation.resetSize(mainPanel.getPreferredSize());
+	public void recalculate(GameState state) {
+		mainPanel.setVisible(state == GameState.PAUSED);
+		setVisible(state == GameState.PAUSED);
 		revalidate();
 		repaint();
-	}*/
+	}
 }
-
-
 
 class SplashScreenPanel extends JPanel {
 	JPanel mainPanel;

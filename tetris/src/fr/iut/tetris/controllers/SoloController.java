@@ -85,6 +85,18 @@ public class SoloController implements ActionListener, KeyListener {
 			model.gameState = GameState.PLAYING;
 			vue.recalculate();
 		}
+		if(e.getKeyCode()==Config.getInstance().getInt("KEYCODE_GOBACK")) {
+			if(model.gameState == GameState.PLAYING) {
+				model.gameState = GameState.PAUSED;
+				vue.recalculate();
+				return;
+			}
+			if(model.gameState == GameState.PAUSED) {
+				model.gameState = GameState.PLAYING;
+				vue.recalculate();
+				return;
+			}
+		}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(Direction.LEFT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(Direction.RIGHT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { model.fallCurrent(); vue.recalculate();}
@@ -124,6 +136,13 @@ public class SoloController implements ActionListener, KeyListener {
 			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
+
+
+			case "CLICK:RESUME": //HACKY
+				if(model.gameState == GameState.PAUSED) {
+					model.gameState = GameState.PLAYING;
+					vue.recalculate();
+				}
 			case "CLICK:MENU:SOLO": //HACKY
 			case "CLICK:SOLO:BACK":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
