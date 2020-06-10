@@ -1,11 +1,9 @@
 package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.*;
 import fr.iut.tetris.models.MenuModel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;

@@ -72,7 +72,6 @@ public class VersusModel {
         if(fallingPiecePlayerA == null) {
             PieceModel p = nextPiecePlayerA.clone();
             pieceListPlayerA.add(p);
-            p.x-=3;
             fallingPiecePlayerA = p;
             nextPiecePlayerA = getRandomPiece(0);
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN_PLAYER_A"));
@@ -92,7 +91,6 @@ public class VersusModel {
         if(fallingPiecePlayerB == null) {
             PieceModel p = nextPiecePlayerB.clone();
             pieceListPlayerB.add(p);
-            p.x+=3;
             fallingPiecePlayerB = p;
             nextPiecePlayerB = getRandomPiece(1);
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN_PLAYER_B"));

@@ -171,7 +171,7 @@ public class SoloModel {
 	 * @param piece the piece to transform
 	 */
 	void convertFullPiecesToBlocks(PieceModel piece) {
-		Log.info(this,"Converting the fallling piece to individual blocks");
+		Log.info(this,"Converting the falling piece to individual blocks");
 		pieceList.remove(piece);
 		for (int y = 0; y < 4; y++) {
 			for (int x = 0; x < 4; x++) {
