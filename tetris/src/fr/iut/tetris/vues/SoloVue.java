@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 import fr.iut.tetris.Config;
+import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
@@ -85,7 +86,7 @@ public class SoloVue extends JPanel {
 
 class GamePanelSolo extends JPanel {
 	SoloModel model;
-	int squareSize = 40;
+	int squareSize = 20;
 	BufferedImage img = null;
 	JPanel mainPanel;
 	NextPiecePanel nextPiecePanel;
@@ -103,7 +104,7 @@ class GamePanelSolo extends JPanel {
 
 		this.model = model;
 		mainPanel = new JPanel();
-		GridLayout mainLayout = new GridLayout(0,model.witdh);//ROW = 0 IF Else bug
+		GridLayout mainLayout = new GridLayout(0,model.width);//ROW = 0 IF Else bug
 
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setVisible(true);
@@ -158,17 +159,33 @@ class GamePanelSolo extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
 		setLayout(layout);
 
-		//Recalculate panel width
+
 		Dimension t = mainPanel.getPreferredSize();
-		squareSize = t.height / model.height;
-		t.width = t.height * (model.height / model.witdh);
+		//Manual calculation of layout is needed because the vue isn't rendered yet
+		int temp = getHeight() - (10+Common.getStringHeight(scoreLabel.getText())+10+10);
+		squareSize = temp/model.height;
+
+		for(Component c : mainPanel.getComponents()) {
+			TetrisBlock b = (TetrisBlock)c;
+			b.setSize(squareSize);
+		}
+
+		t.height = model.height * squareSize;
+		t.width = model.width * squareSize;
 		mainPanel.setPreferredSize(t);
-		nextPiecePanel.resetSize((int)(squareSize*1.5));
+
+		nextPiecePanel.resetSize((int)(squareSize/2));
 		recalculate();
 	}
 
+
+
 	public void recalculate() {
 		setIgnoreRepaint(true);
+
+		/*Dimension t = mainPanel.getSize();
+		t.width = t.height * (model.height / model.witdh);
+		mainPanel.setSize(t);*/
 
 		scoreLabel.setText("<html>Score: "+this.model.currentScore);
 
@@ -179,7 +196,8 @@ class GamePanelSolo extends JPanel {
 
 				for (int y = 0; y < grid.length; y++) {
 					for (int x = 0; x < grid[y].length; x++) {
-						TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
+						TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.width + x);
+						//p.setSize(mainPanel.getPreferredSize().height / model.height);
 						if(grid[y][x] != null) {
 							p.recalulate(grid[y][x]);
 						} else {

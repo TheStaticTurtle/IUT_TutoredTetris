@@ -110,7 +110,7 @@ class GamePanelVersus extends JPanel {
 
         this.model = model;
         mainPanel = new JPanel();
-        GridLayout mainLayout = new GridLayout(0,model.witdh);//ROW = 0 IF Else bug
+        GridLayout mainLayout = new GridLayout(0,model.width);//ROW = 0 IF Else bug
 
         mainPanel.setLayout(mainLayout);
         mainPanel.setVisible(true);
@@ -216,12 +216,21 @@ class GamePanelVersus extends JPanel {
 
         setLayout(layout);
 
-        //Recalculate panel width
         Dimension t = mainPanel.getPreferredSize();
-        squareSize = t.height / model.height;
-        t.width = t.height * (model.height / model.witdh);
+        //Manual calculation of layout is needed because the vue isn't rendered yet
+        int temp = getHeight() - (10+Common.getStringHeight(scoreLabel.getText())+10+10);
+        squareSize = temp/model.height;
+
+        for(Component c : mainPanel.getComponents()) {
+            TetrisBlock b = (TetrisBlock)c;
+            b.setSize(squareSize);
+        }
+
+        t.height = model.height * squareSize;
+        t.width = model.width * squareSize;
         mainPanel.setPreferredSize(t);
-        nextPiecePanel.resetSize((int)(squareSize*1.5));
+
+        nextPiecePanel.resetSize((int)(squareSize/2));
         recalculate();
     }
 
@@ -243,7 +252,7 @@ class GamePanelVersus extends JPanel {
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {
-                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
+                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.width + x);
                             if(grid[y][x] != null) {
                                 p.recalulate(grid[y][x]);
                             } else {
@@ -262,7 +271,7 @@ class GamePanelVersus extends JPanel {
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {
-                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
+                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.width + x);
                             if(grid[y][x] != null) {
                                 p.recalulate(grid[y][x]);
                             } else {

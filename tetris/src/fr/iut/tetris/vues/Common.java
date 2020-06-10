@@ -23,6 +23,13 @@ import java.util.Random;
 
 public class Common {
 
+	public static int getStringHeight(String str)
+	{
+		Graphics2D g2 = new BufferedImage(10,10,BufferedImage.TYPE_INT_ARGB).createGraphics();
+		g2.setFont(Config.getInstance().getFont("FONT_BIG"));
+		return g2.getFont().createGlyphVector(g2.getFontRenderContext(), str).getPixelBounds(null, 0, 0).height;
+	}
+
 	/**
 	 * Colorize an image based on a specified color (Took from: https://stackoverflow.com/a/21385150/8165282)
 	 * @param image the base image
@@ -340,6 +347,11 @@ class TetrisBlock extends JPanel {
 	BufferedImage img;
 
 	TetrisBlock(int size) {
+		this.canvasWidth = size;
+		this.canvasHeight = size;
+	}
+
+	public void setSize (int size) {
 		this.canvasWidth = size;
 		this.canvasHeight = size;
 	}
