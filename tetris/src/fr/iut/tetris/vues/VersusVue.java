@@ -1,7 +1,6 @@
 package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.Log;
 import fr.iut.tetris.models.VersusModel;
 import fr.iut.tetris.controllers.VersusController;
 import fr.iut.tetris.enums.GameState;
@@ -142,18 +141,36 @@ class GamePanelVersus extends JPanel {
         add(nextPiecePanel);
         add(scoreLabel);
 
-        try {
-            Object[][] grid = model.computeMixedGrid();
-            for (Object[] objects : grid) {
-                for (int x = 0; x < objects.length; x++) {
-                    TetrisBlock b = new TetrisBlock(squareSize);
-                    mainPanel.add(b);
-                    b.recalulate(noBlockModel);
+        if (this.player == 1) {
+            try {
+                Object[][] grid = model.computeMixedGrid(1);
+                for (Object[] objects : grid) {
+                    for (int x = 0; x < objects.length; x++) {
+                        TetrisBlock b = new TetrisBlock(squareSize);
+                        mainPanel.add(b);
+                        b.recalulate(noBlockModel);
+                    }
                 }
+            } catch (PieceOutOfBoardException | OverlappedPieceException e) {
+                e.printStackTrace();
             }
-        } catch (PieceOutOfBoardException | OverlappedPieceException e) {
-            e.printStackTrace();
         }
+        else {
+            try {
+                Object[][] grid = model.computeMixedGrid(2);
+                for (Object[] objects : grid) {
+                    for (int x = 0; x < objects.length; x++) {
+                        TetrisBlock b = new TetrisBlock(squareSize);
+                        mainPanel.add(b);
+                        b.recalulate(noBlockModel);
+                    }
+                }
+            } catch (PieceOutOfBoardException | OverlappedPieceException e) {
+                e.printStackTrace();
+            }
+        }
+
+
 
 
         SpringLayout layout = new SpringLayout();
@@ -212,22 +229,43 @@ class GamePanelVersus extends JPanel {
         }
 
         if(model.gameState==GameState.PLAYING) {
-            try {
-                nextPiecePanel.recalulate(model.nextPiecePlayerA);
-                BlockModel[][] grid = model.computeMixedGrid();
+            if (this.player == 1) {
+                try {
+                    nextPiecePanel.recalulate(model.nextPiecePlayerA);
+                    BlockModel[][] grid = model.computeMixedGrid(1);
 
-                for (int y = 0; y < grid.length; y++) {
-                    for (int x = 0; x < grid[y].length; x++) {
-                        TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
-                        if(grid[y][x] != null) {
-                            p.recalulate(grid[y][x]);
-                        } else {
-                            p.recalulate(noBlockModel);
+                    for (int y = 0; y < grid.length; y++) {
+                        for (int x = 0; x < grid[y].length; x++) {
+                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
+                            if(grid[y][x] != null) {
+                                p.recalulate(grid[y][x]);
+                            } else {
+                                p.recalulate(noBlockModel);
+                            }
                         }
                     }
+                } catch (PieceOutOfBoardException | OverlappedPieceException e) {
+                    e.printStackTrace();
                 }
-            } catch (PieceOutOfBoardException | OverlappedPieceException e) {
-                e.printStackTrace();
+            }
+            else {
+                try {
+                    nextPiecePanel.recalulate(model.nextPiecePlayerB);
+                    BlockModel[][] grid = model.computeMixedGrid(2);
+
+                    for (int y = 0; y < grid.length; y++) {
+                        for (int x = 0; x < grid[y].length; x++) {
+                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
+                            if(grid[y][x] != null) {
+                                p.recalulate(grid[y][x]);
+                            } else {
+                                p.recalulate(noBlockModel);
+                            }
+                        }
+                    }
+                } catch (PieceOutOfBoardException | OverlappedPieceException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

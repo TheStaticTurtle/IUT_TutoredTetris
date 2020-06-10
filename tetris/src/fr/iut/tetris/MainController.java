@@ -128,6 +128,9 @@ public class MainController implements ActionListener, KeyListener {
 		if(coopController != null) {
 			coopController.keyTyped(e);
 		}
+		if(versusController != null) {
+			versusController.keyTyped(e);
+		}
 	}
 
 	@Override
@@ -138,6 +141,9 @@ public class MainController implements ActionListener, KeyListener {
 		if(coopController != null) {
 			coopController.keyPressed(e);
 		}
+		if(versusController != null) {
+			versusController.keyPressed(e);
+		}
 	}
 
 	@Override
@@ -147,6 +153,9 @@ public class MainController implements ActionListener, KeyListener {
 		}
 		if(coopController != null) {
 			coopController.keyReleased(e);
+		}
+		if(versusController != null) {
+			versusController.keyReleased(e);
 		}
 	}
 }
