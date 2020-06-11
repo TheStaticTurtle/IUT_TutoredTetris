@@ -4,8 +4,6 @@ import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.controllers.MenuController;
-import fr.iut.tetris.controllers.SettingsController;
-import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.*;
@@ -293,7 +291,7 @@ class CustomSlider extends JSlider implements MouseListener {
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;
 
-		int thumbSize = getHeight() - borderSize*2 -space*2;
+		int thumbSize = getHeight() - borderSize*2 - space*2;
 
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0 ,0,getWidth(),borderSize);
@@ -343,7 +341,7 @@ class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object> 
 	}
 
 	@Override
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 		if(isSelected) {
 			setForeground(Color.RED);
 		} else {

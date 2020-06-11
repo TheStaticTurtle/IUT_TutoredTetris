@@ -70,15 +70,6 @@ public class Config {
 			}
 		}
 
-		Font font = new JLabel().getFont();
-		try {
-			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, is);
-			Log.info(this,"Loaded font: /res/retro.ttf");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 		this.reloadFonts();
 
 		inst = this;

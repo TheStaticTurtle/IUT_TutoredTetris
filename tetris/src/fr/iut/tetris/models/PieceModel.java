@@ -1,7 +1,6 @@
 package fr.iut.tetris.models;
 
 import java.awt.*;
-import java.util.Arrays;
 
 public
 class PieceModel {

@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 public class VersusVue extends JPanel {
+	
     VersusModel model;
     VersusController ctrl;
 
@@ -89,7 +90,10 @@ public class VersusVue extends JPanel {
 }
 
 class GamePanelVersus extends JPanel {
-    VersusModel model;
+
+	private static final long serialVersionUID = 1L;
+	
+	VersusModel model;
     int squareSize = 40;
     BufferedImage img = null;
     JPanel mainPanel;
@@ -99,6 +103,7 @@ class GamePanelVersus extends JPanel {
     int player;
 
     public GamePanelVersus(VersusModel model, Dimension dimension, int player) {
+    	
         setLocation(0, 0);
         setPreferredSize(dimension);
         setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
@@ -123,12 +128,10 @@ class GamePanelVersus extends JPanel {
 
         JLabel labelNextPiece;
 
-        if (this.player == 1) {
+        if (this.player == 1)
             labelNextPiece = new JLabel("<html>Next A:");
-        }
-        else  {
+        else
             labelNextPiece = new JLabel("<html>Next B:");
-        }
 
         labelNextPiece.setForeground(Color.white);
         labelNextPiece.setFont(Config.getInstance().getFont("FONT_NORMAL"));
@@ -237,12 +240,10 @@ class GamePanelVersus extends JPanel {
     public void recalculate() {
         setIgnoreRepaint(true);
 
-        if (this.player == 0) {
+        if (this.player == 0)
             scoreLabel.setText("<html>Score: "+this.model.currentScorePlayerA);
-        }
-        else {
+        else
             scoreLabel.setText("<html>Score: "+this.model.currentScorePlayerB);
-        }
 
         if(model.gameState==GameState.PLAYING) {
             if (this.player == 0) {

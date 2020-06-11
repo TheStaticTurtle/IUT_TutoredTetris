@@ -51,6 +51,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 	 * Listen for incoming event and do some action accordingly
 	 * @param e the event
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {

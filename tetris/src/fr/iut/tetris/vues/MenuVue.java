@@ -7,10 +7,6 @@ import fr.iut.tetris.models.MenuModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Random;
-
-
-
 
 public class MenuVue extends JPanel  {
 	MenuModel model;
