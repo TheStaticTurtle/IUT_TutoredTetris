@@ -1,10 +1,13 @@
 package fr.iut.tetris.controllers;
 
 import fr.iut.tetris.Config;
+import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
+import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.SettingsModel;
 import fr.iut.tetris.vues.SettingsVue;
 
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
@@ -51,10 +54,25 @@ public class SettingsController implements ActionListener, ChangeListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
+			case "RESOLUTION_SELECT":
+				JComboBox<Resolution> box = (JComboBox<Resolution>) e.getSource();
+				Resolution r = (Resolution) box.getSelectedItem();
+				assert r != null;
+				Log.info(this,"Changing resolution to: "+box.getSelectedItem());
+				Config.getInstance().putInt("WINDOW_HEIGHT",r.height);
+				Config.getInstance().putInt("WINDOW_WIDTH" ,r.width);
+				Config.getInstance().putInt("FONT_ULTRABIG",r.font_ultrabig);
+				Config.getInstance().putInt("FONT_BIG"     ,r.font_big);
+				Config.getInstance().putInt("FONT_NORMAL"  ,r.font_normal);
+				Config.getInstance().putInt("FONT_TINY"    ,r.font_tiny);
+				Config.getInstance().putInt("FONT_VERYTINY",r.font_verytiny);
+				Config.getInstance().reloadFonts();
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
+				break;
 			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
-			case "CLICK:SETTINGS:BACK":
+			case "CLICK:BACK":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				saveConfig();
 				mainCtrl.actionPerformed(e);

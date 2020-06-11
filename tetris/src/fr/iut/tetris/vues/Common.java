@@ -7,10 +7,12 @@ import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.controllers.SettingsController;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
+import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +23,50 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+public class Common {
 
+	public static int getStringHeight(String str)
+	{
+		Graphics2D g2 = new BufferedImage(10,10,BufferedImage.TYPE_INT_ARGB).createGraphics();
+		g2.setFont(Config.getInstance().getFont("FONT_BIG"));
+		return g2.getFont().createGlyphVector(g2.getFontRenderContext(), str).getPixelBounds(null, 0, 0).height;
+	}
+
+	/**
+	 * Colorize an image based on a specified color (Took from: https://stackoverflow.com/a/21385150/8165282)
+	 * @param image the base image
+	 * @param color the color you want to adjust to
+	 * @return the colorized image
+	 */
+	public static BufferedImage dye(BufferedImage image, Color color) {
+		int w = image.getWidth();
+		int h = image.getHeight();
+		BufferedImage dyed = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = dyed.createGraphics();
+		g.drawImage(image, 0,0, null);
+		g.setComposite(AlphaComposite.SrcAtop);
+		g.setColor(color);
+		g.fillRect(0,0,w,h);
+		g.dispose();
+		return dyed;
+	}
+
+	/**
+	 * Convert a normal image of type Image to a BufferedImage to be used with graphics/dye
+	 * @param img the raw image
+	 * @return the buffer image
+	 */
+	public static BufferedImage toBufferedImage(Image img) {
+		if (img instanceof BufferedImage) { return (BufferedImage) img; }
+		BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+		Graphics2D bGr = bimage.createGraphics();
+		bGr.drawImage(img, 0, 0, null);
+		bGr.dispose();
+		return bimage;
+	}
+}
+
+/* Custom components */
 class Spacer extends Box {
 	private static final long serialVersionUID = 1L;
 
@@ -212,124 +257,6 @@ class TetrisLogo extends JPanel {
 		}
 	}
 }
-class StarsAnimation extends JPanel {
-	Random rn = new Random();
-	StarModel[] stars = new StarModel[35];
-	Dimension size;
-	Image img;
-	Image resize_img;
-	Color bgColor = null;
-
-	public static BufferedImage dye(BufferedImage image, Color color) {
-		int w = image.getWidth();
-		int h = image.getHeight();
-		BufferedImage dyed = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g = dyed.createGraphics();
-		g.drawImage(image, 0,0, null);
-		g.setComposite(AlphaComposite.SrcAtop);
-		g.setColor(color);
-		g.fillRect(0,0,w,h);
-		g.dispose();
-		return dyed;
-	}
-
-	public StarsAnimation(Dimension size, Color bgColor, int count) {
-		this(size);
-
-		stars = new StarModel[count];
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-
-		this.bgColor = bgColor;
-	}
-
-	public StarsAnimation(Dimension size, Color bgColor, int count,Color colorize) {
-		this(size,colorize);
-
-		stars = new StarModel[count];
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-
-		this.bgColor = bgColor;
-	}
-
-	public StarsAnimation(Dimension size,Color colorize) {
-		this.size = size;
-
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-
-		img = dye(Config.getInstance().getRessourceImage("/res/star.png"),colorize);
-
-		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-img.getWidth(null), 0);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		img = op.filter((BufferedImage) img, null);
-		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
-
-		StarsAnimation p = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			for (StarModel star : p.stars) {
-				star.move();
-			}
-		}}).start();
-	}
-
-	public StarsAnimation(Dimension size) {
-		this.size = size;
-
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-
-
-		img = Config.getInstance().getRessourceImage("/res/star.png");
-
-		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-img.getWidth(null), 0);
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		img = op.filter((BufferedImage) img, null);
-		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
-
-		StarsAnimation p = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			for (StarModel star : p.stars) {
-				star.move();
-			}
-		}}).start();
-	}
-
-	public void resetSize(Dimension size) {
-		this.size = size;
-		for(int i=0; i<stars.length; i++) {
-			int s = rn.nextInt(2)+1;
-			stars[i] = new StarModel(rn,size,s+2);
-		}
-	}
-
-	@Override public Dimension getPreferredSize() {return size;}
-
-	@Override public int getHeight() { return size.height; }
-	@Override public int getWidth() { return size.width; }
-
-	@Override public void paintComponent(Graphics g) {
-		Graphics2D g2 = (Graphics2D) g;
-		if(this.bgColor != null) {
-			g2.setColor(this.bgColor);
-			g2.fillRect(0,0,this.getWidth(),this.getHeight());
-		}
-		for (StarModel star : stars) {
-			g2.drawImage(resize_img,star.position.x-star.offset, star.position.y, this);
-		}
-	}
-}
 class CustomSlider extends JSlider implements MouseListener {
 
 	int borderSize = 10;
@@ -413,6 +340,61 @@ class CustomSlider extends JSlider implements MouseListener {
 	@Override public void mouseEntered(MouseEvent e) {}
 	@Override public void mouseExited(MouseEvent e) {}
 }
+
+class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object>  {
+	public CustomComboBoxRenderer() {
+		setOpaque(true);
+		setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+		setBackground(Color.BLACK);
+		setForeground(Color.WHITE);
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.white),new EmptyBorder(2, 2, 2, 2)));
+	}
+
+	@Override
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		if(isSelected) {
+			setForeground(Color.RED);
+		} else {
+			setForeground(Color.WHITE);
+		}
+		setText(value.toString());
+		return this;
+	}
+}
+class CustomComboBoxEditor extends BasicComboBoxEditor {
+	private JLabel label = new JLabel();
+	private JPanel panel = new JPanel();
+	private Object selectedItem;
+
+	public CustomComboBoxEditor() {
+		label.setOpaque(false);
+		label.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+		label.setForeground(Color.WHITE);
+
+		panel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white));
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		panel.setBackground(Color.BLACK);
+		panel.add(label);
+	}
+
+	public Component getEditorComponent() {
+		return this.panel;
+	}
+
+	public Object getItem() {
+		return this.selectedItem;
+	}
+
+	public void setItem(Object item) {
+		this.selectedItem = item;
+		if(item instanceof Resolution)
+			label.setText(((Resolution)item).name());
+		else
+			label.setText(item.toString());
+	}
+
+}
+
 class TetrisBlock extends JPanel {
 
 	int canvasWidth;
@@ -422,6 +404,11 @@ class TetrisBlock extends JPanel {
 	BufferedImage img;
 
 	TetrisBlock(int size) {
+		this.canvasWidth = size;
+		this.canvasHeight = size;
+	}
+
+	public void setSize (int size) {
 		this.canvasWidth = size;
 		this.canvasHeight = size;
 	}
@@ -507,12 +494,12 @@ class PauseMenu extends JPanel {
 	Object ctrl;
 	Object model;
 
-	public PauseMenu(int x, int y, int width, int height,Object ctrl,Object model) {
+	public PauseMenu(Dimension dimension, Object ctrl, Object model) {
 		this.ctrl = ctrl;
 		this.model = model;
 
-		setLocation(x, y);
-		setPreferredSize(new Dimension(width,height));
+		setLocation(0,0);
+		setPreferredSize(dimension);
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		setOpaque(false);
 
@@ -536,21 +523,23 @@ class PauseMenu extends JPanel {
 
 		JPanel backResumePanel = new JPanel();
 		backResumePanel.setOpaque(false);
-		MenuButton backButton = new MenuButton("Resume",Color.GREEN,Color.WHITE, (ActionListener)ctrl);
-		backButton.setActionCommand("CLICK:RESUME");
-		backButton.addActionListener((ActionListener)ctrl);
-		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
-		backResumePanel.add(backButton);
 
-		MenuButton resumeButton = new MenuButton("Menu",Color.RED,Color.WHITE, (ActionListener)ctrl);
-		resumeButton.setActionCommand("CLICK:SOLO:BACK");
+		MenuButton resumeButton = new MenuButton("Resume",Color.GREEN,Color.WHITE, (ActionListener)ctrl);
+		resumeButton.setActionCommand("CLICK:RESUME");
 		resumeButton.addActionListener((ActionListener)ctrl);
 		resumeButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		backResumePanel.add(resumeButton);
+
+		MenuButton backButton = new MenuButton("Menu",Color.RED,Color.WHITE, (ActionListener)ctrl);
+		backButton.setActionCommand("CLICK:BACK");
+		backButton.addActionListener((ActionListener)ctrl);
+		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+
+		backResumePanel.add(backButton);
 		backResumePanel.setLayout(subLayout);
 		mainPanel.add(backResumePanel);
 
-		StarsAnimation animation = new StarsAnimation(mainPanel.getPreferredSize(),Color.black,10,Color.red);
+		MovingStarsAnimation animation = new MovingStarsAnimation(mainPanel.getPreferredSize(),Color.black,10,Color.red);
 
 		JLayeredPane testPane = new JLayeredPane();
 		testPane.add(animation,JLayeredPane.DEFAULT_LAYER);
@@ -611,17 +600,17 @@ class SplashScreenPanel extends JPanel {
 	JPanel backReplayPanel;
 	Object ctrl;
 	Object model;
-	StarsAnimation animation;
+	MovingStarsAnimation animation;
 
 	JButton backButton;
 	JButton replayButton;
 
-	public SplashScreenPanel(int x, int y, int width, int height,Object ctrl,Object model) {
+	public SplashScreenPanel(Dimension dimension, Object ctrl, Object model) {
 		this.ctrl = ctrl;
 		this.model = model;
 
-		setLocation(x, y);
-		setPreferredSize(new Dimension(width,height));
+		setLocation(0,0);
+		setPreferredSize(dimension);
 		setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
 		setOpaque(false);
 
@@ -642,8 +631,8 @@ class SplashScreenPanel extends JPanel {
 		backReplayPanel = new JPanel();
 		backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE, (ActionListener)ctrl);
 		replayButton = new MenuButton("Restart",Color.RED,Color.WHITE, (ActionListener)ctrl);
-		backButton.setActionCommand("CLICK:SOLO:BACK");
-		replayButton.setActionCommand("CLICK:MENU:SOLO"); //HACKY
+		backButton.setActionCommand("CLICK:BACK");
+		replayButton.setActionCommand("CLICK:RESTART"); //HACKY
 		backButton.addActionListener((ActionListener)ctrl);
 		replayButton.addActionListener((ActionListener)ctrl);
 
@@ -665,7 +654,7 @@ class SplashScreenPanel extends JPanel {
 		bestScoreLabel.setText("<html>Best Score: 0");
 
 
-		animation = new StarsAnimation(mainPanel.getPreferredSize(),Color.black,20);
+		animation = new MovingStarsAnimation(mainPanel.getPreferredSize(),Color.black,20);
 
 		JLayeredPane testPane = new JLayeredPane();
 		testPane.add(animation,JLayeredPane.DEFAULT_LAYER);
@@ -718,8 +707,6 @@ class SplashScreenPanel extends JPanel {
 				pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
 				currentScoreLabel.setText("<html>Current score: "+((CoopModel)this.model).currentScore);
 				bestScoreLabel.setText("<html>Best score: "+((CoopModel)this.model).bestScore);
-				replayButton.setActionCommand("CLICK:MENU:COOP");
-				replayButton.addActionListener((ActionListener)ctrl);
 			}
 			mainPanel.removeAll();
 			mainPanel.add(pressSpace);
@@ -736,5 +723,229 @@ class SplashScreenPanel extends JPanel {
 		animation.resetSize(mainPanel.getPreferredSize());
 		/*revalidate();
 		repaint();*/
+	}
+}
+
+/* Annimations */
+class MovingStarModel {
+	Point position;
+	Dimension parent;
+	Random rng;
+	int speed = 0;
+	int offset = 150;
+	public MovingStarModel(Random rng, Dimension parent, int speed) {
+		this.parent = parent;
+		this.speed = speed;
+		this.rng = rng;
+		this.position = new Point();
+		this.position.y = rng.nextInt(this.parent.height);
+		this.position.x = rng.nextInt(this.parent.width);
+	}
+
+	public void move() {
+		position.x += speed;
+		if(position.x>parent.width+offset) {
+			position.x=0;
+			this.position.y = this.rng.nextInt(this.parent.height);
+		}
+	}
+}
+class MovingStarsAnimation extends JPanel {
+	Random rn = new Random();
+	MovingStarModel[] stars = new MovingStarModel[35];
+	Dimension size;
+	Image img;
+	Image resize_img;
+	Color bgColor = null;
+
+	public MovingStarsAnimation(Dimension size, Color bgColor, int count) {
+		this(size);
+
+		stars = new MovingStarModel[count];
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+
+		this.bgColor = bgColor;
+	}
+
+	public MovingStarsAnimation(Dimension size, Color bgColor, int count, Color colorize) {
+		this(size,colorize);
+
+		stars = new MovingStarModel[count];
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+
+		this.bgColor = bgColor;
+	}
+
+	public MovingStarsAnimation(Dimension size, Color colorize) {
+		this.size = size;
+
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+
+		img = Common.dye(Config.getInstance().getRessourceImage("/res/star.png"),colorize);
+
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-img.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		img = op.filter((BufferedImage) img, null);
+		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
+
+		MovingStarsAnimation p = this;
+		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			for (MovingStarModel star : p.stars) {
+				star.move();
+			}
+		}}).start();
+	}
+
+	public MovingStarsAnimation(Dimension size) {
+		this.size = size;
+
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+
+
+		img = Config.getInstance().getRessourceImage("/res/star.png");
+
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-img.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		img = op.filter((BufferedImage) img, null);
+		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
+
+		MovingStarsAnimation p = this;
+		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			for (MovingStarModel star : p.stars) {
+				star.move();
+			}
+		}}).start();
+	}
+
+	public void resetSize(Dimension size) {
+		this.size = size;
+		for(int i=0; i<stars.length; i++) {
+			int s = rn.nextInt(2)+1;
+			stars[i] = new MovingStarModel(rn,size,s+2);
+		}
+	}
+
+	@Override public Dimension getPreferredSize() {return size;}
+
+	@Override public int getHeight() { return size.height; }
+	@Override public int getWidth() { return size.width; }
+
+	@Override public void paintComponent(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		if(this.bgColor != null) {
+			g2.setColor(this.bgColor);
+			g2.fillRect(0,0,this.getWidth(),this.getHeight());
+		}
+		for (MovingStarModel star : stars) {
+			g2.drawImage(resize_img,star.position.x-star.offset, star.position.y, this);
+		}
+	}
+}
+class StaticStarModel {
+	Point position;
+	Dimension parent;
+	Random rng;
+
+	Image img;
+
+
+	Image resize_img;
+
+	double base_size = 0;
+	double size = 0;
+	double max_diff = 0.8;
+	double direction = 0.1;
+
+	public StaticStarModel(Random rng, Dimension parent, double size, Image img) {
+		this.parent = parent;
+		this.base_size = size;
+		this.size = size;
+		this.rng = rng;
+		this.position = new Point();
+		this.position.y = rng.nextInt(this.parent.height);
+		this.position.x = rng.nextInt(this.parent.width);
+		this.img = img;
+	}
+
+	public Image getImage() {
+		return resize_img;
+	}
+
+	public void move() {
+		this.size += direction;
+		if(this.size>base_size+max_diff || this.size<0 || this.size<(base_size-max_diff)) direction *= -1;
+
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-img.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		resize_img =  op.filter((BufferedImage) img, null).getScaledInstance((int)(this.size*5)+1, (int)(this.size*5)+1, Image.SCALE_REPLICATE);
+	}
+}
+class StaticStarAnimation extends JPanel {
+	Random rn = new Random();
+	StaticStarModel[] stars = new StaticStarModel[35];
+	Dimension size;
+
+	Color bgColor = null;
+
+	public StaticStarAnimation(Dimension size, Color bgColor, int count) {
+		this(size);
+
+		Image img = Config.getInstance().getRessourceImage("/res/star_static.png");
+		stars = new StaticStarModel[count];
+		for(int i=0; i<stars.length; i++) {
+			double s = rn.nextDouble()*4;
+			stars[i] = new StaticStarModel(rn,size,s,img);
+		}
+
+		this.bgColor = bgColor;
+	}
+
+	public StaticStarAnimation(Dimension size) {
+		this.size = size;
+
+		Image img = Config.getInstance().getRessourceImage("/res/star_static.png");
+
+		for(int i=0; i<stars.length; i++) {
+			double s = rn.nextDouble()*4;
+			stars[i] = new StaticStarModel(rn,size,s, img);
+		}
+
+		StaticStarAnimation p = this;
+		new Timer(250, new ActionListener() { public void actionPerformed(ActionEvent e) {
+			for (StaticStarModel star : p.stars) {
+				star.move();
+			}
+		}}).start();
+	}
+
+	@Override public Dimension getPreferredSize() {return size;}
+
+	@Override public int getHeight() { return size.height; }
+	@Override public int getWidth() { return size.width; }
+
+	@Override public void paintComponent(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		if(this.bgColor != null) {
+			g2.setColor(this.bgColor);
+			g2.fillRect(0,0,this.getWidth(),this.getHeight());
+		}
+		for (StaticStarModel star : stars) {
+			g2.drawImage(star.getImage(),star.position.x, star.position.y, this);
+		}
 	}
 }

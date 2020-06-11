@@ -35,7 +35,7 @@ public class CreditVue extends JPanel  {
 		JButton backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE,ctrl);
 
 		backButton.addActionListener(ctrl);
-		backButton.setActionCommand("CLICK:CREDIT:BACK");
+		backButton.setActionCommand("CLICK:BACK");
 
 
 		JLabel[] creditsLabel = new JLabel[6];
@@ -73,7 +73,7 @@ public class CreditVue extends JPanel  {
 		mainPanel.setVisible(true);
 
 		JLayeredPane testPane = new JLayeredPane();
-		testPane.add(new StarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
+		testPane.add(new MovingStarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 

@@ -51,7 +51,7 @@ public class Config {
 				Log.warning(this,"The stored config file has not the same version number as the default config file, overwriting it (L:"+config.get("CONFIG_VERSION")+" D:"+defConf.get("CONFIG_VERSION")+")");
 				//Merge the two configs
 				defConf.forEach((key, value) -> config.merge(key, value, (v1, v2) -> v1) );
-
+				config.put("CONFIG_VERSION",defConf.get("CONFIG_VERSION"));
 				try {
 					config.store(new FileWriter(appConfigPath),null);
 					Log.info(this,"Saved the new config");
@@ -79,11 +79,7 @@ public class Config {
 			e.printStackTrace();
 		}
 
-		fonts.put("FONT_ULTRABIG",font.deriveFont((float)this.getInt("FONT_ULTRABIG")));
-		fonts.put("FONT_BIG",font.deriveFont((float)this.getInt("FONT_BIG")));
-		fonts.put("FONT_NORMAL",font.deriveFont((float)this.getInt("FONT_NORMAL")));
-		fonts.put("FONT_TINY",font.deriveFont((float)this.getInt("FONT_TINY")));
-		GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(fonts.get("FONT_NORMAL"));
+		this.reloadFonts();
 
 		inst = this;
 	}
@@ -149,11 +145,37 @@ public class Config {
 	}
 
 	/**
+	 * Reload fonts (used after a resolution change)
+	 */
+	public void reloadFonts() {
+		Font font = new JLabel().getFont();
+		try {
+			InputStream is = Main.class.getResourceAsStream("/res/retro.ttf");
+			font = Font.createFont(Font.TRUETYPE_FONT, is);
+			Log.info(this,"Loaded font: /res/retro.ttf");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		fonts.put("FONT_ULTRABIG",font.deriveFont((float)this.getInt("FONT_ULTRABIG")));
+		fonts.put("FONT_BIG",font.deriveFont((float)this.getInt("FONT_BIG")));
+		fonts.put("FONT_NORMAL",font.deriveFont((float)this.getInt("FONT_NORMAL")));
+		fonts.put("FONT_TINY",font.deriveFont((float)this.getInt("FONT_TINY")));
+		fonts.put("FONT_VERYTINY",font.deriveFont((float)this.getInt("FONT_VERYTINY")));
+		GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(fonts.get("FONT_NORMAL"));
+	}
+
+	/**
 	 * Return a font with correct size specified in the config
 	 * @param key name of the font you want to get
 	 * @return the font
 	 */
 	public Font getFont(String key) {
+		if(fonts.containsKey(key)) {
+			return fonts.get(key);
+		}
+		//Make sure the wasn't an udpate but only if it fails the first time
+		reloadFonts();
 		if(fonts.containsKey(key)) {
 			return fonts.get(key);
 		}
@@ -223,7 +245,7 @@ public class Config {
 	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
-		p.put("CONFIG_VERSION"     ,"5");
+		p.put("CONFIG_VERSION"     ,"6");
 
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
@@ -252,6 +274,7 @@ public class Config {
 		p.put("FONT_BIG"      ,"48");
 		p.put("FONT_NORMAL"   ,"32");
 		p.put("FONT_TINY"     ,"16");
+		p.put("FONT_VERYTINY" ,"10");
 		return p;
 	}
 }

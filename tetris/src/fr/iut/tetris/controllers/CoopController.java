@@ -86,6 +86,18 @@ public class CoopController implements ActionListener, KeyListener {
 			model.gameState = GameState.PLAYING;
 			vue.recalculate();
 		}
+		if(e.getKeyCode()==Config.getInstance().getInt("KEYCODE_GOBACK")) {
+			if(model.gameState == GameState.PLAYING) {
+				model.gameState = GameState.PAUSED;
+				vue.recalculate();
+				return;
+			}
+			if(model.gameState == GameState.PAUSED) {
+				model.gameState = GameState.PLAYING;
+				vue.recalculate();
+				return;
+			}
+		}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_LEFT"))     { model.moveCurrentX(0,Direction.LEFT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT"))    { model.moveCurrentX(0,Direction.RIGHT); vue.recalculate();}
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_DOWN"))     { model.fallCurrentForPlayerA(); vue.recalculate();}
@@ -117,6 +129,7 @@ public class CoopController implements ActionListener, KeyListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Log.error(this,e);
 		switch(e.getActionCommand() ) {
 			case "GAME:FOURLINES_COMPLETE":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/fourlines_completed.wav"));
@@ -134,8 +147,18 @@ public class CoopController implements ActionListener, KeyListener {
 			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
-			case "CLICK:MENU:SOLO": //HACKY
-			case "CLICK:SOLO:BACK":
+
+			case "CLICK:RESUME":
+				if(model.gameState == GameState.PAUSED) {
+					model.gameState = GameState.PLAYING;
+					vue.recalculate();
+				}
+				break;
+			case "CLICK:RESTART": //HACKY
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
+				mainCtrl.actionPerformed(new ActionEvent(this,0,"CLICK:MENU:COOP"));
+				break;
+			case "CLICK:BACK":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				mainCtrl.actionPerformed(e);
 				break;

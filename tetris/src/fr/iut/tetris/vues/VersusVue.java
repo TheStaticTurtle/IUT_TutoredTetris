@@ -10,6 +10,8 @@ import fr.iut.tetris.models.BlockModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 public class VersusVue extends JPanel {
@@ -19,6 +21,7 @@ public class VersusVue extends JPanel {
     GamePanelVersus gamePanelPlayer1;
     GamePanelVersus gamePanelPlayer2;
     SplashScreenPanel splashScreen;
+    PauseMenu pauseMenu;
     JLayeredPane testPane;
 
     public VersusVue(VersusModel model, VersusController ctrl) {
@@ -32,41 +35,45 @@ public class VersusVue extends JPanel {
         setBackground(bg);
 
 
-        gamePanelPlayer1 = new GamePanelVersus(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(), 0);
+        gamePanelPlayer1 = new GamePanelVersus(model,getPreferredSize() ,0);
         gamePanelPlayer1.setLocation(0, 0);
         gamePanelPlayer1.setVisible(true);
 
-        gamePanelPlayer2 = new GamePanelVersus(model,0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(), 1);
+        gamePanelPlayer2 = new GamePanelVersus(model,getPreferredSize() ,1);
         gamePanelPlayer2.setLocation(0, 0);
         gamePanelPlayer2.setVisible(true);
 
-        splashScreen = new SplashScreenPanel(0,0,(int) getPreferredSize().getWidth(),(int) getPreferredSize().getHeight(),ctrl,model);
+        splashScreen = new SplashScreenPanel(getPreferredSize(), ctrl, model);
         splashScreen.setVisible(true);
 
-        //ICI Pour ajoutter des couches
+        pauseMenu = new PauseMenu(getPreferredSize(), ctrl,model);
+
         testPane = new JLayeredPane();
-        //testPane.add(mainPanel,JLayeredPane.DEFAULT_LAYER);
+        testPane.add(new StaticStarAnimation(getPreferredSize(),new Color(0f,0f,0.1f),55),JLayeredPane.DEFAULT_LAYER);
         testPane.add(gamePanelPlayer1,JLayeredPane.PALETTE_LAYER);
         testPane.add(gamePanelPlayer2,JLayeredPane.PALETTE_LAYER);
         testPane.add(splashScreen,JLayeredPane.MODAL_LAYER);
+        testPane.add(pauseMenu,JLayeredPane.POPUP_LAYER);
         testPane.setPreferredSize(getPreferredSize());
 
 
         SpringLayout lyt = new SpringLayout();
         SpringLayout lyt2 = new SpringLayout();
-		/*lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
-		lyt.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, testPane);
-		lyt2.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
-		lyt2.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, this);*/
-
 
         lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, splashScreen, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
         lyt.putConstraint(SpringLayout.VERTICAL_CENTER, splashScreen, 0, SpringLayout.VERTICAL_CENTER, testPane);
         lyt2.putConstraint(SpringLayout.HORIZONTAL_CENTER, splashScreen, 0, SpringLayout.HORIZONTAL_CENTER, this);
         lyt2.putConstraint(SpringLayout.VERTICAL_CENTER, splashScreen, 0, SpringLayout.VERTICAL_CENTER, this);
+
         testPane.setLayout(lyt);
         setLayout(lyt2);
         add(testPane);
+
+        JPanel t = this;
+        new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+            t.repaint();
+            t.revalidate();
+        }}).start();
     }
 
     public void setModel(VersusModel model) {
@@ -74,8 +81,8 @@ public class VersusVue extends JPanel {
     }
 
     public void recalculate() {
-        //panelPiece.recalculate();
-        splashScreen.recalculate(model.gameState != GameState.PLAYING,model.gameState);
+        splashScreen.recalculate(model.gameState == GameState.WAITING || model.gameState == GameState.FINISHED,model.gameState);
+        pauseMenu.recalculate(model.gameState);
         gamePanelPlayer1.recalculate();
         gamePanelPlayer2.recalculate();
     }
@@ -91,9 +98,9 @@ class GamePanelVersus extends JPanel {
     JLabel scoreLabel;
     int player;
 
-    public GamePanelVersus(VersusModel model, int xp, int yp, int width, int height, int player) {
-        setLocation(xp, yp);
-        setPreferredSize(new Dimension(width,height));
+    public GamePanelVersus(VersusModel model, Dimension dimension, int player) {
+        setLocation(0, 0);
+        setPreferredSize(dimension);
         setBounds(0, 0, (int) getPreferredSize().getWidth(), (int) getPreferredSize().getHeight());
         setOpaque(false);
         this.player = player;
@@ -103,7 +110,7 @@ class GamePanelVersus extends JPanel {
 
         this.model = model;
         mainPanel = new JPanel();
-        GridLayout mainLayout = new GridLayout(0,model.witdh);//ROW = 0 IF Else bug
+        GridLayout mainLayout = new GridLayout(0,model.width);//ROW = 0 IF Else bug
 
         mainPanel.setLayout(mainLayout);
         mainPanel.setVisible(true);
@@ -209,12 +216,21 @@ class GamePanelVersus extends JPanel {
 
         setLayout(layout);
 
-        //Recalculate panel width
         Dimension t = mainPanel.getPreferredSize();
-        squareSize = t.height / model.height;
-        t.width = t.height * (model.height / model.witdh);
+        //Manual calculation of layout is needed because the vue isn't rendered yet
+        int temp = getHeight() - (10+Common.getStringHeight(scoreLabel.getText())+10+10);
+        squareSize = temp/model.height;
+
+        for(Component c : mainPanel.getComponents()) {
+            TetrisBlock b = (TetrisBlock)c;
+            b.setSize(squareSize);
+        }
+
+        t.height = model.height * squareSize;
+        t.width = model.width * squareSize;
         mainPanel.setPreferredSize(t);
-        nextPiecePanel.resetSize((int)(squareSize*1.5));
+
+        nextPiecePanel.resetSize((int)(squareSize/2));
         recalculate();
     }
 
@@ -236,7 +252,7 @@ class GamePanelVersus extends JPanel {
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {
-                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
+                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.width + x);
                             if(grid[y][x] != null) {
                                 p.recalulate(grid[y][x]);
                             } else {
@@ -255,7 +271,7 @@ class GamePanelVersus extends JPanel {
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {
-                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.witdh + x);
+                            TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.width + x);
                             if(grid[y][x] != null) {
                                 p.recalulate(grid[y][x]);
                             } else {
@@ -271,6 +287,7 @@ class GamePanelVersus extends JPanel {
 
         setIgnoreRepaint(false);
         repaint();
+
     }
 
 	/*@Override public void paintComponent(Graphics g) {

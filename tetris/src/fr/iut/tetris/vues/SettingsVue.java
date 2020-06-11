@@ -3,14 +3,13 @@ package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
 import fr.iut.tetris.controllers.SettingsController;
+import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.SettingsModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 
 public class SettingsVue extends JPanel{
@@ -20,6 +19,7 @@ public class SettingsVue extends JPanel{
 
 	public JSlider soundMusicLevel;
 	public JSlider soundSFXMusicLevel;
+	public JComboBox<Resolution> resolutionDropdown;
 
 	public SettingsVue(SettingsModel model, SettingsController ctrl) {
 		this.model = model;
@@ -49,6 +49,8 @@ public class SettingsVue extends JPanel{
 		soundMusicLevel = new CustomSlider(-50,5,Color.WHITE,Color.ORANGE);
 		JLabel soundSFXMusicLabel = new JLabel("<html>SFX: ");
 		soundSFXMusicLevel = new CustomSlider(-50,5,Color.WHITE,Color.GREEN);
+		JLabel resolutionLabel = new JLabel("<html>Size: ");
+		resolutionDropdown = new JComboBox<Resolution>();
 
 		JButton backButton = new MenuButton("Save",Color.GREEN,Color.WHITE,ctrl);
 
@@ -60,11 +62,27 @@ public class SettingsVue extends JPanel{
 		soundMusicLabel.setForeground(Color.white);
 		soundSFXMusicLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		soundSFXMusicLabel.setForeground(Color.white);
+		resolutionLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		resolutionLabel.setForeground(Color.white);
 
 		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
+		for (Resolution r : Resolution.values()) {
+			resolutionDropdown.addItem(r);
+		}
+		Resolution r = Resolution.getFromSize(new Dimension(Config.getInstance().getInt("WINDOW_WIDTH"),Config.getInstance().getInt("WINDOW_HEIGHT")));
+		if(r != null) {
+			resolutionDropdown.setSelectedItem(r);
+		}
+		resolutionDropdown.setActionCommand("RESOLUTION_SELECT");
+		resolutionDropdown.addActionListener(ctrl);
+		resolutionDropdown.setRenderer(new CustomComboBoxRenderer());
+		resolutionDropdown.setEditor(new CustomComboBoxEditor());
+		resolutionDropdown.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+		resolutionDropdown.setEditable(true);
+
 		backButton.addActionListener(ctrl);
-		backButton.setActionCommand("CLICK:SETTINGS:BACK");
+		backButton.setActionCommand("CLICK:BACK");
 
 		soundMusicLevel.addChangeListener(ctrl);
 		soundSFXMusicLevel.addChangeListener(ctrl);
@@ -88,6 +106,13 @@ public class SettingsVue extends JPanel{
 		SFXVolumeCtrlPanel.add(soundSFXMusicLevel);
 		mainPanel.add(SFXVolumeCtrlPanel);
 
+		JPanel resolutionCtrlPannel = new JPanel();
+		resolutionCtrlPannel.setOpaque(false);
+		resolutionCtrlPannel.setLayout(subLayout);
+		resolutionCtrlPannel.add(resolutionLabel);
+		resolutionCtrlPannel.add(resolutionDropdown);
+		mainPanel.add(resolutionCtrlPannel);
+
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
@@ -102,7 +127,7 @@ public class SettingsVue extends JPanel{
 		mainPanel.setVisible(true);
 
 		JLayeredPane testPane = new JLayeredPane();
-		testPane.add(new StarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
+		testPane.add(new MovingStarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 

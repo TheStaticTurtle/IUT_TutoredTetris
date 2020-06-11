@@ -28,7 +28,7 @@ public class CreditController implements ActionListener {
 			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
-			case "CLICK:CREDIT:BACK":
+			case "CLICK:BACK":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				mainCtrl.actionPerformed(e);
 				break;

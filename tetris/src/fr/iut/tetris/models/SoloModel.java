@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class SoloModel {
 	public int height = 20;
-	public int witdh = 10;
+	public int width = 10;
 	public int fallSpeed = 1000; //ms
 	ArrayList<Object> pieceList = new ArrayList<>();
 	public PieceModel fallingPiece = null;
@@ -80,7 +80,7 @@ public class SoloModel {
 	 * @throws PieceOutOfBoardException if a piece has a position outside of the board
 	 */
 	public BlockModel[][] computeMixedGrid() throws OverlappedPieceException, PieceOutOfBoardException {
-		BlockModel[][] table = new BlockModel[height][witdh];
+		BlockModel[][] table = new BlockModel[height][width];
 		for (Object obj: pieceList) {
 
 			if(obj instanceof BlockModel) {
@@ -95,7 +95,7 @@ public class SoloModel {
 					for (int x = piece.x; x < piece.x+4; x++) {
 						if(piece.childs[y-piece.y][x-piece.x] != null) {
 							if(y> height-1 || y<0) throw new PieceOutOfBoardException();
-							if(x> witdh-1 || x<0) throw new PieceOutOfBoardException();
+							if(x> width -1 || x<0) throw new PieceOutOfBoardException();
 							if(table[y][x] != null) throw new OverlappedPieceException();
 							table[y][x] = piece.childs[y-piece.y][x-piece.x];
 						}
