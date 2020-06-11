@@ -90,18 +90,19 @@ class HoveredButtonIcon implements Icon {
 	}
 
 	public void paintIcon(Component c, Graphics g, int x, int y) {
+		int borderSize = Config.getInstance().getInt("BORDER_SIZES");
+
 		Graphics2D g2 = (Graphics2D) g;
 		x = getIconWidth() /2;
 		y = getIconHeight()/2;
 
-		int width = 12;//12
-		int length = 35;//35
+		int length = (int) (borderSize*2.9);//35
 
 		g2.setColor(this.backGroundColor);
-		g2.fillRect(0, 0, length, width);
-		g2.fillRect(0, 0, width, length);
-		g2.fillRect(getIconWidth()-length, getIconHeight()-width, length, width);
-		g2.fillRect(getIconWidth()-width, getIconHeight()-length, width, length);
+		g2.fillRect(0, 0, length, borderSize);
+		g2.fillRect(0, 0, borderSize, length);
+		g2.fillRect(getIconWidth()-length, getIconHeight()- borderSize, length, borderSize);
+		g2.fillRect(getIconWidth()- borderSize, getIconHeight()-length, borderSize, length);
 
 		g2.setColor(foreGroundColor);
 		g2.setFont(this.font);
@@ -259,6 +260,7 @@ class CustomSlider extends JSlider implements MouseListener {
 
 	public CustomSlider(int min, int max, Color borderColor, Color thumbColor) {
 		addMouseListener(this);
+		borderSize = Config.getInstance().getInt("BORDER_SIZES");
 		raw_thumb_x = (borderSize+space);
 		this.min = min;
 		this.max= max;
@@ -358,11 +360,13 @@ class CustomComboBoxEditor extends BasicComboBoxEditor {
 	private Object selectedItem;
 
 	public CustomComboBoxEditor() {
+		int borderSize = Config.getInstance().getInt("BORDER_SIZES");
+
 		label.setOpaque(false);
 		label.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
 		label.setForeground(Color.WHITE);
 
-		panel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white));
+		panel.setBorder(BorderFactory.createMatteBorder(borderSize, borderSize, borderSize, borderSize, Color.white));
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		panel.setBackground(Color.BLACK);
 		panel.add(label);

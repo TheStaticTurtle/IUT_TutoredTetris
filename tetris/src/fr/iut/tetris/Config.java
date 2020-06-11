@@ -236,7 +236,7 @@ public class Config {
 	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
-		p.put("CONFIG_VERSION"     ,"6");
+		p.put("CONFIG_VERSION"     ,"7");
 
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
@@ -261,6 +261,9 @@ public class Config {
 
 		p.put("WINDOW_HEIGHT"  ,"870");
 		p.put("WINDOW_WIDTH"   ,"640");
+
+		p.put("BORDER_SIZES"  ,"10");
+
 		p.put("FONT_ULTRABIG" ,"72");
 		p.put("FONT_BIG"      ,"48");
 		p.put("FONT_NORMAL"   ,"32");

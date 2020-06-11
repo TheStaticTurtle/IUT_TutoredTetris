@@ -3,9 +3,9 @@ package fr.iut.tetris.enums;
 import java.awt.*;
 
 public enum Resolution {
-	BIG(1000,735,72,55,41,24,22),
-	NORMAL(870,640,72,48,32,16,18),
-	TINY(640,448,48,32,24,16,10),
+	BIG(1000,735,72,55,41,24,22,13),
+	NORMAL(870,640,72,48,32,16,18,12),
+	TINY(640,448,48,32,24,16,10,9),
 	;
 
 	public final int height;
@@ -15,7 +15,8 @@ public enum Resolution {
 	public final int font_normal;
 	public final int font_tiny;
 	public final int font_verytiny;
-	Resolution(int height,int width, int font_ultrabig, int font_big, int font_normal, int font_tiny, int font_verytiny) {
+	public final int border_size;
+	Resolution(int height,int width, int font_ultrabig, int font_big, int font_normal, int font_tiny, int font_verytiny, int border_size) {
 		this.height = height;
 		this.width = width;
 		this.font_ultrabig = font_ultrabig;
@@ -23,6 +24,7 @@ public enum Resolution {
 		this.font_normal = font_normal;
 		this.font_tiny = font_tiny;
 		this.font_verytiny = font_verytiny;
+		this.border_size = border_size;
 	}
 
 	public static Resolution getFromSize(Dimension t) {
