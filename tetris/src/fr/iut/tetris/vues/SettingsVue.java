@@ -52,6 +52,7 @@ public class SettingsVue extends JPanel{
 		JLabel resolutionLabel = new JLabel("<html>Size: ");
 		resolutionDropdown = new JComboBox<Resolution>();
 
+		JButton gotoKeysButton = new MenuButton("Controls",Color.orange,Color.WHITE,ctrl);
 		JButton backButton = new MenuButton("Save",Color.GREEN,Color.WHITE,ctrl);
 
 		myLabel.setFont(Config.getInstance().getFont("FONT_ULTRABIG"));
@@ -65,6 +66,7 @@ public class SettingsVue extends JPanel{
 		resolutionLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		resolutionLabel.setForeground(Color.white);
 
+		gotoKeysButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
 		for (Resolution r : Resolution.values()) {
@@ -80,6 +82,9 @@ public class SettingsVue extends JPanel{
 		resolutionDropdown.setEditor(new CustomComboBoxEditor());
 		resolutionDropdown.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
 		resolutionDropdown.setEditable(true);
+
+		gotoKeysButton.addActionListener(ctrl);
+		gotoKeysButton.setActionCommand("CLICK:MENU:SETTINGS:KEYS");
 
 		backButton.addActionListener(ctrl);
 		backButton.setActionCommand("CLICK:BACK");
@@ -113,7 +118,7 @@ public class SettingsVue extends JPanel{
 		resolutionCtrlPannel.add(resolutionDropdown);
 		mainPanel.add(resolutionCtrlPannel);
 
-		mainPanel.add( new Spacer());
+		mainPanel.add(gotoKeysButton);
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());

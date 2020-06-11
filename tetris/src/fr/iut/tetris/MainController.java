@@ -19,6 +19,7 @@ public class MainController implements ActionListener, KeyListener {
 	CoopModel coopModel;
 	VersusModel versusModel;
 	SettingsModel settingsModel;
+	SettingsKeysModel settingsKeysModel;
 	
 	MenuController menuCtrl;
 	CreditController creditCtrl;
@@ -26,6 +27,7 @@ public class MainController implements ActionListener, KeyListener {
 	CoopController coopController;
 	VersusController versusController;
 	SettingsController settingsCtrl;
+	SettingsKeysController settingsKeysCtrl;
 	
 	MenuVue menuVue;
 	CreditVue creditVue;
@@ -33,6 +35,7 @@ public class MainController implements ActionListener, KeyListener {
 	CoopVue coopVue;
 	VersusVue versusVue;
 	SettingsVue settingsVue;
+	SettingsKeysVue settingsKeysVue;
 
 	AudioController audio;
 	Config config;
@@ -48,15 +51,19 @@ public class MainController implements ActionListener, KeyListener {
 		menuModel = new MenuModel();
 		creditModel = new CreditModel();
 		settingsModel = new SettingsModel();
+		settingsKeysModel = new SettingsKeysModel();
 		
 		menuCtrl = new MenuController(this, menuModel, audio);
 		creditCtrl = new CreditController(this, creditModel, audio);
 		settingsCtrl = new SettingsController(this, settingsModel,settingsVue, audio);
+		settingsKeysCtrl = new SettingsKeysController(this, settingsKeysModel,settingsKeysVue, audio);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
 		creditVue = new CreditVue(creditModel, creditCtrl);
 		settingsVue = new SettingsVue(settingsModel, settingsCtrl);
+		settingsKeysVue = new SettingsKeysVue(settingsKeysModel, settingsKeysCtrl);
 		settingsCtrl.setVue(settingsVue);
+		settingsKeysCtrl.setVue(settingsKeysVue);
 
 		mainVue.setCurrentVueAndCenterWindows(menuVue);
 		mainVue.display();
@@ -99,10 +106,22 @@ public class MainController implements ActionListener, KeyListener {
 				break;
 
 			case "CLICK:MENU:SETTINGS":
+				settingsKeysModel = null;
+				settingsKeysCtrl = null;
+				settingsKeysVue = null;
 				settingsVue = new SettingsVue(settingsModel, settingsCtrl);
 				mainVue.setCurrentVue(settingsVue);
 				settingsCtrl.setVue(settingsVue);
 				settingsCtrl.enteredVue();
+				break;
+
+			case "CLICK:MENU:SETTINGS:KEYS":
+				settingsKeysModel = new SettingsKeysModel();
+				settingsKeysCtrl = new SettingsKeysController(this, settingsKeysModel,settingsKeysVue,audio);
+				settingsKeysVue = new SettingsKeysVue(settingsKeysModel, settingsKeysCtrl);
+				mainVue.setCurrentVue(settingsKeysVue);
+				settingsKeysCtrl.setVue(settingsKeysVue);
+				//settingsKeysCtrl.enteredVue();
 				break;
 
 			case "CLICK:BACK":
@@ -115,6 +134,9 @@ public class MainController implements ActionListener, KeyListener {
 				soloModel = null;
 				soloCtrl = null;
 				soloVue = null;
+				settingsKeysModel = null;
+				settingsKeysCtrl = null;
+				settingsKeysVue = null;
 				menuVue = new MenuVue(menuModel, menuCtrl);
 				mainVue.setCurrentVue(menuVue);
 				break;
@@ -138,6 +160,9 @@ public class MainController implements ActionListener, KeyListener {
 		if(versusController != null) {
 			versusController.keyTyped(e);
 		}
+		if(settingsKeysCtrl != null) {
+			settingsKeysCtrl.keyTyped(e);
+		}
 	}
 
 	@Override
@@ -151,6 +176,9 @@ public class MainController implements ActionListener, KeyListener {
 		if(versusController != null) {
 			versusController.keyPressed(e);
 		}
+		if(settingsKeysCtrl != null) {
+			settingsKeysCtrl.keyPressed(e);
+		}
 	}
 
 	@Override
@@ -163,6 +191,9 @@ public class MainController implements ActionListener, KeyListener {
 		}
 		if(versusController != null) {
 			versusController.keyReleased(e);
+		}
+		if(settingsKeysCtrl != null) {
+			settingsKeysCtrl.keyReleased(e);
 		}
 	}
 }

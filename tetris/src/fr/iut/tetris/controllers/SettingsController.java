@@ -72,6 +72,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
+			case "CLICK:MENU:SETTINGS:KEYS":
 			case "CLICK:BACK":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				saveConfig();

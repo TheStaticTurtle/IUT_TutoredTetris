@@ -18,8 +18,6 @@ public class MainVue extends JFrame {
 
 		addKeyListener(ctrl);
 		setFocusable(true);
-
-
 	}
 
 	public void setCurrentVueAndCenterWindows(JPanel p) {
@@ -38,8 +36,5 @@ public class MainVue extends JFrame {
 
 	public void display() {
 		setVisible(true);
-	}
-	public void undisplay() {
-		setVisible(false);
 	}
 }
