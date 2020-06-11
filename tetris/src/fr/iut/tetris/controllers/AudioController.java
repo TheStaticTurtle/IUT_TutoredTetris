@@ -14,7 +14,7 @@ public class AudioController {
 	float musicLineVolumeControl=0;
 
 	Thread bgMusicThread;
-	ExecutorService sfxThreadPool = Executors.newFixedThreadPool(10);
+	ExecutorService sfxThreadPool = Executors.newFixedThreadPool(32);
 
 	/**
 	 * Read the configured audio level in the config
@@ -35,19 +35,25 @@ public class AudioController {
 					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
 					Log.info(this,"Started sfx: "+file.getFile());
 
-					Clip clip = null;
 					try {
-						clip = AudioSystem.getClip();
+						Clip clip = AudioSystem.getClip();
+
+						clip.open(audioInputStream);
+
+						FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+						ctrl.setValue(soundEffetLineVolumeControl);
+
+						clip.start();
+						clip.addLineListener(e -> {
+							if (e.getType() == LineEvent.Type.STOP) {
+								clip.close();
+							}
+						});
 					} catch (LineUnavailableException e) {
 						e.printStackTrace();
 					}
-					clip.open(audioInputStream);
 
-					FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-					ctrl.setValue(soundEffetLineVolumeControl);
-
-					clip.start();
-				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+				} catch (IOException | UnsupportedAudioFileException e) {
 					e.printStackTrace();
 				}
 			}
