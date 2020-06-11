@@ -682,7 +682,7 @@ class SplashScreenPanel extends JPanel {
 		if(state == GameState.FINISHED) {
 
 			if(this.model instanceof VersusModel) {
-				pressSpace.setText("<html><div style='text-align: center;'>Congratulations :</div> <div style='text-align: center;'>player "+((VersusModel)model).winner+" wins the game</div></html>");
+				pressSpace.setText("<html><div style='text-align: center;'>Congratulations :</div><br><div style='text-align: center;'>player "+((VersusModel)model).winner+" has won the game</div></html>");
 				mainPanel.removeAll();
 				mainPanel.add(pressSpace);
 				mainPanel.add(new Spacer());
