@@ -137,23 +137,6 @@ class MenuButton extends JButton implements MouseListener {
 		this(text,foreGroundColor,backGroundColor);
 		listener = ctrl;
 	}
-	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, SoloController ctrl) {
-		this(text,foreGroundColor,backGroundColor);
-		listener = ctrl;
-	}
-	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, SettingsController ctrl) {
-		this(text,foreGroundColor,backGroundColor);
-		listener = ctrl;
-	}
-	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, CreditController ctrl) {
-		this(text,foreGroundColor,backGroundColor);
-		listener = ctrl;
-	}
-	public MenuButton(String text, Color foreGroundColor, Color backGroundColor,MenuController ctrl) {
-		this(text,foreGroundColor,backGroundColor);
-		super.setForeground(foreGroundColor);
-		listener = ctrl;
-	}
 	public MenuButton(String text, Color foreGroundColor, Color backGroundColor) {
 		this(text);
 		super.setForeground(foreGroundColor);
@@ -182,14 +165,23 @@ class MenuButton extends JButton implements MouseListener {
 	@Override public void setFont(Font font) {
 		super.setFont(font);
 		this.font = font;
+		super.setText(text);
+		setIcon(null);
 	}
 
 	@Override public void mouseClicked(MouseEvent e) { }
 	@Override public void mousePressed(MouseEvent e) { }
 	@Override public void mouseReleased(MouseEvent e) { }
 
+	@Override
+	public void setText(String text) {
+		super.setText(text);
+		this.text = text;
+		setIcon(new HoveredButtonIcon(getHeight(),getWidth(),this.font, this.text, this.foreGroundColor, this.backGroundColor));
+	}
+
 	@Override public void mouseEntered(MouseEvent e) {
-		setText("");
+		super.setText("");
 		setIcon(new HoveredButtonIcon(getHeight(),getWidth(),this.font, this.text, this.foreGroundColor, this.backGroundColor));
 		if(listener!=null)
 			listener.actionPerformed(new ActionEvent(this,0,"MOUSE:ENTER"));
@@ -197,7 +189,7 @@ class MenuButton extends JButton implements MouseListener {
 	@Override public void mouseExited(MouseEvent e) {
 		if(listener!=null)
 			listener.actionPerformed(new ActionEvent(this,0,"MOUSE:EXIT"));
-		setText(text);
+		super.setText(text);
 		setIcon(null);
 	}
 }
