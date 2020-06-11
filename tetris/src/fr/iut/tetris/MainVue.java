@@ -11,7 +11,7 @@ public class MainVue extends JFrame {
 	public MainVue(MainController ctrl) {
 		setTitle("Tetris");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(true);
+		setResizable(false);
 
 		ImageIcon img = new ImageIcon(Main.class.getResource("/res/icon.png"));
 		setIconImage(img.getImage());
