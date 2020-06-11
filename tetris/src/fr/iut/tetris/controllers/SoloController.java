@@ -123,6 +123,9 @@ public class SoloController implements ActionListener, KeyListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
+			case "GAME:FOURLINES_COMPLETE":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/fourlines_completed.wav"));
+				break;
 			case "GAME:LINE_COMPLETE":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/line_completed.wav"));
 				break;
