@@ -299,7 +299,13 @@ public class CoopModel{
 				convertFullPiecesToBlocks(fallingPiecePlayerA);
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
-				this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
+				if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
+					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:FOURLINES_COMPLETE"));
+				} else if(score == LineCompleted.NO_LINE ) {
+					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
+				} else {
+					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_COMPLETE"));
+				}
 				Log.info(this,"Got score: "+score.toString());
 
 				fallingPiecePlayerA = null; // The piece can not fall anymore
@@ -320,7 +326,7 @@ public class CoopModel{
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
 				if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
-					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_QUAD_COMPLETE"));
+					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:FOURLINES_COMPLETE"));
 				} else if(score == LineCompleted.NO_LINE ) {
 					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
 				} else {

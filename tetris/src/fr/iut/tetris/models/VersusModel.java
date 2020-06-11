@@ -324,7 +324,7 @@ public class VersusModel {
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 0);
                 this.calculateScore(score, 0);
                 if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
-                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_QUAD_COMPLETE"));
+                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:FOURLINES_COMPLETE"));
                 } else if(score == LineCompleted.NO_LINE ) {
                     this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
                 } else {
@@ -350,7 +350,7 @@ public class VersusModel {
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 1);
                 this.calculateScore(score, 1);
                 if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
-                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_QUAD_COMPLETE"));
+                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:FOURLINES_COMPLETE"));
                 } else if(score == LineCompleted.NO_LINE ) {
                     this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
                 } else {

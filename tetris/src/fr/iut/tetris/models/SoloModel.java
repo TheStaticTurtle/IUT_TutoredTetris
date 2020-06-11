@@ -237,7 +237,7 @@ public class SoloModel {
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
 				if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
-					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_QUAD_COMPLETE"));
+					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:FOURLINES_COMPLETE"));
 				} else if(score == LineCompleted.NO_LINE ) {
 					this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
 				} else {
