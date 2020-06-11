@@ -67,11 +67,19 @@ public class SettingsVue extends JPanel{
 
 		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 
-		resolutionDropdown.addItem(Resolution.BIG);
-		resolutionDropdown.addItem(Resolution.NORMAL);
-		resolutionDropdown.addItem(Resolution.TINY);
+		for (Resolution r : Resolution.values()) {
+			resolutionDropdown.addItem(r);
+		}
+		Resolution r = Resolution.getFromSize(new Dimension(Config.getInstance().getInt("WINDOW_WIDTH"),Config.getInstance().getInt("WINDOW_HEIGHT")));
+		if(r != null) {
+			resolutionDropdown.setSelectedItem(r);
+		}
 		resolutionDropdown.setActionCommand("RESOLUTION_SELECT");
 		resolutionDropdown.addActionListener(ctrl);
+		resolutionDropdown.setRenderer(new CustomComboBoxRenderer());
+		resolutionDropdown.setEditor(new CustomComboBoxEditor());
+		resolutionDropdown.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+		resolutionDropdown.setEditable(true);
 
 		backButton.addActionListener(ctrl);
 		backButton.setActionCommand("CLICK:BACK");

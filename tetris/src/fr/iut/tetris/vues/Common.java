@@ -894,3 +894,57 @@ class StaticStarAnimation extends JPanel {
 		}
 	}
 }
+
+class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object>  {
+	public CustomComboBoxRenderer() {
+		setOpaque(true);
+		setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+		setBackground(Color.BLACK);
+		setForeground(Color.WHITE);
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.white),new EmptyBorder(2, 2, 2, 2)));
+	}
+
+	@Override
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		if(isSelected) {
+			setForeground(Color.RED);
+		} else {
+			setForeground(Color.WHITE);
+		}
+		setText(value.toString());
+		return this;
+	}
+}
+class CustomComboBoxEditor extends BasicComboBoxEditor {
+	private JLabel label = new JLabel();
+	private JPanel panel = new JPanel();
+	private Object selectedItem;
+
+	public CustomComboBoxEditor() {
+		label.setOpaque(false);
+		label.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+		label.setForeground(Color.WHITE);
+
+		panel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white));
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		panel.setBackground(Color.BLACK);
+		panel.add(label);
+	}
+
+	public Component getEditorComponent() {
+		return this.panel;
+	}
+
+	public Object getItem() {
+		return this.selectedItem;
+	}
+
+	public void setItem(Object item) {
+		this.selectedItem = item;
+		if(item instanceof Resolution)
+			label.setText(((Resolution)item).name());
+		else
+			label.setText(item.toString());
+	}
+
+}

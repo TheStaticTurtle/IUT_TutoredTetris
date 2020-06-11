@@ -65,6 +65,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 				Config.getInstance().putInt("FONT_BIG"     ,r.font_big);
 				Config.getInstance().putInt("FONT_NORMAL"  ,r.font_normal);
 				Config.getInstance().putInt("FONT_TINY"    ,r.font_tiny);
+				Config.getInstance().putInt("FONT_VERYTINY",r.font_verytiny);
 				Config.getInstance().reloadFonts();
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;

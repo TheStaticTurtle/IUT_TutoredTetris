@@ -21,8 +21,16 @@ public enum Resolution {
 		this.font_tiny = font_tiny;
 	}
 
+	public static Resolution getFromSize(Dimension t) {
+		for (Resolution r : Resolution.values()) {
+			if(r.width == t.width && r.height == t.height) return r;
+		}
+		return null;
+	}
+
 	@Override
 	public String toString() {
 		return name()+": "+width+"x"+height;
 	}
 }
+
