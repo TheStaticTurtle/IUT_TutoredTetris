@@ -203,8 +203,6 @@ public class VersusModel {
             }
 
             if(firstCall) {
-                if(lineCount>0)
-                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_COMPLETE"));
                 return LineCompleted.getScore(lineCount,firstLineY,this.height);
             } else {
                 return lineCount;
@@ -322,7 +320,13 @@ public class VersusModel {
                 convertFullPiecesToBlocks(fallingPiecePlayerA, 0);
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 0);
                 this.calculateScore(score, 0);
-                this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
+                if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
+                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_QUAD_COMPLETE"));
+                } else if(score == LineCompleted.NO_LINE ) {
+                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
+                } else {
+                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_COMPLETE"));
+                }
                 Log.info(this,"Got score: "+score.toString());
 
                 fallingPiecePlayerA = null; // The piece can not fall anymore
@@ -342,7 +346,13 @@ public class VersusModel {
                 convertFullPiecesToBlocks(fallingPiecePlayerB, 2);
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 1);
                 this.calculateScore(score, 1);
-                this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
+                if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
+                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_QUAD_COMPLETE"));
+                } else if(score == LineCompleted.NO_LINE ) {
+                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_PLACE"));
+                } else {
+                    this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:LINE_COMPLETE"));
+                }
                 Log.info(this,"Got score: "+score.toString());
 
                 fallingPiecePlayerB = null; // The piece can not fall anymore
