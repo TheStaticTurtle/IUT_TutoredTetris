@@ -250,7 +250,7 @@ class CustomSlider extends JSlider implements MouseListener {
 	int borderSize = 10;
 	int space = 5;
 	int raw_thumb_x;
-	int thumbSpaceing = borderSize + space;
+	int thumbSpaceing;
 	boolean isMouseDown = false;
 	int min,max;
 	Color borderColor;
@@ -273,7 +273,7 @@ class CustomSlider extends JSlider implements MouseListener {
 	@Override
 	public int getValue() {
 		try {
-			return map(this.raw_thumb_x+25,thumbSpaceing*2,getWidth()-thumbSpaceing*2,this.min,this.max);
+			return map(this.raw_thumb_x,thumbSpaceing,getWidth()-thumbSpaceing,this.min,this.max);
 		}catch (ArithmeticException ignored) {
 			return 0;
 		}
@@ -281,8 +281,9 @@ class CustomSlider extends JSlider implements MouseListener {
 
 	@Override
 	public void setValue(int n) {
+		thumbSpaceing = borderSize+(getHeight() - borderSize*2 - space*2);
 		n = Math.min(Math.max(n,this.min),this.max);
-		raw_thumb_x = map(n,this.min,this.max,thumbSpaceing*2,getWidth()-thumbSpaceing*2)-25;
+		raw_thumb_x = map(n,this.min,this.max,thumbSpaceing,getWidth()-thumbSpaceing);
 	}
 
 	@Override
@@ -290,6 +291,7 @@ class CustomSlider extends JSlider implements MouseListener {
 		Graphics2D g2d = (Graphics2D)g;
 
 		int thumbSize = getHeight() - borderSize*2 - space*2;
+		thumbSpaceing = borderSize+thumbSize;
 
 		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0 ,0,getWidth(),borderSize);
@@ -305,12 +307,13 @@ class CustomSlider extends JSlider implements MouseListener {
 
 		Point pos = getMousePosition();
 		if(pos != null && isMouseDown) {
-			raw_thumb_x = Math.min(Math.max(thumbSpaceing*2,pos.x),getWidth()-thumbSpaceing*2) -25;
+			raw_thumb_x = Math.max(pos.x      , thumbSpaceing);
+			raw_thumb_x = Math.min(raw_thumb_x, getWidth()-(thumbSpaceing));
 			super.fireStateChanged();
 		}
 
 		g2d.setColor(this.thumbColor);
-		g2d.fillRect( raw_thumb_x+thumbSpaceing ,borderSize+space,thumbSize,thumbSize );
+		g2d.fillRect( raw_thumb_x - thumbSize/2 ,borderSize+space,thumbSize,thumbSize );
 	}
 
 
