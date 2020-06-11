@@ -274,7 +274,7 @@ public class Config {
 		p.put("FONT_BIG"      ,"48");
 		p.put("FONT_NORMAL"   ,"32");
 		p.put("FONT_TINY"     ,"16");
-		p.put("FONT_VERYTINY" ,"10");
+		p.put("FONT_VERYTINY" ,"16");
 		return p;
 	}
 }
