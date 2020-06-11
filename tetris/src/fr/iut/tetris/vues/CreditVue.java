@@ -58,8 +58,9 @@ public class CreditVue extends JPanel  {
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 
+		Font f = Config.getInstance().getFont("FONT_NORMAL");
 		for(JLabel lbl : creditsLabel) {
-			lbl.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+			lbl.setFont(f.deriveFont(f.getSize()-2f));
 			lbl.setForeground(Color.white);
 			mainPanel.add(lbl);
 		}
