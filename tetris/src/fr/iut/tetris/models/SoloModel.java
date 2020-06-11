@@ -50,7 +50,7 @@ public class SoloModel {
 	 */
 	public PieceModel getRandomPiece() {
 		Log.info(this,"Spawned a new random piece");
-		return ((PieceModel)getRandomElement(PieceModel.Pieces,rand)).clone();
+		return ((PieceModel)getRandomElement(PieceModel.getPieces(),rand)).clone();
 	}
 
 	/**

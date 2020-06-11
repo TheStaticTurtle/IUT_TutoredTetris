@@ -20,6 +20,7 @@ public class SettingsVue extends JPanel{
 	public JSlider soundMusicLevel;
 	public JSlider soundSFXMusicLevel;
 	public JComboBox<Resolution> resolutionDropdown;
+	public JCheckBox legacyCheckbox;
 
 	public SettingsVue(SettingsModel model, SettingsController ctrl) {
 		this.model = model;
@@ -51,6 +52,8 @@ public class SettingsVue extends JPanel{
 		soundSFXMusicLevel = new CustomSlider(-50,5,Color.WHITE,Color.GREEN);
 		JLabel resolutionLabel = new JLabel("<html>Size: ");
 		resolutionDropdown = new JComboBox<Resolution>();
+		JLabel legacyLabel = new JLabel("<html>Legacy: ");
+		legacyCheckbox = new JCheckBox();
 
 		JButton gotoKeysButton = new MenuButton("Controls",Color.orange,Color.WHITE,ctrl);
 		JButton backButton = new MenuButton("Save",Color.GREEN,Color.WHITE,ctrl);
@@ -65,6 +68,8 @@ public class SettingsVue extends JPanel{
 		soundSFXMusicLabel.setForeground(Color.white);
 		resolutionLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		resolutionLabel.setForeground(Color.white);
+		legacyLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		legacyLabel.setForeground(Color.white);
 
 		gotoKeysButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
@@ -82,6 +87,10 @@ public class SettingsVue extends JPanel{
 		resolutionDropdown.setEditor(new CustomComboBoxEditor());
 		resolutionDropdown.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
 		resolutionDropdown.setEditable(true);
+
+		legacyCheckbox.setIcon(new CheckBoxIcon(48,Color.RED,Color.black));
+		legacyCheckbox.setSelectedIcon(new CheckBoxIcon(48,Color.GREEN,Color.black));
+		legacyCheckbox.setOpaque(false);
 
 		gotoKeysButton.addActionListener(ctrl);
 		gotoKeysButton.setActionCommand("CLICK:MENU:SETTINGS:KEYS");
@@ -118,8 +127,14 @@ public class SettingsVue extends JPanel{
 		resolutionCtrlPannel.add(resolutionDropdown);
 		mainPanel.add(resolutionCtrlPannel);
 
+		JPanel legacyCtrlPannel = new JPanel();
+		legacyCtrlPannel.setOpaque(false);
+		legacyCtrlPannel.setLayout(subLayout);
+		legacyCtrlPannel.add(legacyLabel);
+		legacyCtrlPannel.add(legacyCheckbox);
+		mainPanel.add(legacyCtrlPannel);
+
 		mainPanel.add(gotoKeysButton);
-		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());

@@ -75,6 +75,7 @@ public class Config {
 		inst = this;
 	}
 
+
 	/**
 	 * Put an object into memory
 	 * @param key a string which you can use to retrive the key later
@@ -205,6 +206,14 @@ public class Config {
 	public void putInt(String key, int value) {
 		config.put(key,String.valueOf(value));
 	}
+	/**
+	 * Save a boolean a the emplacement "key" in th config file
+	 * @param key The emplacement of the boolean
+	 * @param value The boolean
+	 */
+	public void putBool(String key, boolean value) {
+		config.put(key,String.valueOf(value));
+	}
 
 	/**
 	 * Read a string from the config file
@@ -228,6 +237,18 @@ public class Config {
 			return Integer.parseInt((String)config.get(key));
 		}
 		return 0;
+	}
+
+	/**
+	 * Read a boolean from the config file
+	 * @param key
+	 * @return the boolean a the emplacement "key"
+	 */
+	public boolean getBool(String key) {
+		if(config.containsKey(key)) {
+			return ((String)config.get(key)).equals("true");
+		}
+		return false;
 	}
 
 	/**
@@ -269,6 +290,8 @@ public class Config {
 		p.put("FONT_NORMAL"   ,"32");
 		p.put("FONT_TINY"     ,"16");
 		p.put("FONT_VERYTINY" ,"16");
+
+		p.put("LEGACY_PIECES" ,"false");
 		return p;
 	}
 }

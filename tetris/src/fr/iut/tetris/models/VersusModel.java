@@ -57,8 +57,8 @@ public class VersusModel {
      * @return a PieceModel
      */
     public PieceModel getRandomPiece(int player) { //0=PlayerA 1=PlayerB
-        PieceModel piece = ((PieceModel)getRandomElement(PieceModel.Pieces,rand)).clone();
-        return piece;
+        Log.info(this,"Spawned a new random piece");
+        return ((PieceModel)getRandomElement(PieceModel.getPieces(),rand)).clone();
     }
 
     /**

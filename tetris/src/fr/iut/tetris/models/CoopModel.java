@@ -51,7 +51,8 @@ public class CoopModel{
 	 * @return a PieceModel
 	 */
 	public PieceModel getRandomPiece(int player) { //0=PlayerA 1=PlayerB
-		PieceModel piece = ((PieceModel)getRandomElement(PieceModel.Pieces,rand)).clone();
+		Log.info(this,"Spawned a new random piece");
+		PieceModel piece = ((PieceModel)getRandomElement(PieceModel.getPieces(),rand)).clone();
 		if(player == 0) {
 			piece.changeColor(PieceModel.COLOR_BLUE);
 		} else {

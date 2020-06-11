@@ -1,6 +1,10 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Config;
+
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public
 class PieceModel {
@@ -223,5 +227,30 @@ class PieceModel {
 			new Point(1,2),
 			"PieceI"
 	);
-	static PieceModel[] Pieces = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.PieceI,PieceModel.PieceJ};
+
+	static PieceModel PieceStar = new PieceModel(
+			new BlockModel[][] {
+					{null                     , new BlockModel(COLOR_RED), null                     , null},
+					{new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null},
+					{null                     , new BlockModel(COLOR_RED), null                     , null},
+					{null                     , null                     , null                     , null},
+
+			},
+			new Point(3,0),
+			new Point(1,2),
+			"PieceZ"
+	);
+
+	static PieceModel[] PiecesLegacy = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.PieceI,PieceModel.PieceJ};
+	static PieceModel[] PiecesCustoms = new PieceModel[]{PieceStar};
+
+	static public PieceModel[] getPieces() {
+		if(Config.getInstance().getBool("LEGACY_PIECES")) {
+			return PiecesLegacy;
+		} else {
+			ArrayList<PieceModel> baseArray = new ArrayList<>(Arrays.asList(PiecesLegacy));
+			baseArray.addAll(Arrays.asList(PiecesCustoms));
+			return baseArray.toArray(new PieceModel[baseArray.size()]);
+		}
+	}
 }

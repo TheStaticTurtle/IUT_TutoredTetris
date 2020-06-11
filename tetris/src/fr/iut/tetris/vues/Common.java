@@ -334,6 +334,40 @@ class CustomSlider extends JSlider implements MouseListener {
 	@Override public void mouseExited(MouseEvent e) {}
 }
 
+class CheckBoxIcon implements Icon {
+	int size;
+	Color foreGroundColor;
+	Color backGroundColor;
+
+	public CheckBoxIcon(int size,Color foreGroundColor, Color backGroundColor) {
+		this.size = size;
+		this.foreGroundColor = foreGroundColor;
+		this.backGroundColor = backGroundColor;
+	}
+
+	public void getHeight() {
+
+	}
+	public void paintIcon(Component c, Graphics g, int x, int y) {
+		int borderSize = Config.getInstance().getInt("BORDER_SIZES");
+		int spaceing = 5;
+
+		Graphics2D g2 = (Graphics2D) g;
+
+		g2.setColor(Color.white);
+		g2.fillRect(0, 0, size, size);
+
+		g2.setColor(this.backGroundColor);
+		g2.fillRect(borderSize, borderSize, size-borderSize*2, size-borderSize*2);
+
+		g2.setColor(this.foreGroundColor);
+		g2.fillRect(borderSize+spaceing, borderSize+spaceing, size-(borderSize+spaceing)*2, size-(borderSize+spaceing)*2);
+	}
+
+	public int getIconWidth() { return this.size; }
+	public int getIconHeight() { return this.size; }
+}
+
 class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object>  {
 	public CustomComboBoxRenderer() {
 		setOpaque(true);
