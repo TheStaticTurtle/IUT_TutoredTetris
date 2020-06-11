@@ -342,11 +342,11 @@ class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object> 
 
 	@Override
 	public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		if(isSelected) {
+		if(isSelected)
 			setForeground(Color.RED);
-		} else {
+		else
 			setForeground(Color.WHITE);
-		}
+	
 		setText(value.toString());
 		return this;
 	}
