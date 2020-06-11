@@ -56,19 +56,23 @@ public class VersusController implements ActionListener, KeyListener {
     private long timerCounterA;
     private long timerCounterB;
     void timerTicked() {
-
         timerCounterA += 10;
         timerCounterB += 10;
-        if(timerCounterA > model.fallSpeedPlayerA && timerCounterB > model.fallSpeedPlayerB) {
+        if(timerCounterA > model.fallSpeedPlayerA) {
             timerCounterA -= model.fallSpeedPlayerA;
-            timerCounterB -= model.fallSpeedPlayerB;
 
             if(model.gameState == GameState.PLAYING) {
                 model.fallCurrentForPlayerA();
-                model.fallCurrentForPlayerB();
                 if(model.fallingPiecePlayerA == null) {
                     model.spawnPlayerAPiece();
                 }
+                vue.recalculate();
+            }
+        }
+        if(timerCounterB > model.fallSpeedPlayerB) {
+            timerCounterB -= model.fallSpeedPlayerB;
+            if(model.gameState == GameState.PLAYING) {
+                model.fallCurrentForPlayerB();
                 if(model.fallingPiecePlayerB == null) {
                     model.spawnPlayerBPiece();
                 }
