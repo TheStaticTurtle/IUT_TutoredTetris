@@ -36,7 +36,7 @@ public class AudioController {
 					Log.info(this,"Started sfx: "+file.getFile());
 
 					try {
-						Clip clip = AudioSystem.getClip();
+						Clip clip = AudioSystem.getClip(null);
 
 						clip.open(audioInputStream);
 
@@ -74,7 +74,7 @@ public class AudioController {
 					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
 					Log.info(this,"Started bg music playing: "+file.getFile());
 
-					Clip clip = AudioSystem.getClip();
+					Clip clip = AudioSystem.getClip(null);
 					clip.open(audioInputStream);
 
 					FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);

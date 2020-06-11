@@ -66,8 +66,6 @@ public class Common {
 
 /* Custom components */
 class Spacer extends Box {
-	private static final long serialVersionUID = 1L;
-
 	public Spacer() {
 		super(0);
 		setPreferredSize(new Dimension(1, 1));
