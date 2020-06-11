@@ -129,6 +129,7 @@ public class CoopController implements ActionListener, KeyListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Log.error(this,e);
 		switch(e.getActionCommand() ) {
 			case "GAME:LINE_COMPLETE":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/line_completed.wav"));

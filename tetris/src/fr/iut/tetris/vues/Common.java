@@ -7,10 +7,12 @@ import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.controllers.SettingsController;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
+import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -338,6 +340,61 @@ class CustomSlider extends JSlider implements MouseListener {
 	@Override public void mouseEntered(MouseEvent e) {}
 	@Override public void mouseExited(MouseEvent e) {}
 }
+
+class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object>  {
+	public CustomComboBoxRenderer() {
+		setOpaque(true);
+		setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+		setBackground(Color.BLACK);
+		setForeground(Color.WHITE);
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.white),new EmptyBorder(2, 2, 2, 2)));
+	}
+
+	@Override
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+		if(isSelected) {
+			setForeground(Color.RED);
+		} else {
+			setForeground(Color.WHITE);
+		}
+		setText(value.toString());
+		return this;
+	}
+}
+class CustomComboBoxEditor extends BasicComboBoxEditor {
+	private JLabel label = new JLabel();
+	private JPanel panel = new JPanel();
+	private Object selectedItem;
+
+	public CustomComboBoxEditor() {
+		label.setOpaque(false);
+		label.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+		label.setForeground(Color.WHITE);
+
+		panel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white));
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		panel.setBackground(Color.BLACK);
+		panel.add(label);
+	}
+
+	public Component getEditorComponent() {
+		return this.panel;
+	}
+
+	public Object getItem() {
+		return this.selectedItem;
+	}
+
+	public void setItem(Object item) {
+		this.selectedItem = item;
+		if(item instanceof Resolution)
+			label.setText(((Resolution)item).name());
+		else
+			label.setText(item.toString());
+	}
+
+}
+
 class TetrisBlock extends JPanel {
 
 	int canvasWidth;
@@ -650,8 +707,6 @@ class SplashScreenPanel extends JPanel {
 				pressSpace.setText("<html><div style='text-align: center;'>Game Over</div></html>");
 				currentScoreLabel.setText("<html>Current score: "+((CoopModel)this.model).currentScore);
 				bestScoreLabel.setText("<html>Best score: "+((CoopModel)this.model).bestScore);
-				replayButton.setActionCommand("CLICK:MENU:COOP");
-				replayButton.addActionListener((ActionListener)ctrl);
 			}
 			mainPanel.removeAll();
 			mainPanel.add(pressSpace);
@@ -893,58 +948,4 @@ class StaticStarAnimation extends JPanel {
 			g2.drawImage(star.getImage(),star.position.x, star.position.y, this);
 		}
 	}
-}
-
-class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object>  {
-	public CustomComboBoxRenderer() {
-		setOpaque(true);
-		setFont(Config.getInstance().getFont("FONT_VERYTINY"));
-		setBackground(Color.BLACK);
-		setForeground(Color.WHITE);
-		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.white),new EmptyBorder(2, 2, 2, 2)));
-	}
-
-	@Override
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		if(isSelected) {
-			setForeground(Color.RED);
-		} else {
-			setForeground(Color.WHITE);
-		}
-		setText(value.toString());
-		return this;
-	}
-}
-class CustomComboBoxEditor extends BasicComboBoxEditor {
-	private JLabel label = new JLabel();
-	private JPanel panel = new JPanel();
-	private Object selectedItem;
-
-	public CustomComboBoxEditor() {
-		label.setOpaque(false);
-		label.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
-		label.setForeground(Color.WHITE);
-
-		panel.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.white));
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		panel.setBackground(Color.BLACK);
-		panel.add(label);
-	}
-
-	public Component getEditorComponent() {
-		return this.panel;
-	}
-
-	public Object getItem() {
-		return this.selectedItem;
-	}
-
-	public void setItem(Object item) {
-		this.selectedItem = item;
-		if(item instanceof Resolution)
-			label.setText(((Resolution)item).name());
-		else
-			label.setText(item.toString());
-	}
-
 }

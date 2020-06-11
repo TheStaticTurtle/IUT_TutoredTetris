@@ -52,7 +52,6 @@ public class Config {
 				//Merge the two configs
 				defConf.forEach((key, value) -> config.merge(key, value, (v1, v2) -> v1) );
 				config.put("CONFIG_VERSION",defConf.get("CONFIG_VERSION"));
-
 				try {
 					config.store(new FileWriter(appConfigPath),null);
 					Log.info(this,"Saved the new config");
@@ -172,6 +171,11 @@ public class Config {
 	 * @return the font
 	 */
 	public Font getFont(String key) {
+		if(fonts.containsKey(key)) {
+			return fonts.get(key);
+		}
+		//Make sure the wasn't an udpate but only if it fails the first time
+		reloadFonts();
 		if(fonts.containsKey(key)) {
 			return fonts.get(key);
 		}
