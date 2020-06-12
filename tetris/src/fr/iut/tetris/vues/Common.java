@@ -338,15 +338,16 @@ class CheckBoxIcon implements Icon {
 	int size;
 	Color foreGroundColor;
 	Color backGroundColor;
+	int borderSize;
 
 	public CheckBoxIcon(int size,Color foreGroundColor, Color backGroundColor) {
 		this.size = size;
 		this.foreGroundColor = foreGroundColor;
 		this.backGroundColor = backGroundColor;
+		borderSize = Config.getInstance().getInt("BORDER_SIZES");
 	}
 
 	public void paintIcon(Component c, Graphics g, int x, int y) {
-		int borderSize = Config.getInstance().getInt("BORDER_SIZES");
 		int spaceing = 5;
 
 		Graphics2D g2 = (Graphics2D) g;

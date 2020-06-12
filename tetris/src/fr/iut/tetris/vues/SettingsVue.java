@@ -88,8 +88,8 @@ public class SettingsVue extends JPanel{
 		resolutionDropdown.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
 		resolutionDropdown.setEditable(true);
 
-		legacyCheckbox.setIcon(new CheckBoxIcon(48,Color.RED,Color.black));
-		legacyCheckbox.setSelectedIcon(new CheckBoxIcon(48,Color.GREEN,Color.black));
+		legacyCheckbox.setIcon(new CheckBoxIcon(16,Color.RED,Color.black));
+		legacyCheckbox.setSelectedIcon(new CheckBoxIcon(16,Color.GREEN,Color.black));
 		legacyCheckbox.setOpaque(false);
 
 		gotoKeysButton.addActionListener(ctrl);
@@ -159,6 +159,9 @@ public class SettingsVue extends JPanel{
 		lyt2.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, this);
 		testPane.setLayout(lyt);
 		setLayout(lyt2);
+
+		legacyCheckbox.setSelectedIcon(new CheckBoxIcon(legacyCtrlPannel.getPreferredSize().height,Color.GREEN,Color.black));
+		legacyCheckbox.setIcon(new CheckBoxIcon(legacyCtrlPannel.getPreferredSize().height,Color.RED,Color.black));
 
 		add(testPane);
 
