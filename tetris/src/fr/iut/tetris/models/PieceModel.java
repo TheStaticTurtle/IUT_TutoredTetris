@@ -15,6 +15,7 @@ class PieceModel {
 	public static final Color COLOR_ORANGE = Color.decode("#FFAF00");
 	public static final Color COLOR_BLUE = Color.decode("#0026FF");
 	public static final Color COLOR_YELLOW = Color.decode("#FFF500");
+	public static final Color COLOR_WHITE = Color.decode("#FFFFFF");
 
 	public BlockModel[][] childs = new BlockModel[4][4];
 
@@ -230,10 +231,10 @@ class PieceModel {
 
 	static PieceModel PieceStar = new PieceModel(
 			new BlockModel[][] {
-					{null                     , new BlockModel(COLOR_RED), null                     , null},
-					{new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null},
-					{null                     , new BlockModel(COLOR_RED), null                     , null},
-					{null                     , null                     , null                     , null},
+					{null                       , new BlockModel(COLOR_WHITE), null                       , null},
+					{new BlockModel(COLOR_WHITE), new BlockModel(COLOR_WHITE), new BlockModel(COLOR_WHITE), null},
+					{null                       , new BlockModel(COLOR_WHITE), null                       , null},
+					{null                       , null                       , null                       , null},
 
 			},
 			new Point(3,0),

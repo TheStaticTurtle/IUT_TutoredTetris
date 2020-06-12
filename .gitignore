@@ -24,3 +24,4 @@ hs_err_pid*
 /tetris/out/
 /.idea/
 /tetris/tetris.iml
+/out/
