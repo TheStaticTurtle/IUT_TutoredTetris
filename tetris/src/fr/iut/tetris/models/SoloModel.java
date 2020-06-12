@@ -17,6 +17,7 @@ public class SoloModel {
 	public int height = 20;
 	public int width = 10;
 	public int fallSpeed = 1000; //ms
+	final public int FALL_SPEED = 1000; //ms
 	ArrayList<Object> pieceList = new ArrayList<>();
 	public PieceModel fallingPiece = null;
 	public PieceModel nextPiece;
@@ -119,6 +120,11 @@ public class SoloModel {
 			Integer lineCount = 0;
 
 			currentScore += 4;
+			// Difficulty
+			if(fallSpeed > 75) {
+				fallSpeed = (int)(1000 - 0.3*currentScore);
+				Log.debug(this, "FallSpeed = " + this.fallSpeed);
+			}
 
 			for (int y = grid.length-1; y >= 0; y--) {
 				boolean isLineFull = true;
@@ -127,6 +133,7 @@ public class SoloModel {
 				}
 
 				if(isLineFull) {
+
 					lineCount += 1;
 					firstLineY = y;
 					Log.info(this,"Line "+y+" is full");
@@ -146,12 +153,6 @@ public class SoloModel {
 					}
 					// Line has fallen down recheck to see if there is more lines but tel the function to spit out an integer instead of the LineCompleted enum
 					lineCount += (Integer)checkForFullLineAndRemoveIt(false);
-					if(currentScore < 10) {
-						fallSpeed = 1000;
-						Log.debug(this, "FallSpeed = " + this.fallSpeed);
-					} else {
-						fallSpeed = (int)10000/currentScore;
-					}
 					break;
 				}
 			}

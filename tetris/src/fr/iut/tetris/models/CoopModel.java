@@ -148,6 +148,11 @@ public class CoopModel{
 			Integer lineCount = 0;
 
 			currentScore += 4;
+			// Difficulty
+			if(fallSpeed > 75) {
+				fallSpeed = (int)(1000 - 0.3*currentScore);
+				Log.debug(this, "FallSpeed = " + this.fallSpeed);
+			}
 
 			for (int y = grid.length-1; y >= 0; y--) {
 				boolean isLineFull = true;

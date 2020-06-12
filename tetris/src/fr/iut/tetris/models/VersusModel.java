@@ -31,7 +31,7 @@ public class VersusModel {
     VersusController ctrl;
     public int bestScore = 0;
     public int currentScorePlayerA = 0;
-    public int currentScorePlayerB =0;
+    public int currentScorePlayerB = 0;
     public String winner;
     Random rand = new Random();
 
@@ -158,6 +158,18 @@ public class VersusModel {
 
             if (player == 0) { currentScorePlayerA += 4; }
             else { currentScorePlayerB += 4; }
+            // Difficulty
+            if (player == 0) {
+                if(fallSpeedPlayerA > 75) {
+                    fallSpeedPlayerA = (int)(1000 - 0.3*currentScorePlayerA);
+                    Log.debug(this, "FallSpeed Player A = " + this.fallSpeedPlayerA);
+                }
+            } else {
+                if(fallSpeedPlayerB > 75) {
+                    fallSpeedPlayerB = (int)(1000 - 0.3*currentScorePlayerB);
+                    Log.debug(this, "FallSpeed Player B = " + this.fallSpeedPlayerB);
+                }
+            }
 
             for (int y = grid.length-1; y >= 0; y--) {
                 boolean isLineFull = true;
@@ -186,25 +198,6 @@ public class VersusModel {
                     }
                     // Line has fallen down recheck to see if there is more lines but tel the function to spit out an integer instead of the LineCompleted enum
                     lineCount += (Integer)checkForFullLineAndRemoveIt(false, player);
-                    if (player == 0) {
-                        if(fallSpeedPlayerA-currentScorePlayerA > 250) {
-                            fallSpeedPlayerA -= currentScorePlayerA;
-                            Log.debug(this, "FallSpeed = " + this.fallSpeedPlayerA);
-                        }
-                        else {
-                            fallSpeedPlayerA = 250;
-                        }
-                    }
-                    else {
-                        if(fallSpeedPlayerB-currentScorePlayerB > 250) {
-                            fallSpeedPlayerB -= currentScorePlayerB;
-                            Log.debug(this, "FallSpeed = " + this.fallSpeedPlayerB);
-                        }
-                        else {
-                            fallSpeedPlayerB = 250;
-                        }
-                    }
-
                     break;
                 }
             }
