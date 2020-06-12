@@ -79,9 +79,9 @@ class PieceModel {
 		int size = matrix.length;
 		BlockModel[][] ret = new BlockModel[size][size];
 
-		if (name.equals("PieceO")) { return matrix; }
+		if (name.equals("PieceO") || name.equals("PieceStar")) { return matrix; }
 
-		if(name.equals("PieceI")) {
+		if(name.equals("PieceI") || name.equals("PieceTLongA") || name.equals("PieceTLongB")) {
 			for (int i = 0; i < size; ++i)
 				for (int j = 0; j < size; ++j)
 					ret[i][j] = matrix[size - j - 1][i]; //***
@@ -106,7 +106,7 @@ class PieceModel {
 		int size = matrix.length;
 		BlockModel[][] ret = new BlockModel[size][size];
 
-		if (name.equals("PieceO")) { return matrix; }
+		if (name.equals("PieceO") || name.equals("PieceStar")) { return matrix; }
 
 		if(name.equals("PieceI") || name.equals("PieceTLongA") || name.equals("PieceTLongB")) {
 			for (int i = 0; i < size; ++i)
