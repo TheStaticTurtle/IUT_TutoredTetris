@@ -1,5 +1,7 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.controllers.VersusController;
+
 class BonusSpeed extends EffectModel {
     public BonusSpeed() {
         super("/res/effects/bonus_speed.png");
@@ -43,10 +45,26 @@ class RandomLine extends EffectModel {
     }
 }
 
+class InvertControls extends EffectModel {
+    VersusController versusController;
+    int player;
+
+    public InvertControls(VersusController versusController, int player, int duration){
+        super("/res/effects/malus_revserse_cmds.png");
+        this.versusController = versusController;
+        this.player = player;
+        doEffect();
+    }
+
+    void doEffect(){
+        this.versusController.invertControls(this.player, true);
+    }
+}
+
 
 public class EffectModel {
-
     public String imagePath;
+
     public EffectModel(String imagePath) {
         this.imagePath = imagePath;
     }

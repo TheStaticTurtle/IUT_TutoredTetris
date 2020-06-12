@@ -23,11 +23,17 @@ public class VersusController implements ActionListener, KeyListener {
     public VersusVue vue;
     AudioController audio;
 
+    private boolean invertedP0Controls;
+    private boolean invertedP1Controls;
+
     public VersusController(MainController mainCtrl, VersusModel model,AudioController audio) {
         this.model = model;
-        model.setCtrl(this);
+        this.invertedP0Controls = false;
+        this.invertedP1Controls = false;
         this.mainCtrl = mainCtrl;
         this.audio = audio;
+        
+        model.setCtrl(this);
 
         VersusController me = this;
         new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
@@ -118,14 +124,33 @@ public class VersusController implements ActionListener, KeyListener {
                 return;
             }
         }
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_LEFT"))     { model.moveCurrentX(0, Direction.LEFT); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT"))    { model.moveCurrentX(0,Direction.RIGHT); vue.recalculate();}
+
+        //Player 0 Controls
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_LEFT")) {
+            if(invertedP0Controls) model.moveCurrentX(0, Direction.RIGHT);
+            else model.moveCurrentX(0, Direction.LEFT);
+            vue.recalculate();
+        }
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT")) {
+            if(invertedP0Controls) model.moveCurrentX(0, Direction.LEFT);
+            else model.moveCurrentX(0, Direction.RIGHT);
+            vue.recalculate();
+        }
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_DOWN"))     { model.fallCurrentForPlayerA(); vue.recalculate();}
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_FASTDOWN")) { model.fallCurrentAtBottomForPlayerA(); vue.recalculate();}
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_ROTATE"))   { model.rotateCurrent(0,Direction.RIGHT); vue.recalculate();}
 
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT"))     { model.moveCurrentX(1,Direction.LEFT); vue.recalculate();}
-        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT"))    { model.moveCurrentX(1,Direction.RIGHT); vue.recalculate();}
+        //Player 1 Controls
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT")) {
+            if(invertedP1Controls) model.moveCurrentX(1, Direction.RIGHT);
+            else model.moveCurrentX(1, Direction.LEFT);
+            vue.recalculate();
+        }
+        if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT")) {
+            if(invertedP1Controls) model.moveCurrentX(1, Direction.LEFT);
+            else model.moveCurrentX(1, Direction.RIGHT);
+            vue.recalculate();
+        }
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { model.fallCurrentForPlayerB(); vue.recalculate();}
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottomForPlayerB(); vue.recalculate();}
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))   { model.rotateCurrent(1,Direction.RIGHT); vue.recalculate();}
@@ -184,5 +209,12 @@ public class VersusController implements ActionListener, KeyListener {
             default:
                 break;
         }
+    }
+
+    public void invertControls(int player, boolean value){
+        if (player == 0)
+            this.invertedP0Controls = value;
+        if (player == 1)
+            this.invertedP1Controls = value;
     }
 }
