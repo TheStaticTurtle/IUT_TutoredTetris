@@ -25,6 +25,10 @@ public class MainVue extends JFrame {
 		setLocationRelativeTo(null);
 	}
 
+	public void recenter() {
+		setLocationRelativeTo(null);
+	}
+
 	public void setCurrentVue(JPanel p) {
 		this.currentVue = p;
 

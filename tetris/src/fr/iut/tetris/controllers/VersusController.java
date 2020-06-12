@@ -207,6 +207,7 @@ public class VersusController implements ActionListener, KeyListener {
                 mainCtrl.actionPerformed(new ActionEvent(this,0,"CLICK:MENU:VERSUS"));
                 break;
             case "CLICK:BACK":
+                this.audio.setMusicTrack(getClass().getResource("/sounds/music_calm.wav"));
                 this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
                 mainCtrl.actionPerformed(e);
                 break;

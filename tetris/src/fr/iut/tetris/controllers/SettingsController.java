@@ -12,6 +12,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class SettingsController implements ActionListener, ChangeListener {
 	MainController mainCtrl;
@@ -71,6 +72,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 				Config.getInstance().putInt("FONT_VERYTINY",r.font_verytiny);
 				Config.getInstance().putInt("BORDER_SIZES" ,r.border_size);
 				Config.getInstance().reloadFonts();
+				Config.getInstance().saveAsync();
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
 			case "MOUSE:ENTER":
