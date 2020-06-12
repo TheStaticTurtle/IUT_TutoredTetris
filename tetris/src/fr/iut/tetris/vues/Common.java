@@ -755,6 +755,55 @@ class SplashScreenPanel extends JPanel {
 	}
 }
 
+class EffectImage extends JPanel {
+	Dimension size = new Dimension(64,64);
+	BufferedImage image;
+	String imagePath;
+
+	public EffectImage(String image_path) {
+		imagePath = image_path;
+		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(32,32, Image.SCALE_REPLICATE));
+		setOpaque(false);
+	}
+
+	/*@Override
+	public void setPreferredSize(Dimension size) {
+		super.setPreferredSize(size);
+		this.size = size;
+		this.size.height = this.size.width;
+
+		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
+		updateUI();
+	}
+	@Override
+	public void setSize(Dimension size) {
+		super.setSize(size);
+		this.size = size;
+		this.size.height = this.size.width;
+
+		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
+		updateUI();
+	}*/
+
+	@Override
+	public Dimension getPreferredSize() {
+		return size;
+	}
+
+	@Override
+	public int getHeight() {
+		this.size = new Dimension(getWidth(),getWidth());
+		return getWidth();
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		setSize(this.size);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.drawImage(this.image,0,0,getWidth(),getWidth(),null);
+	}
+}
+
 /* Annimations */
 class MovingStarModel {
 	Point position;

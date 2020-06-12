@@ -5,6 +5,7 @@ import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
+import fr.iut.tetris.models.EffectModel;
 import fr.iut.tetris.models.VersusModel;
 import fr.iut.tetris.vues.VersusVue;
 
@@ -58,8 +59,19 @@ public class VersusController implements ActionListener, KeyListener {
     void timerTicked() {
         timerCounterA += 10;
         timerCounterB += 10;
-        if(timerCounterA > model.fallSpeedPlayerA) {
-            timerCounterA -= model.fallSpeedPlayerA;
+
+        int fallSpeedPlayerA = model.fallSpeedPlayerA;
+        for (EffectModel m: model.effectListPlayerA) {
+            fallSpeedPlayerA = m.speedFunction(fallSpeedPlayerA);
+        }
+
+        int fallSpeedPlayerB = model.fallSpeedPlayerA;
+        for (EffectModel m: model.effectListPlayerB) {
+            fallSpeedPlayerB = m.speedFunction(fallSpeedPlayerB);
+        }
+
+        if(timerCounterA > fallSpeedPlayerA) {
+            timerCounterA -= fallSpeedPlayerA;
 
             if(model.gameState == GameState.PLAYING) {
                 model.fallCurrentForPlayerA();
@@ -69,8 +81,8 @@ public class VersusController implements ActionListener, KeyListener {
                 vue.recalculate();
             }
         }
-        if(timerCounterB > model.fallSpeedPlayerB) {
-            timerCounterB -= model.fallSpeedPlayerB;
+        if(timerCounterB > fallSpeedPlayerB) {
+            timerCounterB -= fallSpeedPlayerB;
             if(model.gameState == GameState.PLAYING) {
                 model.fallCurrentForPlayerB();
                 if(model.fallingPiecePlayerB == null) {

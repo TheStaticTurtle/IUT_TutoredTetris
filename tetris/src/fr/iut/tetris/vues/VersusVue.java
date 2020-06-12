@@ -1,6 +1,7 @@
 package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
+import fr.iut.tetris.models.EffectModel;
 import fr.iut.tetris.models.VersusModel;
 import fr.iut.tetris.controllers.VersusController;
 import fr.iut.tetris.enums.GameState;
@@ -100,6 +101,7 @@ class GamePanelVersus extends JPanel {
     NextPiecePanel nextPiecePanel;
     BlockModel noBlockModel;
     JLabel scoreLabel;
+    JPanel effectsPanel;
     int player;
 
     public GamePanelVersus(VersusModel model, Dimension dimension, int player) {
@@ -145,11 +147,15 @@ class GamePanelVersus extends JPanel {
         scoreLabel.setForeground(Color.white);
         scoreLabel.setFont(Config.getInstance().getFont("FONT_BIG"));
 
+        effectsPanel = new JPanel();
+        effectsPanel.setLayout(new GridLayout(0,2,10,10));
+        effectsPanel.setOpaque(false);
 
         add(mainPanel);
         add(labelNextPiece);
         add(nextPiecePanel);
         add(scoreLabel);
+        add(effectsPanel);
 
         if (this.player == 0) {
             try {
@@ -180,9 +186,6 @@ class GamePanelVersus extends JPanel {
             }
         }
 
-
-
-
         SpringLayout layout = new SpringLayout();
 
         if (this.player == 0) {
@@ -199,6 +202,10 @@ class GamePanelVersus extends JPanel {
 
             layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.SOUTH, labelNextPiece);
             layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.WEST, this);
+
+            layout.putConstraint(SpringLayout.NORTH, effectsPanel, 150, SpringLayout.SOUTH, nextPiecePanel);
+            layout.putConstraint(SpringLayout.WEST, effectsPanel, 10, SpringLayout.WEST, this);
+            layout.putConstraint(SpringLayout.EAST, effectsPanel, -10, SpringLayout.WEST, mainPanel);
         }
         else {
 
@@ -215,6 +222,9 @@ class GamePanelVersus extends JPanel {
             layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.SOUTH, labelNextPiece);
             layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
 
+            layout.putConstraint(SpringLayout.NORTH, effectsPanel, 150, SpringLayout.SOUTH, nextPiecePanel);
+            layout.putConstraint(SpringLayout.WEST, effectsPanel, 10, SpringLayout.EAST, mainPanel);
+            layout.putConstraint(SpringLayout.EAST, effectsPanel, -10, SpringLayout.EAST, this);
         }
 
         setLayout(layout);
@@ -284,6 +294,15 @@ class GamePanelVersus extends JPanel {
                     e.printStackTrace();
                 }
             }
+        }
+
+        effectsPanel.removeAll();
+        if(player == 0) {
+            for (EffectModel m: model.effectListPlayerA) {
+                effectsPanel.add(new EffectImage(m.imagePath));
+            }
+        } else {
+
         }
 
         setIgnoreRepaint(false);

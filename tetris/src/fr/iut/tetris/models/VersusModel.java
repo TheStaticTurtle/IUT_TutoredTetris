@@ -21,6 +21,8 @@ public class VersusModel {
     public int fallSpeedPlayerB = 1000; //ms
     ArrayList<Object> pieceListPlayerA = new ArrayList<>();
     ArrayList<Object> pieceListPlayerB = new ArrayList<>();
+    public ArrayList<EffectModel> effectListPlayerA = new ArrayList<>();
+    public ArrayList<EffectModel> effectListPlayerB = new ArrayList<>();
     public GameState gameState = GameState.WAITING;
     public PieceModel fallingPiecePlayerA = null;
     public PieceModel fallingPiecePlayerB = null;
@@ -36,6 +38,8 @@ public class VersusModel {
     public VersusModel() {
         nextPiecePlayerA = getRandomPiece(0);
         nextPiecePlayerB = getRandomPiece(1);
+
+        effectListPlayerA.add(EffectModel.malusSpeed);
     }
 
     public void setCtrl(VersusController ctrl) {
