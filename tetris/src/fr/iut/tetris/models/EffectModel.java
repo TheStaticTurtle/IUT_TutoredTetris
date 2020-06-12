@@ -1,13 +1,17 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.controllers.VersusController;
 import fr.iut.tetris.Log;
+import fr.iut.tetris.enums.Direction;
+import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 class BonusSpeed extends EffectModel {
@@ -111,18 +115,37 @@ class RandomLine extends EffectModel {
 }
 
 class InvertControls extends EffectModel {
-    VersusController versusController;
+    VersusModel model;
     int player;
 
-    public InvertControls(VersusController versusController, int player, int duration){
-        super("/res/effects/malus_revserse_cmds.png");
-        this.versusController = versusController;
+    public InvertControls(VersusModel model, int player, int duration){
+        super("/res/effects/malus_reverse_cmds.png");
+        this.model = model;
         this.player = player;
-        doEffect();
     }
 
-    void doEffect(){
-        this.versusController.invertControls(this.player, true);
+    public KeyEvent keyDown(KeyEvent e) {
+        if(player == 1) {
+            if(e.getKeyCode()== Config.getInstance().getInt("KEYCODE_P1_LEFT")) {
+                e.setKeyCode(Config.getInstance().getInt("KEYCODE_P1_RIGHT"));
+                return e;
+            }
+            if(e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT")) {
+                e.setKeyCode(Config.getInstance().getInt("KEYCODE_P1_LEFT"));
+                return e;
+            }
+        }
+        if(player == 0) {
+            if(e.getKeyCode()== Config.getInstance().getInt("KEYCODE_P2_LEFT")) {
+                e.setKeyCode(Config.getInstance().getInt("KEYCODE_P2_RIGHT"));
+                return e;
+            }
+            if(e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT")) {
+                e.setKeyCode(Config.getInstance().getInt("KEYCODE_P2_LEFT"));
+                return e;
+            }
+        }
+        return e;
     }
 }
 
@@ -136,5 +159,9 @@ public class EffectModel {
 
     public int speedFunction(int currentSpeed) {
         return currentSpeed;
+    }
+
+    public KeyEvent keyDown(KeyEvent e) {
+        return e;
     }
 }

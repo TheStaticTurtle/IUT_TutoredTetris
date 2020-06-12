@@ -108,6 +108,14 @@ public class VersusController implements ActionListener, KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
+
+        for (EffectModel m: model.effectListPlayerA) {
+            e = m.keyDown(e);
+        }
+        for (EffectModel m: model.effectListPlayerB) {
+            e = m.keyDown(e);
+        }
+
         if(model.gameState == GameState.WAITING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_STARTGAME")) {
             model.gameState = GameState.PLAYING;
             vue.recalculate();
@@ -127,13 +135,11 @@ public class VersusController implements ActionListener, KeyListener {
 
         //Player 0 Controls
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_LEFT")) {
-            if(invertedP0Controls) model.moveCurrentX(0, Direction.RIGHT);
-            else model.moveCurrentX(0, Direction.LEFT);
+            model.moveCurrentX(0, Direction.LEFT);
             vue.recalculate();
         }
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT")) {
-            if(invertedP0Controls) model.moveCurrentX(0, Direction.LEFT);
-            else model.moveCurrentX(0, Direction.RIGHT);
+            model.moveCurrentX(0, Direction.RIGHT);
             vue.recalculate();
         }
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_DOWN"))     { model.fallCurrentForPlayerA(); vue.recalculate();}
@@ -142,13 +148,11 @@ public class VersusController implements ActionListener, KeyListener {
 
         //Player 1 Controls
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_LEFT")) {
-            if(invertedP1Controls) model.moveCurrentX(1, Direction.RIGHT);
-            else model.moveCurrentX(1, Direction.LEFT);
+            model.moveCurrentX(1, Direction.LEFT);
             vue.recalculate();
         }
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_RIGHT")) {
-            if(invertedP1Controls) model.moveCurrentX(1, Direction.LEFT);
-            else model.moveCurrentX(1, Direction.RIGHT);
+            model.moveCurrentX(1, Direction.RIGHT);
             vue.recalculate();
         }
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_DOWN"))     { model.fallCurrentForPlayerB(); vue.recalculate();}

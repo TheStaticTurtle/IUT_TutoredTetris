@@ -41,10 +41,11 @@ public class VersusModel {
 
         effectListPlayerA.add(new MalusSpeed());
         effectListPlayerA.add(new RandomLine(this,0));
+        effectListPlayerA.add(new InvertControls(this,0,30));
     }
 
     public void setCtrl(VersusController ctrl) {
-        this.ctrl = ctrl; effectListPlayerA.add(new InvertControls(this.ctrl, 0, 30));
+        this.ctrl = ctrl;
     }
 
     /**
