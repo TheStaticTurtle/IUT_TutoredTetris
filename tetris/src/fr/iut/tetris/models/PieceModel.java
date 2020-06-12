@@ -15,7 +15,18 @@ class PieceModel {
 	public static final Color COLOR_ORANGE = Color.decode("#FFAF00");
 	public static final Color COLOR_BLUE = Color.decode("#0026FF");
 	public static final Color COLOR_YELLOW = Color.decode("#FFF500");
-	public static final Color COLOR_WHITE = Color.decode("#FFFFFF");
+	public static final Color COLOR_OLIVE = Color.decode("#D4FF00");
+	public static final Color COLOR_LIGHTBLUE = Color.decode("#00BFFF");
+	public static final Color COLOR_ORANGERED = Color.decode("#FF4300");
+	public static final Color COLOR_CYAN = Color.decode("#00FFA5");
+	public static final Color COLOR_DARKPURPLE = Color.decode("#7200FF");
+	public static final Color COLOR_GOLD = Color.decode("#FFD200");
+	public static final Color COLOR_DARKGOLD = Color.decode("#FF7700");
+	public static final Color COLOR_DARKPINK = Color.decode("#FF0059");
+	public static final Color COLOR_LIGHTPINK = Color.decode("#FF00B6");
+	public static final Color COLOR_GRAY = Color.decode("#DBDBDB");
+	public static final Color COLOR_DARKGRAY = Color.decode("#808080");
+	public static final Color COLOR_PURPLE2 = Color.decode("#8E00DB");
 
 	public BlockModel[][] childs = new BlockModel[4][4];
 
