@@ -122,8 +122,17 @@ class InvertControls extends EffectModel {
         super("/res/effects/malus_reverse_cmds.png");
         this.model = model;
         this.player = player;
+        Timer timer = new Timer(duration, actionEvent -> {
+            if (this.player == 0)
+                model.effectListPlayerA.remove(this);
+            if (this.player == 1)
+                model.effectListPlayerB.remove(this);
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
+    @Override
     public KeyEvent keyDown(KeyEvent e) {
         if(player == 1) {
             if(e.getKeyCode()== Config.getInstance().getInt("KEYCODE_P1_LEFT")) {
@@ -142,6 +151,38 @@ class InvertControls extends EffectModel {
             }
             if(e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_RIGHT")) {
                 e.setKeyCode(Config.getInstance().getInt("KEYCODE_P2_LEFT"));
+                return e;
+            }
+        }
+        return e;
+    }
+}
+
+class RandomRotation extends EffectModel {
+    VersusModel model;
+    int player;
+
+    public RandomRotation(VersusModel model, int player, int duration){
+        super("/res/effects/malus_rotate.png");
+        this.model = model;
+        this.player = player;
+        Timer timer = new Timer(duration, actionEvent -> {
+            if (this.player == 0)
+                model.effectListPlayerA.remove(this);
+            if (this.player == 1)
+                model.effectListPlayerB.remove(this);
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    @Override
+    public KeyEvent keyDown(KeyEvent e){
+        if (this.player == 0){
+            if (e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P2_ROTATE")) {
+                int n = new Random().nextInt(4);
+                for (int i = 0; i < n; i++)
+                    model.rotateCurrent(0,Direction.RIGHT);
                 return e;
             }
         }

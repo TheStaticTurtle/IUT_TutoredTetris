@@ -23,13 +23,8 @@ public class VersusController implements ActionListener, KeyListener {
     public VersusVue vue;
     AudioController audio;
 
-    private boolean invertedP0Controls;
-    private boolean invertedP1Controls;
-
     public VersusController(MainController mainCtrl, VersusModel model,AudioController audio) {
         this.model = model;
-        this.invertedP0Controls = false;
-        this.invertedP1Controls = false;
         this.mainCtrl = mainCtrl;
         this.audio = audio;
         
@@ -213,12 +208,5 @@ public class VersusController implements ActionListener, KeyListener {
             default:
                 break;
         }
-    }
-
-    public void invertControls(int player, boolean value){
-        if (player == 0)
-            this.invertedP0Controls = value;
-        if (player == 1)
-            this.invertedP1Controls = value;
     }
 }
