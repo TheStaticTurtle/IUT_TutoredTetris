@@ -108,7 +108,7 @@ class PieceModel {
 
 		if (name.equals("PieceO")) { return matrix; }
 
-		if(name.equals("PieceI")) {
+		if(name.equals("PieceI") || name.equals("PieceTLongA") || name.equals("PieceTLongB")) {
 			for (int i = 0; i < size; ++i)
 				for (int j = 0; j < size; ++j)
 					ret[i][j] = matrix[j][size - i -1]; //***
@@ -242,19 +242,152 @@ class PieceModel {
 
 	static PieceModel PieceStar = new PieceModel(
 			new BlockModel[][] {
-					{null                       , new BlockModel(COLOR_WHITE), null                       , null},
-					{new BlockModel(COLOR_WHITE), new BlockModel(COLOR_WHITE), new BlockModel(COLOR_WHITE), null},
-					{null                       , new BlockModel(COLOR_WHITE), null                       , null},
+					{null                       , new BlockModel(COLOR_OLIVE), null                       , null},
+					{new BlockModel(COLOR_OLIVE), new BlockModel(COLOR_OLIVE), new BlockModel(COLOR_OLIVE), null},
+					{null                       , new BlockModel(COLOR_OLIVE), null                       , null},
 					{null                       , null                       , null                       , null},
 
 			},
 			new Point(3,0),
 			new Point(1,2),
-			"PieceZ"
+			"PieceStar"
 	);
 
+	static PieceModel PieceU = new PieceModel(
+			new BlockModel[][] {
+					{new BlockModel(COLOR_CYAN), new BlockModel(COLOR_CYAN), null                       , null},
+					{null                      , new BlockModel(COLOR_CYAN), null                       , null},
+					{new BlockModel(COLOR_CYAN), new BlockModel(COLOR_CYAN), null                       , null},
+					{null                       , null                       , null                       , null},
+
+			},
+			new Point(3,0),
+			new Point(1,2),
+			"PieceU"
+	);
+	static PieceModel PieceBarre3 = new PieceModel(
+			new BlockModel[][] {
+					{ null                        , null                       , null                       , null},
+					{ new BlockModel(COLOR_ORANGERED) , new BlockModel(COLOR_ORANGERED), new BlockModel(COLOR_ORANGERED), null},
+					{ null                        , null                       , null                       , null},
+					{ null                        , null                       , null                       , null},
+
+			},
+			new Point(3,-1),
+			new Point(1,1),
+			"PieceBarre3"
+	);
+	static PieceModel PieceMiniL = new PieceModel(
+			new BlockModel[][] {
+					{ null                        , new BlockModel(COLOR_AQUA), null                       , null},
+					{ new BlockModel(COLOR_AQUA) , new BlockModel(COLOR_AQUA), null                       , null},
+					{ null                        , null                       , null                       , null},
+					{ null                        , null                       , null                       , null},
+
+			},
+			new Point(3,0),
+			new Point(1,1),
+			"PieceMiniL"
+	);
+	static PieceModel PieceTLongA = new PieceModel(
+			new BlockModel[][] {
+
+					{null					     	 , null				    		   , null					    	 , null},
+					{new BlockModel(COLOR_DARKPURPLE), new BlockModel(COLOR_DARKPURPLE), new BlockModel(COLOR_DARKPURPLE), new BlockModel(COLOR_DARKPURPLE)},
+					{null                            , new BlockModel(COLOR_DARKPURPLE), null                            , null},
+					{null					         , null				     		   , null					    	 , null}
+			},
+			new Point(3,-1),
+			new Point(3,1),
+			"PieceTLongA"
+	);
+	static PieceModel PieceTLongB = new PieceModel(
+			new BlockModel[][] {
+
+					{null						 , null						   , null						 , null},
+					{new BlockModel(COLOR_GOLD), new BlockModel(COLOR_GOLD), new BlockModel(COLOR_GOLD), new BlockModel(COLOR_GOLD)},
+					{null                        , null                        , new BlockModel(COLOR_GOLD), null},
+					{null						 , null						   , null						 , null}
+			},
+			new Point(3,-1),
+			new Point(3,1),
+			"PieceTLongB"
+	);
+	static PieceModel PieceBigL = new PieceModel(
+			new BlockModel[][] {
+					{ null                           , null                           , new BlockModel(COLOR_DARKGOLD) , null},
+					{ null                           , null                           , new BlockModel(COLOR_DARKGOLD) , null},
+					{ new BlockModel(COLOR_DARKGOLD) , new BlockModel(COLOR_DARKGOLD) , new BlockModel(COLOR_DARKGOLD) , null},
+					{ null                           , null                           , null                           , null},
+
+			},
+			new Point(3,0),
+			new Point(1,1),
+			"PieceBigL"
+	);
+
+	static PieceModel PieceBigT = new PieceModel(
+			new BlockModel[][] {
+					{new BlockModel(COLOR_DARKPINK), new BlockModel(COLOR_DARKPINK), new BlockModel(COLOR_DARKPINK), null},
+					{null                          , new BlockModel(COLOR_DARKPINK), null                          , null},
+					{null                          , new BlockModel(COLOR_DARKPINK), null                          , null},
+					{null					       , null						   , null		   			       , null}
+			},
+			new Point(3,0),
+			new Point(3,1),
+			"PieceBigT"
+	);
+
+	static PieceModel PieceBizzareA = new PieceModel(
+			new BlockModel[][] {
+					{null                           , null                           , new BlockModel(COLOR_LIGHTPINK), null},
+					{new BlockModel(COLOR_LIGHTPINK), new BlockModel(COLOR_LIGHTPINK), new BlockModel(COLOR_LIGHTPINK), null},
+					{null                           , new BlockModel(COLOR_LIGHTPINK), null                           , null},
+					{null					        , null				   		     , null		   			          , null}
+			},
+			new Point(3,0),
+			new Point(3,1),
+			"PieceBizzareA"
+	);
+
+	static PieceModel PieceBizzareB = new PieceModel(
+			new BlockModel[][] {
+					{new BlockModel(COLOR_GRAY), null                      , null                      , null},
+					{new BlockModel(COLOR_GRAY), new BlockModel(COLOR_GRAY), new BlockModel(COLOR_GRAY), null},
+					{null                      , new BlockModel(COLOR_GRAY), null                      , null},
+					{null					   , null				   	   , null		   			   , null}
+			},
+			new Point(3,0),
+			new Point(3,1),
+			"PieceBizzareB"
+	);
+
+	static PieceModel PieceBigZ = new PieceModel(
+			new BlockModel[][] {
+					{new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null                     , null},
+					{null                     , new BlockModel(COLOR_RED), null                     , null},
+					{null                     , new BlockModel(COLOR_RED), new BlockModel(COLOR_RED), null},
+					{null                     , null                     , null                     , null}
+			},
+			new Point(3,0),
+			new Point(3,1),
+			"PieceBigZ"
+	);
+	static PieceModel PieceBigS = new PieceModel(
+			new BlockModel[][]{
+					{null                       , new BlockModel(COLOR_GREEN), new BlockModel(COLOR_GREEN),                        null},
+					{null                       , new BlockModel(COLOR_GREEN),                        null,                        null},
+					{new BlockModel(COLOR_GREEN), new BlockModel(COLOR_GREEN),                        null,                        null},
+					{null                       ,                        null,                        null,                        null}
+			},
+			new Point(3,0),
+			new Point(3,1),
+			"PieceBigS"
+	);
+
+
 	static PieceModel[] PiecesLegacy = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.PieceI,PieceModel.PieceJ};
-	static PieceModel[] PiecesCustoms = new PieceModel[]{PieceStar};
+	static PieceModel[] PiecesCustoms = new PieceModel[]{PieceStar,PieceU,PieceBarre3,PieceMiniL,PieceTLongA,PieceTLongB,PieceBigL,PieceBigT,PieceBizzareA,PieceBizzareB,PieceBigZ,PieceBigS};
 
 	static public PieceModel[] getPieces() {
 		if(Config.getInstance().getBool("LEGACY_PIECES")) {
