@@ -257,7 +257,7 @@ public class Config {
 	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
-		p.put("CONFIG_VERSION"     ,"7");
+		p.put("CONFIG_VERSION"     ,"8");
 
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
@@ -279,6 +279,9 @@ public class Config {
 
 		p.put("SCORE_SOLO_BEST" ,"0");
 		p.put("SCORE_COOP_BEST" ,"0");
+
+		p.put("SCORE_SOLO_BEST_LEGACY" ,"0");
+		p.put("SCORE_COOP_BEST_LEGACY" ,"0");
 
 		p.put("WINDOW_HEIGHT"  ,"870");
 		p.put("WINDOW_WIDTH"   ,"640");

@@ -44,13 +44,23 @@ public class SoloController implements ActionListener, KeyListener {
 	 * @return the best score
 	 */
 	public int gameEnded() {
-		int bestScore = Config.getInstance().getInt("SCORE_SOLO_BEST");
-		if(model.currentScore > bestScore) {
-			bestScore = model.currentScore;
-			Config.getInstance().putInt("SCORE_SOLO_BEST",model.currentScore);
-			Config.getInstance().saveAsync();
+		if(Config.getInstance().getBool("LEGACY_PIECES")) {
+			int bestScore = Config.getInstance().getInt("SCORE_SOLO_BEST_LEGACY");
+			if(model.currentScore > bestScore) {
+				bestScore = model.currentScore;
+				Config.getInstance().putInt("SCORE_SOLO_BEST_LEGACY",model.currentScore);
+				Config.getInstance().saveAsync();
+			}
+			return bestScore;
+		} else {
+			int bestScore = Config.getInstance().getInt("SCORE_SOLO_BEST");
+			if(model.currentScore > bestScore) {
+				bestScore = model.currentScore;
+				Config.getInstance().putInt("SCORE_SOLO_BEST",model.currentScore);
+				Config.getInstance().saveAsync();
+			}
+			return bestScore;
 		}
-		return bestScore;
 	}
 
 	/**

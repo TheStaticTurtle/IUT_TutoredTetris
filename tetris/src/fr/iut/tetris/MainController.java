@@ -19,6 +19,7 @@ public class MainController implements ActionListener, KeyListener {
 	CoopModel coopModel;
 	VersusModel versusModel;
 	SettingsModel settingsModel;
+	HighScoresModel highScoreModel;
 	SettingsKeysModel settingsKeysModel;
 	
 	MenuController menuCtrl;
@@ -27,6 +28,7 @@ public class MainController implements ActionListener, KeyListener {
 	CoopController coopController;
 	VersusController versusController;
 	SettingsController settingsCtrl;
+	HighScoresController highScoreCtrl;
 	SettingsKeysController settingsKeysCtrl;
 	
 	MenuVue menuVue;
@@ -35,6 +37,7 @@ public class MainController implements ActionListener, KeyListener {
 	CoopVue coopVue;
 	VersusVue versusVue;
 	SettingsVue settingsVue;
+	HighScoresVue highScoreVue;
 	SettingsKeysVue settingsKeysVue;
 
 	AudioController audio;
@@ -50,16 +53,19 @@ public class MainController implements ActionListener, KeyListener {
 
 		menuModel = new MenuModel();
 		creditModel = new CreditModel();
+		highScoreModel = new HighScoresModel();
 		settingsModel = new SettingsModel();
 		settingsKeysModel = new SettingsKeysModel();
 		
 		menuCtrl = new MenuController(this, menuModel, audio);
 		creditCtrl = new CreditController(this, creditModel, audio);
+		highScoreCtrl = new HighScoresController(this, highScoreModel, audio);
 		settingsCtrl = new SettingsController(this, settingsModel,settingsVue, audio);
 		settingsKeysCtrl = new SettingsKeysController(this, settingsKeysModel,settingsKeysVue, audio);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
 		creditVue = new CreditVue(creditModel, creditCtrl);
+		highScoreVue = new HighScoresVue(highScoreModel, highScoreCtrl);
 		settingsVue = new SettingsVue(settingsModel, settingsCtrl);
 		settingsKeysVue = new SettingsKeysVue(settingsKeysModel, settingsKeysCtrl);
 		settingsCtrl.setVue(settingsVue);
@@ -108,6 +114,11 @@ public class MainController implements ActionListener, KeyListener {
 			case "CLICK:MENU:CREDIT":
 				creditVue = new CreditVue(creditModel, creditCtrl);
 				mainVue.setCurrentVue(creditVue);
+				break;
+
+			case "CLICK:MENU:HIGHSCORE":
+				highScoreVue = new HighScoresVue(highScoreModel, highScoreCtrl);
+				mainVue.setCurrentVue(highScoreVue);
 				break;
 
 			case "CLICK:MENU:SETTINGS":

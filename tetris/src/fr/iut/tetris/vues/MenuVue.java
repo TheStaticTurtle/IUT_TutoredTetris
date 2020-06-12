@@ -33,6 +33,7 @@ public class MenuVue extends JPanel  {
 		JButton soloButton = new MenuButton("Solo",Color.YELLOW,Color.WHITE,ctrl);
 		JButton coopButton = new MenuButton("Coop",Color.RED,Color.WHITE,ctrl);
 		JButton versusButton = new MenuButton("Versus",Color.ORANGE,Color.WHITE,ctrl);
+		JButton highScoreButton = new MenuButton("Highscores",Color.GREEN,Color.WHITE,ctrl);
 		JButton settingsButton = new MenuButton("Settings",Color.CYAN,Color.WHITE,ctrl);
 
 		soloButton.addActionListener(ctrl);
@@ -43,6 +44,9 @@ public class MenuVue extends JPanel  {
 
 		versusButton.addActionListener(ctrl);
 		versusButton.setActionCommand("CLICK:MENU:VERSUS");
+
+		highScoreButton.addActionListener(ctrl);
+		highScoreButton.setActionCommand("CLICK:MENU:HIGHSCORE");
 
 		settingsButton.addActionListener(ctrl);
 		settingsButton.setActionCommand("CLICK:MENU:SETTINGS");
@@ -59,6 +63,7 @@ public class MenuVue extends JPanel  {
 		soloButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		coopButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		versusButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		highScoreButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		settingsButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		quitButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		creditButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
@@ -88,6 +93,8 @@ public class MenuVue extends JPanel  {
 		mainPanel.add( new Spacer());
 		mainPanel.add(soloButton);
 		mainPanel.add(soloCoopPanel);
+		mainPanel.add(highScoreButton);
+		mainPanel.add( new Spacer());
 		mainPanel.add(settingsButton);
 		mainPanel.add( new Spacer());
 		mainPanel.add(quitCreditsPanel);

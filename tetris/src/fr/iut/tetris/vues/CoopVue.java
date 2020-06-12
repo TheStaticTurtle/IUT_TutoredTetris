@@ -169,7 +169,6 @@ class GamePanelCoop extends JPanel {
 
 
 
-
 		setLayout(layout);
 
 		Dimension t = mainPanel.getPreferredSize();
@@ -188,7 +187,6 @@ class GamePanelCoop extends JPanel {
 
 		nextPiecePanelPlayerA.resetSize((int)(squareSize/2));
 		nextPiecePanelPlayerB.resetSize((int)(squareSize/2));
-
 
 		layout.putConstraint(SpringLayout.NORTH, labelNextPieceB, squareSize*4, SpringLayout.SOUTH, nextPiecePanelPlayerA);
 		layout.putConstraint(SpringLayout.WEST, labelNextPieceB, 10, SpringLayout.EAST, mainPanel);
