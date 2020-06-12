@@ -167,11 +167,8 @@ class GamePanelCoop extends JPanel {
 		layout.putConstraint(SpringLayout.NORTH, nextPiecePanelPlayerA, 10, SpringLayout.SOUTH, labelNextPieceA);
 		layout.putConstraint(SpringLayout.WEST, nextPiecePanelPlayerA, 10, SpringLayout.EAST, mainPanel);
 
-		layout.putConstraint(SpringLayout.NORTH, labelNextPieceB, 150, SpringLayout.SOUTH, nextPiecePanelPlayerA);
-		layout.putConstraint(SpringLayout.WEST, labelNextPieceB, 10, SpringLayout.EAST, mainPanel);
 
-		layout.putConstraint(SpringLayout.NORTH, nextPiecePanelPlayerB, 10, SpringLayout.SOUTH, labelNextPieceB);
-		layout.putConstraint(SpringLayout.WEST, nextPiecePanelPlayerB, 10, SpringLayout.EAST, mainPanel);
+
 
 		setLayout(layout);
 
@@ -191,6 +188,14 @@ class GamePanelCoop extends JPanel {
 
 		nextPiecePanelPlayerA.resetSize((int)(squareSize/2));
 		nextPiecePanelPlayerB.resetSize((int)(squareSize/2));
+
+
+		layout.putConstraint(SpringLayout.NORTH, labelNextPieceB, squareSize*4, SpringLayout.SOUTH, nextPiecePanelPlayerA);
+		layout.putConstraint(SpringLayout.WEST, labelNextPieceB, 10, SpringLayout.EAST, mainPanel);
+
+		layout.putConstraint(SpringLayout.NORTH, nextPiecePanelPlayerB, 10, SpringLayout.SOUTH, labelNextPieceB);
+		layout.putConstraint(SpringLayout.WEST, nextPiecePanelPlayerB, 10, SpringLayout.EAST, mainPanel);
+
 		recalculate();
 	}
 
