@@ -1,6 +1,7 @@
 package fr.iut.tetris.controllers;
 
 import fr.iut.tetris.Config;
+import fr.iut.tetris.Discord;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.enums.Direction;
@@ -19,12 +20,14 @@ public class CoopController implements ActionListener, KeyListener {
 	CoopModel model;
 	public CoopVue vue;
 	AudioController audio;
+	Discord discord;
 
-	public CoopController(MainController mainCtrl, CoopModel model,AudioController audio) {
+	public CoopController(MainController mainCtrl, CoopModel model, AudioController audio, Discord discord) {
 		this.model = model;
 		model.setCtrl(this);
 		this.mainCtrl = mainCtrl;
 		this.audio = audio;
+		this.discord = discord;
 
 		CoopController me = this;
 		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
@@ -139,6 +142,8 @@ public class CoopController implements ActionListener, KeyListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		this.discord.setIngameStatus(model.currentScore,-1,"COOP");
+
 		Log.error(this,e);
 		switch(e.getActionCommand() ) {
 			case "GAME:FOURLINES_COMPLETE":

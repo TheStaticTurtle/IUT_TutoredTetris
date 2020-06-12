@@ -42,9 +42,11 @@ public class MainController implements ActionListener, KeyListener {
 
 	AudioController audio;
 	Config config;
+	Discord discord;
 
 	public MainController() {
 		config = new Config(); //Need's to be instentiated first in order to be able to use Config.getInstance() on other methods
+		discord = new Discord();
 
 		audio = new AudioController();
 		audio.setMusicTrack(getClass().getResource("/res/sounds/music_calm.wav"));
@@ -85,7 +87,7 @@ public class MainController implements ActionListener, KeyListener {
 
 			case "CLICK:MENU:SOLO":
 				soloModel = new SoloModel();
-				soloCtrl = new SoloController(this, soloModel,audio);
+				soloCtrl = new SoloController(this, soloModel,audio,discord);
 				soloVue = new SoloVue(soloModel, soloCtrl);
 				soloCtrl.setVue(soloVue);
 
@@ -94,7 +96,7 @@ public class MainController implements ActionListener, KeyListener {
 
 			case "CLICK:MENU:COOP":
 				coopModel = new CoopModel();
-				coopController = new CoopController(this, coopModel,audio);
+				coopController = new CoopController(this, coopModel,audio,discord);
 				coopVue = new CoopVue(coopModel, coopController);
 				coopController.setVue(coopVue);
 
@@ -103,7 +105,7 @@ public class MainController implements ActionListener, KeyListener {
 
 			case "CLICK:MENU:VERSUS":
 				versusModel = new VersusModel();
-				versusController = new VersusController(this, versusModel,audio);
+				versusController = new VersusController(this, versusModel,audio,discord);
 				versusVue = new VersusVue(versusModel, versusController);
 				versusController.setVue(versusVue);
 
@@ -114,11 +116,13 @@ public class MainController implements ActionListener, KeyListener {
 			case "CLICK:MENU:CREDIT":
 				creditVue = new CreditVue(creditModel, creditCtrl);
 				mainVue.setCurrentVue(creditVue);
+				discord.setInMenuStatus();
 				break;
 
 			case "CLICK:MENU:HIGHSCORE":
 				highScoreVue = new HighScoresVue(highScoreModel, highScoreCtrl);
 				mainVue.setCurrentVue(highScoreVue);
+				discord.setInMenuStatus();
 				break;
 
 			case "CLICK:MENU:SETTINGS":
@@ -129,6 +133,7 @@ public class MainController implements ActionListener, KeyListener {
 				mainVue.setCurrentVue(settingsVue);
 				settingsCtrl.setVue(settingsVue);
 				settingsCtrl.enteredVue();
+				discord.setInMenuStatus();
 				break;
 
 			case "CLICK:MENU:SETTINGS:KEYS":
@@ -138,6 +143,7 @@ public class MainController implements ActionListener, KeyListener {
 				mainVue.setCurrentVue(settingsKeysVue);
 				settingsKeysCtrl.setVue(settingsKeysVue);
 				//settingsKeysCtrl.enteredVue();
+				discord.setInMenuStatus();
 				break;
 
 			case "CLICK:BACK":
@@ -155,6 +161,7 @@ public class MainController implements ActionListener, KeyListener {
 				settingsKeysVue = null;
 				menuVue = new MenuVue(menuModel, menuCtrl);
 				mainVue.setCurrentVue(menuVue);
+				discord.setInMenuStatus();
 				break;
 
 			case "CLICK:MENU:QUIT":

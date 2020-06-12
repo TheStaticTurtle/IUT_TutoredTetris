@@ -1,6 +1,7 @@
 package fr.iut.tetris.controllers;
 
 import fr.iut.tetris.Config;
+import fr.iut.tetris.Discord;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.enums.Direction;
@@ -22,11 +23,13 @@ public class VersusController implements ActionListener, KeyListener {
     VersusModel model;
     public VersusVue vue;
     AudioController audio;
+    Discord discord;
 
-    public VersusController(MainController mainCtrl, VersusModel model,AudioController audio) {
+    public VersusController(MainController mainCtrl, VersusModel model, AudioController audio, Discord discord) {
         this.model = model;
         this.mainCtrl = mainCtrl;
         this.audio = audio;
+        this.discord = discord;
         
         model.setCtrl(this);
 
@@ -103,6 +106,7 @@ public class VersusController implements ActionListener, KeyListener {
      */
     @Override
     public void keyPressed(KeyEvent e) {
+        this.discord.setIngameStatus(model.currentScorePlayerA,model.currentScorePlayerB,"VERSUS");
 
         for (EffectModel m: model.effectListPlayerA) {
             e = m.keyDown(e);
