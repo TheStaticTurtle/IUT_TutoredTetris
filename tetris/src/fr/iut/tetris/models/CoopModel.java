@@ -147,6 +147,8 @@ public class CoopModel{
 			int firstLineY = 0;
 			Integer lineCount = 0;
 
+			currentScore += 4;
+
 			for (int y = grid.length-1; y >= 0; y--) {
 				boolean isLineFull = true;
 				for (BlockModel block: grid[y]) {

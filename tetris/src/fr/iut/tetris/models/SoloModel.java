@@ -118,6 +118,8 @@ public class SoloModel {
 			int firstLineY = 0;
 			Integer lineCount = 0;
 
+			currentScore += 4;
+
 			for (int y = grid.length-1; y >= 0; y--) {
 				boolean isLineFull = true;
 				for (BlockModel block: grid[y]) {
@@ -144,12 +146,11 @@ public class SoloModel {
 					}
 					// Line has fallen down recheck to see if there is more lines but tel the function to spit out an integer instead of the LineCompleted enum
 					lineCount += (Integer)checkForFullLineAndRemoveIt(false);
-					if(fallSpeed-currentScore > 250) {
-						fallSpeed -= currentScore;
+					if(currentScore < 10) {
+						fallSpeed = 1000;
 						Log.debug(this, "FallSpeed = " + this.fallSpeed);
-					}
-					else {
-						fallSpeed = 250;
+					} else {
+						fallSpeed = (int)10000/currentScore;
 					}
 					break;
 				}
