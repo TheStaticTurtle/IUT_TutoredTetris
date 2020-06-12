@@ -345,9 +345,6 @@ class CheckBoxIcon implements Icon {
 		this.backGroundColor = backGroundColor;
 	}
 
-	public void getHeight() {
-
-	}
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 		int borderSize = Config.getInstance().getInt("BORDER_SIZES");
 		int spaceing = 5;
@@ -894,6 +891,7 @@ class MovingStarsAnimation extends JPanel {
 
 
 		img = Config.getInstance().getRessourceImage("/res/star.png");
+		if(Config.getInstance().getInt("EASTER")==1) img = Common.dye(Common.toBufferedImage(img),Color.MAGENTA);
 
 		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
 		tx.translate(-img.getWidth(null), 0);
