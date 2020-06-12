@@ -203,7 +203,7 @@ class GamePanelVersus extends JPanel {
             layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.SOUTH, labelNextPiece);
             layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.WEST, this);
 
-            layout.putConstraint(SpringLayout.NORTH, effectsPanel, 150, SpringLayout.SOUTH, nextPiecePanel);
+            //layout.putConstraint(SpringLayout.NORTH, effectsPanel, 150, SpringLayout.SOUTH, nextPiecePanel);
             layout.putConstraint(SpringLayout.WEST, effectsPanel, 10, SpringLayout.WEST, this);
             layout.putConstraint(SpringLayout.EAST, effectsPanel, -10, SpringLayout.WEST, mainPanel);
         }
@@ -222,7 +222,7 @@ class GamePanelVersus extends JPanel {
             layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.SOUTH, labelNextPiece);
             layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
 
-            layout.putConstraint(SpringLayout.NORTH, effectsPanel, 150, SpringLayout.SOUTH, nextPiecePanel);
+            //layout.putConstraint(SpringLayout.NORTH, effectsPanel, 10, SpringLayout.SOUTH, nextPiecePanel);
             layout.putConstraint(SpringLayout.WEST, effectsPanel, 10, SpringLayout.EAST, mainPanel);
             layout.putConstraint(SpringLayout.EAST, effectsPanel, -10, SpringLayout.EAST, this);
         }
@@ -244,6 +244,9 @@ class GamePanelVersus extends JPanel {
         mainPanel.setPreferredSize(t);
 
         nextPiecePanel.resetSize((int)(squareSize/2));
+
+        layout.putConstraint(SpringLayout.NORTH, effectsPanel, squareSize*4, SpringLayout.SOUTH, nextPiecePanel);
+
         recalculate();
     }
 
