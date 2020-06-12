@@ -39,7 +39,7 @@ public class VersusModel {
         nextPiecePlayerA = getRandomPiece(0);
         nextPiecePlayerB = getRandomPiece(1);
 
-        effectListPlayerA.add(EffectModel.malusSpeed);
+        effectListPlayerA.add(new MalusSpeed());
     }
 
     public void setCtrl(VersusController ctrl) {
