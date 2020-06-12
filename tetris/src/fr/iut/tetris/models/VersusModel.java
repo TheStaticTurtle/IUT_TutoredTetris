@@ -28,6 +28,8 @@ public class VersusModel {
     public PieceModel fallingPiecePlayerB = null;
     public PieceModel nextPiecePlayerA;
     public PieceModel nextPiecePlayerB;
+    public boolean hideNextPieceA;
+    public boolean hideNextPieceB;
     VersusController ctrl;
     public int bestScore = 0;
     public int currentScorePlayerA = 0;
@@ -44,6 +46,8 @@ public class VersusModel {
         nextPiecePlayerB = getRandomPiece(1);
         nextEffectPlayerA = effectStep;
         nextEffectPlayerB = effectStep;
+        hideNextPieceA = false;
+        hideNextPieceB = false;
     }
 
     public void setCtrl(VersusController ctrl) {
@@ -393,42 +397,50 @@ public class VersusModel {
 
     private void checkEffect() {
         if (currentScorePlayerA >= nextEffectPlayerA) {
-            int n = rand.nextInt(4);
+            int n = rand.nextInt(6);
             switch (n) {
-                case 0:
+	            case 0:
+	                effectListPlayerB.add(new HideNextPiece(this, 1, 20 * 1000));
+	                break;
+                case 1:
                     effectListPlayerA.add(new RandomLine(this, 0));
                     break;
-                case 1:
+                case 2:
                     effectListPlayerA.add(new BonusSpeed(this, 0, 10000));
                     break;
-                case 2:
+                case 3:
                     effectListPlayerB.add(new InvertControls(this, 1, 10000));
                     break;
-                case 3:
+                case 4:
                     effectListPlayerB.add(new MalusSpeed(this, 1, 10000));
                     break;
-                case 4:
+                case 5:
                     effectListPlayerB.add(new RandomRotation(this, 1, 10000));
+                    break;
             }
             nextEffectPlayerA += effectStep;
         }
         if (currentScorePlayerB >= nextEffectPlayerB) {
-            int n = rand.nextInt(4);
+            int n = rand.nextInt(6);
             switch (n) {
-                case 0:
+	            case 0:
+	                effectListPlayerA.add(new HideNextPiece(this, 0, 20 * 1000));
+	                break;
+                case 1:
                     effectListPlayerB.add(new RandomLine(this, 1));
                     break;
-                case 1:
+                case 2:
                     effectListPlayerB.add(new BonusSpeed(this, 1, 10000));
                     break;
-                case 2:
+                case 3:
                     effectListPlayerA.add(new InvertControls(this, 0, 10000));
                     break;
-                case 3:
+                case 4:
                     effectListPlayerA.add(new MalusSpeed(this, 0, 10000));
                     break;
-                case 4:
+                case 5:
                     effectListPlayerA.add(new RandomRotation(this, 0, 10000));
+                    break;
             }
             nextEffectPlayerB += effectStep;
         }

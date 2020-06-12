@@ -218,6 +218,38 @@ class RandomRotation extends EffectModel {
 }
 
 
+
+
+
+class HideNextPiece extends EffectModel {
+	
+	public HideNextPiece(VersusModel model, int player, int duration) {
+        super("/res/effects/malus_blind.png");
+        
+        if (player == 0)
+            model.hideNextPieceA = true;
+        if (player == 1)
+            model.hideNextPieceB = true;
+        
+        Timer timer = new Timer(duration, actionEvent -> {
+            if (player == 0){
+            	model.effectListPlayerA.remove(this);
+                model.hideNextPieceA = false;
+            }
+            if (player == 1){
+            	model.effectListPlayerB.remove(this);
+                model.hideNextPieceB = false;
+            } 
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+}
+
+
+
+
 public class EffectModel {
     public String imagePath;
     public BufferedImage image;

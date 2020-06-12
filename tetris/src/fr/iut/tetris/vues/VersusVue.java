@@ -1,7 +1,6 @@
 package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.models.EffectModel;
 import fr.iut.tetris.models.VersusModel;
 import fr.iut.tetris.controllers.VersusController;
 import fr.iut.tetris.enums.GameState;
@@ -92,8 +91,6 @@ public class VersusVue extends JPanel {
 
 class GamePanelVersus extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	
 	VersusModel model;
     int squareSize = 40;
     BufferedImage img = null;
@@ -261,7 +258,8 @@ class GamePanelVersus extends JPanel {
         if(model.gameState==GameState.PLAYING) {
             if (this.player == 0) {
                 try {
-                    nextPiecePanel.recalulate(model.nextPiecePlayerA);
+                    nextPiecePanel.recalulate( model.hideNextPieceA?null:model.nextPiecePlayerA );
+                    
                     BlockModel[][] grid = model.computeMixedGrid(0);
 
                     for (int y = 0; y < grid.length; y++) {
@@ -280,7 +278,7 @@ class GamePanelVersus extends JPanel {
             }
             else {
                 try {
-                    nextPiecePanel.recalulate(model.nextPiecePlayerB);
+                	nextPiecePanel.recalulate( model.hideNextPieceB?null:model.nextPiecePlayerB );
                     BlockModel[][] grid = model.computeMixedGrid(1);
 
                     for (int y = 0; y < grid.length; y++) {
