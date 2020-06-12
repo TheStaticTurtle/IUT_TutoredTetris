@@ -186,6 +186,14 @@ class RandomRotation extends EffectModel {
                 return e;
             }
         }
+        if (this.player == 1){
+            if (e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE")) {
+                int n = new Random().nextInt(4);
+                for (int i = 0; i < n; i++)
+                    model.rotateCurrent(1,Direction.RIGHT);
+                return e;
+            }
+        }
         return e;
     }
 }
