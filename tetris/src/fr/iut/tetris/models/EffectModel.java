@@ -7,11 +7,14 @@ import fr.iut.tetris.enums.Direction;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
+import fr.iut.tetris.vues.Common;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 class BonusSpeed extends EffectModel {
@@ -193,9 +196,11 @@ class RandomRotation extends EffectModel {
 
 public class EffectModel {
     public String imagePath;
+    public BufferedImage image;
 
     public EffectModel(String imagePath) {
         this.imagePath = imagePath;
+        this.image = Config.getInstance().getRessourceImage(imagePath);
     }
 
     public int speedFunction(int currentSpeed) {

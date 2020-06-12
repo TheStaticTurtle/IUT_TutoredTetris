@@ -764,6 +764,15 @@ class EffectImage extends JPanel {
 		setOpaque(false);
 	}
 
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+
+	public EffectImage(BufferedImage image) {
+		this.image = image;
+		setOpaque(false);
+	}
+
 	/*@Override
 	public void setPreferredSize(Dimension size) {
 		super.setPreferredSize(size);

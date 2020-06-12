@@ -299,14 +299,35 @@ class GamePanelVersus extends JPanel {
             }
         }
 
-        effectsPanel.removeAll();
+
+        effectsPanel.setIgnoreRepaint(true);
+
         if(player == 0) {
-            for (EffectModel m: model.effectListPlayerA) {
-                effectsPanel.add(new EffectImage(m.imagePath));
+            int i;
+            for (i = 0; i < model.effectListPlayerA.size(); i++) {
+                if(i >= effectsPanel.getComponents().length) {
+                    effectsPanel.add(new EffectImage(model.effectListPlayerA.get(i).image));
+                }
+                ((EffectImage)effectsPanel.getComponent(i)).setImage(model.effectListPlayerA.get(i).image);
+            }
+            for (;i<effectsPanel.getComponents().length;i++) {
+                effectsPanel.remove(i);
             }
         } else {
-
+            int i;
+            for (i = 0; i < model.effectListPlayerB.size(); i++) {
+                if(i >= effectsPanel.getComponents().length) {
+                    effectsPanel.add(new EffectImage(model.effectListPlayerB.get(i).image));
+                }
+                ((EffectImage)effectsPanel.getComponent(i)).setImage(model.effectListPlayerB.get(i).image);
+            }
+            for (;i<effectsPanel.getComponents().length;i++) {
+                effectsPanel.remove(i);
+            }
         }
+
+        effectsPanel.setIgnoreRepaint(false);
+        effectsPanel.repaint();
 
         setIgnoreRepaint(false);
         repaint();
