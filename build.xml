@@ -1,0 +1,38 @@
+<project>
+
+<target name="clean">
+    <delete dir="./out"/>
+</target>
+
+<target name="build">
+	<mkdir dir="./out"/>          
+	<javac srcdir="./tetris/src" destdir="./out/">   
+		<classpath>
+			<pathelement path="./tetris/libs/discord-rpc.jar"/>
+		</classpath>
+	</javac>
+	<mkdir dir="./out/res"/>          
+	<copy todir="out/res">
+		<fileset dir="./tetris/src/res">
+		</fileset>
+	</copy>
+</target>
+
+<target name="jar">	
+	<jar destfile="./Tetris.jar" basedir="./out">
+		<zipgroupfileset dir="./tetris/libs" includes="discord-rpc.jar" />
+		<zipfileset dir="./tetris/src/res" includes="*"/>
+		
+		<manifest>
+			<attribute name="Main" value="main"/>
+			<attribute name="Main-Class" value="fr.iut.tetris.Main"/>
+		</manifest>
+	</jar>
+</target>
+
+<target name="run">
+	<java classpath="Tetris.jar:tetris/libs/discord-rpc.jar" classname="fr.iut.tetris.Main" fork="true">  
+	</java> 
+</target>
+
+</project>
