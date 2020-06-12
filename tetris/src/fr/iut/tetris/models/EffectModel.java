@@ -18,8 +18,16 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 class BonusSpeed extends EffectModel {
-    public BonusSpeed() {
+    public BonusSpeed(VersusModel model, int player, int duration) {
         super("/res/effects/bonus_speed.png");
+        Timer timer = new Timer(duration, actionEvent -> {
+            if (player == 0)
+                model.effectListPlayerA.remove(this);
+            if (player == 1)
+                model.effectListPlayerB.remove(this);
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
     @Override
@@ -29,8 +37,16 @@ class BonusSpeed extends EffectModel {
 }
 
 class MalusSpeed extends EffectModel {
-    public MalusSpeed() {
+    public MalusSpeed(VersusModel model, int player, int duration) {
         super("/res/effects/malus_speed.png");
+        Timer timer = new Timer(duration, actionEvent -> {
+            if (player == 0)
+                model.effectListPlayerA.remove(this);
+            if (player == 1)
+                model.effectListPlayerB.remove(this);
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
     @Override
