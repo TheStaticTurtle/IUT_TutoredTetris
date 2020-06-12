@@ -233,12 +233,12 @@ class HideNextPiece extends EffectModel {
         
         Timer timer = new Timer(duration, actionEvent -> {
             if (player == 0){
-            	model.effectListPlayerA.remove(this);
                 model.hideNextPieceA = false;
+            	model.effectListPlayerA.remove(this);
             }
             if (player == 1){
-            	model.effectListPlayerB.remove(this);
                 model.hideNextPieceB = false;
+            	model.effectListPlayerB.remove(this);
             } 
         });
         timer.setRepeats(false);
