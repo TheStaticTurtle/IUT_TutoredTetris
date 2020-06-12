@@ -22,6 +22,27 @@ class MalusSpeed extends EffectModel {
     }
 }
 
+class RandomLine extends EffectModel {
+    VersusModel model;
+    RandomLine tmp;
+    int player;
+    public RandomLine(VersusModel model, int player) {
+        super("/res/effects/bonus_delete_line.png");
+        this.model = model;
+        this.player = player;
+        this.tmp = this;
+    }
+
+    void doEffect() {
+        if(player==0){
+            this.model.effectListPlayerA.remove(tmp);
+        }
+        if(player==1){
+            this.model.effectListPlayerB.remove(tmp);
+        }
+    }
+}
+
 
 public class EffectModel {
 
