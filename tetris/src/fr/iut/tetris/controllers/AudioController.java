@@ -71,22 +71,26 @@ public class AudioController {
 		Runnable r = new Runnable() {
 			public void run() {
 				try {
-					AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-					Log.info(this,"Started bg music playing: "+file.getFile());
+					if(file == null) {
+						Log.error(this,"Failed to set music");
+					} else {
+						AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+						Log.info(this,"Started bg music playing: "+file.getFile());
 
-					Clip clip = AudioSystem.getClip(null);
-					clip.open(audioInputStream);
+						Clip clip = AudioSystem.getClip(null);
+						clip.open(audioInputStream);
 
-					FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+						FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
 
-					clip.loop(Clip.LOOP_CONTINUOUSLY);
-					clip.start();
-					while (! Thread.currentThread().isInterrupted()) {
-						ctrl.setValue(musicLineVolumeControl);
+						clip.loop(Clip.LOOP_CONTINUOUSLY);
+						clip.start();
+						while (! Thread.currentThread().isInterrupted()) {
+							ctrl.setValue(musicLineVolumeControl);
+						}
+						clip.stop();
+
+						Log.info(this,"Stop playing bg music");
 					}
-					clip.stop();
-
-					Log.info(this,"Stop playing bg music");
 				} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
 					e.printStackTrace();
 				}

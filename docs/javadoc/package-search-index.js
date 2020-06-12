@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"fr.iut.tetris"},{"l":"fr.iut.tetris.controllers"},{"l":"fr.iut.tetris.models"},{"l":"fr.iut.tetris.vues"}]
