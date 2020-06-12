@@ -34,7 +34,7 @@ public class VersusModel {
     public int currentScorePlayerB = 0;
     public int nextEffectPlayerA;
     public int nextEffectPlayerB;
-    public final int effectStep = 200;
+    public final int effectStep = 80;
     public EffectModel[] effectsList;
     public String winner;
     Random rand = new Random();
