@@ -38,6 +38,9 @@ public class VersusModel {
     public VersusModel() {
         nextPiecePlayerA = getRandomPiece(0);
         nextPiecePlayerB = getRandomPiece(1);
+
+        effectListPlayerA.add(new MalusSpeed());
+        effectListPlayerA.add(new RandomLine(this,0));
     }
 
     public void setCtrl(VersusController ctrl) {

@@ -1,6 +1,14 @@
 package fr.iut.tetris.models;
 
 import fr.iut.tetris.controllers.VersusController;
+import fr.iut.tetris.Log;
+import fr.iut.tetris.exceptions.OverlappedPieceException;
+import fr.iut.tetris.exceptions.PieceOutOfBoardException;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Random;
 
 class BonusSpeed extends EffectModel {
     public BonusSpeed() {
@@ -33,14 +41,71 @@ class RandomLine extends EffectModel {
         this.model = model;
         this.player = player;
         this.tmp = this;
+
+        Timer timer = new Timer(new Random().nextInt(2000)+2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                doEffect();
+            }
+        });
+        timer.setRepeats(false); // Only execute once
+        timer.start(); // Go go go!
     }
 
     void doEffect() {
+        BlockModel[][] models;
         if(player==0){
             this.model.effectListPlayerA.remove(tmp);
-        }
-        if(player==1){
+            try {
+                models = this.model.computeMixedGrid(0);
+            } catch (OverlappedPieceException | PieceOutOfBoardException e) {
+                e.printStackTrace();
+                models = null;
+            }
+        } else {
             this.model.effectListPlayerB.remove(tmp);
+            try {
+                models = this.model.computeMixedGrid(1);
+            } catch (OverlappedPieceException | PieceOutOfBoardException e) {
+                e.printStackTrace();
+                models = null;
+            }
+        }
+
+        if(models != null) {
+            int maxY = models.length - 1;
+            for (int y = models.length-1; y >= 0 ; y--) {
+                boolean lineEmpty = true;
+                for (BlockModel m: models[y]) {
+                    if(m!=null) {
+                        maxY = y;
+                        lineEmpty = false;
+                        break;
+                    }
+                }
+                if(lineEmpty) break;
+            }
+
+            int y = new Random().nextInt(((model.height-1) - maxY) + 1) + maxY;
+
+
+            for (BlockModel block: models[y]) {
+                models[y] = null;
+                if (player == 0) { model.pieceListPlayerA.remove(block); }
+                else { model.pieceListPlayerB.remove(block); }
+            }
+
+            for (int fally = y-1; fally >= 0; fally--) {
+                for (BlockModel block: models[fally]) {
+                    if(block != null) {
+                        Log.debug(this, "Falling line " + fally + " to "+(fally+1)+" (x:"+block.standAlonePos.x+")");
+                        block.standAlonePos.y = Math.min( (fally+1) , model.height - 1);
+                    }
+                }
+            }
+
+            this.model.checkForFullLineAndRemoveIt(true,player);
+            Log.debug(this,maxY);
         }
     }
 }
