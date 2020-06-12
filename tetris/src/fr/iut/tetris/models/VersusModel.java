@@ -41,7 +41,7 @@ public class VersusModel {
 
         effectListPlayerA.add(new MalusSpeed());
         effectListPlayerA.add(new RandomLine(this,0));
-        effectListPlayerA.add(new RandomRotation(this,0,3000));
+        effectListPlayerB.add(new RandomRotation(this,1,3000));
     }
 
     public void setCtrl(VersusController ctrl) {
