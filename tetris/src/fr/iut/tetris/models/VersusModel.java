@@ -71,7 +71,7 @@ public class VersusModel {
      */
     public PieceModel getRandomPiece(int player) { //0=PlayerA 1=PlayerB
         Log.info(this,"Spawned a new random piece");
-        return ((PieceModel)getRandomElement(PieceModel.getPieces(),rand)).clone();
+        return ((PieceModel) getRandomElement(PieceModel.getPieces(),rand)).clone();
     }
 
     /**
@@ -446,7 +446,7 @@ public class VersusModel {
                     break;
                 }
             }
-            int n = rand.nextInt(7);
+            int n = 7; // rand.nextInt(8);
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:GOT_BOUNS"));
             switch (n) {
 	            case 0:
@@ -489,6 +489,12 @@ public class VersusModel {
                     if (!alreadyHasMalus)
                         effectListPlayerA.add(new RemoveMalus());
                     break;
+                case 7:
+	                if (ennemyShieldIndex != -1)
+	                    effectListPlayerB.remove(ennemyShieldIndex);
+	                else
+	                    effectListPlayerB.add(new RandomBlock(this, 0));
+	                break;
             }
             nextEffectPlayerA += effectStep;
         }
@@ -500,7 +506,7 @@ public class VersusModel {
                     break;
                 }
             }
-            int n = rand.nextInt(7);
+            int n = 7; //rand.nextInt(8);
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:GOT_BOUNS"));
             switch (n) {
 	            case 0:
@@ -542,7 +548,12 @@ public class VersusModel {
                         }
                     if (!alreadyHasMalus)
                         effectListPlayerB.add(new RemoveMalus());
-                    break;
+                    break;          
+                case 7:
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerA.add(new RandomBlock(this, 0));         
             }
             nextEffectPlayerB += effectStep;
         }

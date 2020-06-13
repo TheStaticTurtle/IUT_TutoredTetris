@@ -8,10 +8,13 @@ import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 
 import javax.swing.*;
+
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Random;
 
 class BonusSpeed extends EffectModel {
@@ -281,6 +284,92 @@ class HideNextPiece extends EffectModel {
     }
 
 }
+
+
+
+class RandomBlock extends EffectModel {
+    VersusModel model;
+    RandomBlock tmp;
+    int player;
+    
+    public RandomBlock(VersusModel model, int player) {
+        super("/res/effects/malus_random_block.png");
+        this.model = model;
+        this.player = player;
+        this.tmp = this;
+
+        Timer timer = new Timer(new Random().nextInt(2000)+2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                doEffect();
+            }
+        });
+        timer.setRepeats(false); // Only execute once
+        timer.start(); // Go go go!
+    }
+
+	void doEffect() {
+		
+        BlockModel[][] models;
+        if(player == 0){
+            this.model.effectListPlayerA.remove(tmp);
+            try {
+                models = this.model.computeMixedGrid(0, false);
+            } catch (OverlappedPieceException | PieceOutOfBoardException e) {
+                e.printStackTrace();
+                models = null;
+            }
+        } else {
+            this.model.effectListPlayerB.remove(tmp);
+            try {
+                models = this.model.computeMixedGrid(1, false);
+            } catch (OverlappedPieceException | PieceOutOfBoardException e) {
+                e.printStackTrace();
+                models = null;
+            }
+        }
+
+        if(models != null) {
+
+        	Point spawn = new Point(0, 0);
+	
+        	for (int y = models.length-1; y >= 0 ; y--) {
+        		ArrayList<Point> listEmptyBlock = new ArrayList<>();
+                listEmptyBlock.clear();
+        		
+        		for (int x = 0; x < 10; x++)
+        			if(models[y][x] == null)
+        				listEmptyBlock.add(new Point(x, y));
+
+        		if(listEmptyBlock.size() >= 4){
+                	spawn = listEmptyBlock.get(new Random().nextInt(listEmptyBlock.size()));
+                	break;
+                }
+        	}
+
+            PieceModel p = model.getRandomPiece(0);
+            p = new PieceModel(
+        			new BlockModel[][] {
+        					{new BlockModel(PieceModel.COLOR_WHITE), null, null, null},
+        					{null, null, null, null},
+        					{null, null, null, null},
+        					{null, null, null, null}
+
+        			},
+        			spawn,
+        			new Point(0,0),
+        			"PieceCube"
+        	);
+            
+            if(player == 0)
+            	model.pieceListPlayerA.add(p);
+            else
+            	model.pieceListPlayerB.add(p);
+        }
+    }
+}
+
+
 
 
 class RemoveMalus extends EffectModel{

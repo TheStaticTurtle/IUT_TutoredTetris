@@ -27,7 +27,8 @@ class PieceModel {
 	public static final Color COLOR_GRAY = Color.decode("#DBDBDB");
 	public static final Color COLOR_DARKGRAY = Color.decode("#808080");
 	public static final Color COLOR_PURPLE2 = Color.decode("#8E00DB");
-
+	public static final Color COLOR_WHITE = Color.decode("#FFFFFF");
+	
 	public BlockModel[][] childs = new BlockModel[4][4];
 
 	//Position represent top-left corner of the 4x4 grid
