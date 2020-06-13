@@ -5,7 +5,7 @@ import java.awt.*;
 public enum Resolution {
 	BIG(1000,735,72,55,41,24,22,13),
 	NORMAL(870,640,72,48,32,16,18,12),
-	TINY(640,448,48,32,24,16,10,9),
+	TINY(640,448,48,32,24,16,12,9),
 	;
 
 	public final int height;
