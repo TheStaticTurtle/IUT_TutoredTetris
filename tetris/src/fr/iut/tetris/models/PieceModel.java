@@ -34,17 +34,15 @@ class PieceModel {
 	//Position represent top-left corner of the 4x4 grid
 	int x = 0;
 	int y = 0;
-	Point centerOfgravity;
 	Point spawnPoint; //Just for the clone()
 	String name;
 	public boolean ignoreCollisionWithFalling = false;
 
-	public PieceModel(BlockModel[][] childs, Point spawnPoint, Point centerOfgravity, String name) {
+	public PieceModel(BlockModel[][] childs, Point spawnPoint, String name) {
 		this.childs = childs;
 		this.x = spawnPoint.x;
 		this.y = spawnPoint.y;
 		this.spawnPoint = spawnPoint; //Just for the clone()
-		this.centerOfgravity = centerOfgravity;
 		this.name = name;
 		for (int y = 0; y < childs.length; y++) {
 			for (int x = 0; x < childs[y].length; x++) {
@@ -153,7 +151,6 @@ class PieceModel {
 		return new PieceModel(
 				c,
 				new Point(this.spawnPoint.x,this.spawnPoint.y),
-				new Point(this.centerOfgravity.x,this.centerOfgravity.y),
 				this.name
 		);
 	}
@@ -198,7 +195,6 @@ class PieceModel {
 					{null						 , null						   , null						 , null}
 			},
 			new Point(3,-1),
-			new Point(3,1),
 			"PieceT"
 	);
 	static PieceModel PieceL = new PieceModel(
@@ -210,7 +206,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,2),
 			"PieceL"
 	);
 	static PieceModel PieceJ = new PieceModel(
@@ -222,7 +217,6 @@ class PieceModel {
 
 			},
 			new Point(4,0),
-			new Point(1,2),
 			"PieceJ"
 	);
 	static PieceModel PieceO = new PieceModel(
@@ -234,7 +228,6 @@ class PieceModel {
 
 			},
 			new Point(3,-1),
-			new Point(1,2),
 			"PieceO"
 	);
 	static PieceModel PieceS = new PieceModel(
@@ -246,7 +239,6 @@ class PieceModel {
 
 			},
 			new Point(4,-1),
-			new Point(1,2),
 			"PieceS"
 	);
 	static PieceModel PieceZ = new PieceModel(
@@ -258,7 +250,6 @@ class PieceModel {
 
 			},
 			new Point(3,-1),
-			new Point(1,2),
 			"PieceZ"
 	);
 	static PieceModel PieceI = new PieceModel(
@@ -269,7 +260,6 @@ class PieceModel {
 					{null                      , null                      , null                      , null},
 			},
 			new Point(3,-2),
-			new Point(1,2),
 			"PieceI"
 	);
 
@@ -282,7 +272,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,2),
 			"PieceStar"
 	);
 
@@ -295,7 +284,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,2),
 			"PieceU"
 	);
 	static PieceModel PieceBarre3 = new PieceModel(
@@ -307,7 +295,6 @@ class PieceModel {
 
 			},
 			new Point(3,-1),
-			new Point(1,1),
 			"PieceBarre3"
 	);
 	static PieceModel PieceMiniL = new PieceModel(
@@ -319,7 +306,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,1),
 			"PieceMiniL"
 	);
 	static PieceModel PieceTLongA = new PieceModel(
@@ -331,7 +317,6 @@ class PieceModel {
 					{null					         , null				     		   , null					    	 , null}
 			},
 			new Point(3,-1),
-			new Point(3,1),
 			"PieceTLongA"
 	);
 	static PieceModel PieceTLongB = new PieceModel(
@@ -343,7 +328,6 @@ class PieceModel {
 					{null						 , null						   , null						 , null}
 			},
 			new Point(3,-1),
-			new Point(3,1),
 			"PieceTLongB"
 	);
 	static PieceModel PieceBigL = new PieceModel(
@@ -355,7 +339,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,1),
 			"PieceBigL"
 	);
 
@@ -367,7 +350,6 @@ class PieceModel {
 					{null					       , null						   , null		   			       , null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBigT"
 	);
 
@@ -379,7 +361,6 @@ class PieceModel {
 					{null					        , null				   		     , null		   			          , null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBizzareA"
 	);
 
@@ -391,7 +372,6 @@ class PieceModel {
 					{null					   , null				   	   , null		   			   , null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBizzareB"
 	);
 
@@ -403,7 +383,6 @@ class PieceModel {
 					{null                     , null                     , null                     , null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBigZ"
 	);
 	static PieceModel PieceBigS = new PieceModel(
@@ -414,7 +393,6 @@ class PieceModel {
 					{null                       ,                        null,                        null,                        null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBigS"
 	);
 
