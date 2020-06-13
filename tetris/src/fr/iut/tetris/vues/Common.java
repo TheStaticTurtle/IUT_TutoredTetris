@@ -613,7 +613,9 @@ class PauseMenu extends JPanel {
 		backResumePanel.setLayout(subLayout);
 		mainPanel.add(backResumePanel);
 
-		MovingStarsAnimation animation = new MovingStarsAnimation(mainPanel.getPreferredSize(),Color.black,10,Color.red);
+		Dimension d = mainPanel.getPreferredSize();
+		d.width += 150;
+		MovingStarsAnimation animation = new MovingStarsAnimation(d,Color.black,18,Color.red);
 
 		JLayeredPane testPane = new JLayeredPane();
 		testPane.add(animation,JLayeredPane.DEFAULT_LAYER);
@@ -892,7 +894,7 @@ class MovingStarModel {
 	Dimension parent;
 	Random rng;
 	int speed = 0;
-	int offset = 150;
+	int offset = 300;
 	public MovingStarModel(Random rng, Dimension parent, int speed) {
 		this.parent = parent;
 		this.speed = speed;
