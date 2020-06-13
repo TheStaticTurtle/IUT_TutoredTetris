@@ -158,6 +158,10 @@ class PieceModel {
 		);
 	}
 
+	/**
+	 * Calculate a piece height (was used for the drop preview)
+	 * @return the piece height
+	 */
 	int getPieceHeight() {
 		int total = 0;
 		for (int y = 0; y < childs.length; y++) {
@@ -401,9 +405,13 @@ class PieceModel {
 	);
 
 
-	static PieceModel[] PiecesLegacy = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.PieceI,PieceModel.PieceJ};
+	static PieceModel[] PiecesLegacy = new PieceModel[]{PieceL, PieceT, PieceO, PieceS,PieceZ,PieceI,PieceJ};
 	static PieceModel[] PiecesCustoms = new PieceModel[]{PieceStar,PieceU,PieceBarre3,PieceMiniL,PieceTLongA,PieceTLongB,PieceBigL,PieceBigT,PieceBizzareA,PieceBizzareB,PieceBigZ,PieceBigS};
 
+	/**
+	 * Get all the pieces depending if the legacy option is used
+	 * @return an array containing all the pieces
+	 */
 	static public PieceModel[] getPieces() {
 		if(Config.getInstance().getBool("LEGACY_PIECES")) {
 			return PiecesLegacy;

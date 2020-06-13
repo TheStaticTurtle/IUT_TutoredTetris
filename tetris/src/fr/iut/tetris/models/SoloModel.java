@@ -32,6 +32,10 @@ public class SoloModel {
 		nextPiece = getRandomPiece();
 	}
 
+	/**
+	 * Sets the current controller
+	 * @param ctrl an instance of SoloController
+	 */
 	public void setCtrl(SoloController ctrl) {
 		this.ctrl = ctrl;
 	}
@@ -80,7 +84,7 @@ public class SoloModel {
 	 * @return an arrays of the game size that contains BlockModels for the vue to display
 	 * @throws OverlappedPieceException in case a piece collide with an other one
 	 * @throws PieceOutOfBoardException if a piece has a position outside of the board
-	 * @param render_dropped_piece
+	 * @param render_dropped_piece should be false is the function isn't used by the ui
 	 */
 	public BlockModel[][] computeMixedGrid(boolean render_dropped_piece) throws OverlappedPieceException, PieceOutOfBoardException {
 		BlockModel[][] table = new BlockModel[height][width];

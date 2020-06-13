@@ -7,7 +7,6 @@ import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.enums.LineCompleted;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
-import fr.iut.tetris.vues.Common;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,6 +33,10 @@ public class CoopModel{
 		nextPiecePlayerB = getRandomPiece(1);
 	}
 
+	/**
+	 * Sets the current controller
+	 * @param ctrl an instance of CoopController
+	 */
 	public void setCtrl(CoopController ctrl) {
 		this.ctrl = ctrl;
 	}
@@ -108,7 +111,7 @@ public class CoopModel{
 	 * @return an arrays of the game size that contains BlockModels for the vue to display
 	 * @throws OverlappedPieceException in case a piece collide with an other one
 	 * @throws PieceOutOfBoardException if a piece has a position outside of the board
-	 * @param render_dropped_piece
+	 * @param render_dropped_piece should be false is the function isn't used by the ui
 	 */
 	public BlockModel[][] computeMixedGrid(boolean render_dropped_piece) throws OverlappedPieceException, PieceOutOfBoardException {
 		BlockModel[][] table = new BlockModel[height][width];

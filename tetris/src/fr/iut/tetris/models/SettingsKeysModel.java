@@ -9,6 +9,9 @@ import java.util.Map;
 public class SettingsKeysModel {
 	public Map<Integer,String> keycodes = new HashMap<>();
 
+	/**
+	 * Generate an hashmap for the Keycodes->Keyname
+	 */
 	public SettingsKeysModel() {
 		//Create a map of keycodes / keyname
 		Field[] fields = java.awt.event.KeyEvent.class.getDeclaredFields();

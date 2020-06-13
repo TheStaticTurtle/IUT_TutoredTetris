@@ -49,6 +49,7 @@ public class BlockModel {
 		image = Common.dye(this.base_image,c);
 	}
 
+	@Override
 	public BlockModel clone() {
 		return new BlockModel(color,base_image,size,standAlonePos,parent);
 	}

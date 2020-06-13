@@ -24,6 +24,11 @@ import java.util.Random;
 
 public class Common {
 
+	/**
+	 * Find the height in pixel of a given string
+	 * @param str a string
+	 * @return the height in pixel
+	 */
 	public static int getStringHeight(String str)
 	{
 		Graphics2D g2 = new BufferedImage(10,10,BufferedImage.TYPE_INT_ARGB).createGraphics();
