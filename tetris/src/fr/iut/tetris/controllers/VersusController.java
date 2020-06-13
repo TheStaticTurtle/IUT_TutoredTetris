@@ -187,7 +187,8 @@ public class VersusController implements ActionListener, KeyListener {
             case "GAME:PIECE_PLACE":
                 this.audio.playSFX(getClass().getResource( "/res/sounds/piece_place.wav"));
                 break;
-            case "GAME:PIECE_SPAWN":
+            case "GAME:PIECE_SPAWN_PLAYER_A":
+            case "GAME:PIECE_SPAWN_PLAYER_B":
                 this.audio.playSFX(getClass().getResource( "/res/sounds/piece_spawn.wav"));
                 break;
             case "MOUSE:ENTER":

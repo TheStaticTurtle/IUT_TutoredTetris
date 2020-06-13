@@ -127,7 +127,7 @@ class GamePanelVersus extends JPanel {
 
         JLabel labelNextPiece;
 
-        if (this.player == 1)
+        if (this.player == 0)
             labelNextPiece = new JLabel("<html>Next A:");
         else
             labelNextPiece = new JLabel("<html>Next B:");
