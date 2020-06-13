@@ -100,25 +100,35 @@ public class MenuVue extends JPanel  {
 		mainPanel.add(quitCreditsPanel);
 		mainPanel.add( new Spacer());
 
-
 		mainPanel.setLocation(0, 0);
 		mainPanel.setPreferredSize(mainPanel.getPreferredSize());
 
 		mainPanel.setBounds(0, 0, (int)mainPanel.getPreferredSize().getWidth(), (int)mainPanel.getPreferredSize().getHeight());
 		mainPanel.setVisible(true);
 
+		JButton helpButton = new HelpButton((int) (ww*0.12),ctrl);
+		helpButton.setActionCommand("CLICK:MENU:HELP");
+		helpButton.addActionListener(ctrl);
+
 		JLayeredPane testPane = new JLayeredPane();
 
 		testPane.add(new MovingStarsAnimation(getPreferredSize()),JLayeredPane.DEFAULT_LAYER);
 		testPane.add(mainPanel,JLayeredPane.PALETTE_LAYER);
+		testPane.add(helpButton,JLayeredPane.PALETTE_LAYER);
 		testPane.setPreferredSize(getPreferredSize());
 
 		SpringLayout lyt = new SpringLayout();
 		SpringLayout lyt2 = new SpringLayout();
 		lyt.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, testPane);
 		lyt.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, testPane);
+
+		lyt.putConstraint(SpringLayout.SOUTH, helpButton, -20, SpringLayout.SOUTH, testPane);
+		lyt.putConstraint(SpringLayout.EAST, helpButton, -20, SpringLayout.EAST, testPane);
+
 		lyt2.putConstraint(SpringLayout.HORIZONTAL_CENTER, mainPanel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		lyt2.putConstraint(SpringLayout.VERTICAL_CENTER, mainPanel, 0, SpringLayout.VERTICAL_CENTER, this);
+
+
 		testPane.setLayout(lyt);
 		setLayout(lyt2);
 

@@ -21,6 +21,7 @@ public class MainController implements ActionListener, KeyListener {
 	SettingsModel settingsModel;
 	HighScoresModel highScoreModel;
 	SettingsKeysModel settingsKeysModel;
+	HelpModel helpModel;
 	
 	MenuController menuCtrl;
 	CreditController creditCtrl;
@@ -30,6 +31,7 @@ public class MainController implements ActionListener, KeyListener {
 	SettingsController settingsCtrl;
 	HighScoresController highScoreCtrl;
 	SettingsKeysController settingsKeysCtrl;
+	HelpController helpController;
 	
 	MenuVue menuVue;
 	CreditVue creditVue;
@@ -39,6 +41,7 @@ public class MainController implements ActionListener, KeyListener {
 	SettingsVue settingsVue;
 	HighScoresVue highScoreVue;
 	SettingsKeysVue settingsKeysVue;
+	HelpVue helpVue;
 
 	AudioController audio;
 	Config config;
@@ -56,20 +59,24 @@ public class MainController implements ActionListener, KeyListener {
 		highScoreModel = new HighScoresModel();
 		settingsModel = new SettingsModel();
 		settingsKeysModel = new SettingsKeysModel();
+		helpModel = new HelpModel();
 		
 		menuCtrl = new MenuController(this, menuModel, audio);
 		creditCtrl = new CreditController(this, creditModel, audio);
 		highScoreCtrl = new HighScoresController(this, highScoreModel, audio);
 		settingsCtrl = new SettingsController(this, settingsModel,settingsVue, audio);
 		settingsKeysCtrl = new SettingsKeysController(this, settingsKeysModel,settingsKeysVue, audio);
+		helpController = new HelpController(this, helpModel,helpVue, audio);
 		
 		menuVue = new MenuVue(menuModel, menuCtrl);
 		creditVue = new CreditVue(creditModel, creditCtrl);
 		highScoreVue = new HighScoresVue(highScoreModel, highScoreCtrl);
 		settingsVue = new SettingsVue(settingsModel, settingsCtrl);
 		settingsKeysVue = new SettingsKeysVue(settingsKeysModel, settingsKeysCtrl);
+		helpVue = new HelpVue(helpModel, helpController);
 		settingsCtrl.setVue(settingsVue);
 		settingsKeysCtrl.setVue(settingsKeysVue);
+		helpController.setVue(helpVue);
 
 		mainVue.setCurrentVueAndCenterWindows(menuVue);
 		mainVue.display();
@@ -138,6 +145,11 @@ public class MainController implements ActionListener, KeyListener {
 				mainVue.setCurrentVue(settingsKeysVue);
 				settingsKeysCtrl.setVue(settingsKeysVue);
 				//settingsKeysCtrl.enteredVue();
+				break;
+
+			case "CLICK:MENU:HELP":
+				helpVue = new HelpVue(helpModel, helpController);
+				mainVue.setCurrentVue(helpVue);
 				break;
 
 			case "CLICK:BACK":

@@ -10,6 +10,7 @@ import fr.iut.tetris.models.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -364,6 +365,52 @@ class CheckBoxIcon implements Icon {
 
 	public int getIconWidth() { return this.size; }
 	public int getIconHeight() { return this.size; }
+}
+
+class HelpButton extends JButton implements MouseListener {
+
+	private static final long serialVersionUID = 1L;
+
+	int size;
+	ActionListener listener;
+
+	public HelpButton(int size, ActionListener listener) {
+		this.size = size;
+		this.listener = listener;
+
+		addMouseListener(this);
+		setBorder(null);
+		setText("?");
+		setForeground(Color.WHITE);
+		setFont(Config.getInstance().getFont("FONT_BIG"));
+		setPreferredSize(new Dimension(size,size));
+		int bs = Config.getInstance().getInt("BORDER_SIZES")/2;
+		setBorder(new MatteBorder(bs,bs,bs,bs,Color.WHITE));
+		setContentAreaFilled(false);
+		setFocusPainted(false);
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+	@Override public void mouseClicked(MouseEvent e) { }
+	@Override public void mousePressed(MouseEvent e) { }
+	@Override public void mouseReleased(MouseEvent e) { }
+
+	@Override public void mouseEntered(MouseEvent e) {
+		if(listener!=null)
+			listener.actionPerformed(new ActionEvent(this,0,"MOUSE:ENTER"));
+
+		int bs = (int) (Config.getInstance().getInt("BORDER_SIZES")/1.5);
+		setBorder(new MatteBorder(bs,bs,bs,bs,Color.WHITE));
+		//setIcon(new HoveredButtonIcon(getHeight(),getWidth(),this.font, this.text, this.foreGroundColor, this.backGroundColor));
+	}
+	@Override public void mouseExited(MouseEvent e) {
+		if(listener!=null)
+			listener.actionPerformed(new ActionEvent(this,0,"MOUSE:EXIT"));
+
+		int bs = Config.getInstance().getInt("BORDER_SIZES")/2;
+		setBorder(new MatteBorder(bs,bs,bs,bs,Color.WHITE));
+		//setIcon(null);
+	}
 }
 
 class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object>  {
@@ -757,6 +804,14 @@ class EffectImage extends JPanel {
 	Dimension size = new Dimension(64,64);
 	BufferedImage image;
 	String imagePath;
+	boolean scale_to_height = false;
+
+	public EffectImage(String image_path, boolean scale_to_height) {
+		this.scale_to_height = scale_to_height;
+		imagePath = image_path;
+		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(32,32, Image.SCALE_REPLICATE));
+		setOpaque(false);
+	}
 
 	public EffectImage(String image_path) {
 		imagePath = image_path;
@@ -799,15 +854,35 @@ class EffectImage extends JPanel {
 
 	@Override
 	public int getHeight() {
-		this.size = new Dimension(getWidth(),getWidth());
-		return getWidth();
+		if(!this.scale_to_height) {
+			this.size = new Dimension(super.getWidth(),super.getWidth());
+			return super.getWidth();
+		} else {
+			this.size = new Dimension(super.getHeight(),super.getHeight());
+			return super.getHeight();
+		}
+	}
+
+	@Override
+	public int getWidth() {
+		if(!this.scale_to_height) {
+			this.size = new Dimension(super.getWidth(),super.getWidth());
+			return super.getWidth();
+		} else {
+			this.size = new Dimension(super.getHeight(),super.getHeight());
+			return super.getHeight();
+		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		setSize(this.size);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(this.image,0,0,getWidth(),getWidth(),null);
+		if(this.scale_to_height) {
+			g2d.drawImage(this.image, 0, 0, getHeight(), getHeight(), null);
+		} else {
+			g2d.drawImage(this.image,0,0,getWidth(),getWidth(),null);
+		}
 	}
 }
 

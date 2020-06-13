@@ -102,31 +102,6 @@ public class SettingsKeysVue extends JPanel {
 			mainPanel.add(pan);
 		}
 
-		/*mainPanel.add(myLabel);
-		mainPanel.add( new Spacer());
-		mainPanel.add( new Spacer());*/
-		//mainPanel.add(player1ControlLabel);
-
-/*
-		JPanel SFXVolumeCtrlPanel = new JPanel();
-		SFXVolumeCtrlPanel.setOpaque(false);
-		SFXVolumeCtrlPanel.setLayout(subLayout);
-		SFXVolumeCtrlPanel.add(p1RightKeyLabel);
-		//SFXVolumeCtrlPanel.add(soundSFXMusicLevel);
-		mainPanel.add(SFXVolumeCtrlPanel);
-
-		JPanel resolutionCtrlPannel = new JPanel();
-		resolutionCtrlPannel.setOpaque(false);
-		resolutionCtrlPannel.setLayout(subLayout);
-		resolutionCtrlPannel.add(p1RotateKeyLabel);
-		//resolutionCtrlPannel.add(resolutionDropdown);
-		mainPanel.add(resolutionCtrlPannel);
-*/
-/*
-		mainPanel.add( new Spacer());
-		mainPanel.add( new Spacer());
-		mainPanel.add( new Spacer());
-		mainPanel.add( new Spacer());*/
 		mainPanel.add( new Spacer());
 		mainPanel.add(backButton);
 

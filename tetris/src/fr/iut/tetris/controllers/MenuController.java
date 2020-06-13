@@ -1,5 +1,6 @@
 package fr.iut.tetris.controllers;
 
+import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.models.MenuModel;
 
@@ -32,6 +33,7 @@ public class MenuController implements ActionListener {
 			case "CLICK:MENU:SOLO":
 			case "CLICK:MENU:SETTINGS":
 			case "CLICK:MENU:COOP":
+			case "CLICK:MENU:HELP":
 			case "CLICK:MENU:VERSUS":
 			case "CLICK:MENU:HIGHSCORE":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
