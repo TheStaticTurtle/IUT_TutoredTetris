@@ -138,7 +138,7 @@ class GamePanelCoop extends JPanel {
 		add(scoreLabel);
 
 		try {
-			Object[][] grid = model.computeMixedGrid();
+			Object[][] grid = model.computeMixedGrid(false);
 			for (Object[] objects : grid) {
 				for (int x = 0; x < objects.length; x++) {
 					TetrisBlock b = new TetrisBlock(squareSize);
@@ -206,7 +206,7 @@ class GamePanelCoop extends JPanel {
 			try {
 				nextPiecePanelPlayerA.recalulate(model.nextPiecePlayerA);
 				nextPiecePanelPlayerB.recalulate(model.nextPiecePlayerB);
-				BlockModel[][] grid = model.computeMixedGrid();
+				BlockModel[][] grid = model.computeMixedGrid(true);
 
 				for (int y = 0; y < grid.length; y++) {
 					for (int x = 0; x < grid[y].length; x++) {

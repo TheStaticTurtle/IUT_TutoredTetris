@@ -1,16 +1,12 @@
 package fr.iut.tetris.models;
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.controllers.VersusController;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.enums.Direction;
-import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
-import fr.iut.tetris.vues.Common;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -80,7 +76,7 @@ class RandomLine extends EffectModel {
         if(player==0){
             this.model.effectListPlayerA.remove(tmp);
             try {
-                models = this.model.computeMixedGrid(0);
+                models = this.model.computeMixedGrid(0, false);
             } catch (OverlappedPieceException | PieceOutOfBoardException e) {
                 e.printStackTrace();
                 models = null;
@@ -88,7 +84,7 @@ class RandomLine extends EffectModel {
         } else {
             this.model.effectListPlayerB.remove(tmp);
             try {
-                models = this.model.computeMixedGrid(1);
+                models = this.model.computeMixedGrid(1, false);
             } catch (OverlappedPieceException | PieceOutOfBoardException e) {
                 e.printStackTrace();
                 models = null;

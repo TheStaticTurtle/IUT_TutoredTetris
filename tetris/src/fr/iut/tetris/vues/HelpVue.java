@@ -47,11 +47,11 @@ public class HelpVue extends JPanel {
         ArrayList<String> images = new ArrayList<String>();
 
         JLabel helpLabel = new JLabel("Help:"); labels.add(helpLabel); images.add("");
-        JLabel helpText = new JLabel("Welcome to tetris"); labels.add(helpText); images.add("");
+        JLabel helpText = new JLabel("<html>Welcome to TutoredTetris, in this game you play with new pieces but you can disable them by activating the legacy option."); labels.add(helpText); images.add("");
 
         JLabel helpEffectLabel = new JLabel("Effects:"); labels.add(helpEffectLabel); images.add("");
 
-        JLabel helpEffectgeneral = new JLabel("<html>In versus mode there is custom effects. Purple effects are malus and yellow effects are bonuses you gain / send one every 80 points and they stay for a variable length"); labels.add(helpEffectgeneral); images.add("");
+        JLabel helpEffectgeneral = new JLabel("<html>In versus mode there are custom effects. Purple effects are malus and yellow effects are bonuses you gain / send one every 80 points and they stay for a variable length"); labels.add(helpEffectgeneral); images.add("");
         JLabel effectDeleteLine = new JLabel("<html>This will randomly delete a line"); labels.add(effectDeleteLine); images.add("/res/effects/bonus_delete_line.png");
         JLabel effectBSpeed = new JLabel("<html>This effect will slow your game down"); labels.add(effectBSpeed); images.add("/res/effects/bonus_speed.png");
         JLabel effectRemoveMalus = new JLabel("<html>This will remove a malus"); labels.add(effectRemoveMalus); images.add("/res/effects/malus_remove_malus.png");

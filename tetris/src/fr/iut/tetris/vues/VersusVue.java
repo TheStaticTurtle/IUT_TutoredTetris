@@ -156,7 +156,7 @@ class GamePanelVersus extends JPanel {
 
         if (this.player == 0) {
             try {
-                Object[][] grid = model.computeMixedGrid(0);
+                Object[][] grid = model.computeMixedGrid(0, false);
                 for (Object[] objects : grid) {
                     for (int x = 0; x < objects.length; x++) {
                         TetrisBlock b = new TetrisBlock(squareSize);
@@ -170,7 +170,7 @@ class GamePanelVersus extends JPanel {
         }
         else {
             try {
-                Object[][] grid = model.computeMixedGrid(1);
+                Object[][] grid = model.computeMixedGrid(1, false);
                 for (Object[] objects : grid) {
                     for (int x = 0; x < objects.length; x++) {
                         TetrisBlock b = new TetrisBlock(squareSize);
@@ -260,7 +260,7 @@ class GamePanelVersus extends JPanel {
                 try {
                     nextPiecePanel.recalulate( model.hideNextPieceA?null:model.nextPiecePlayerA );
                     
-                    BlockModel[][] grid = model.computeMixedGrid(0);
+                    BlockModel[][] grid = model.computeMixedGrid(0, true);
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {
@@ -279,7 +279,7 @@ class GamePanelVersus extends JPanel {
             else {
                 try {
                 	nextPiecePanel.recalulate( model.hideNextPieceB?null:model.nextPiecePlayerB );
-                    BlockModel[][] grid = model.computeMixedGrid(1);
+                    BlockModel[][] grid = model.computeMixedGrid(1, true);
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {

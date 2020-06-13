@@ -36,6 +36,7 @@ class PieceModel {
 	Point centerOfgravity;
 	Point spawnPoint; //Just for the clone()
 	String name;
+	public boolean ignoreCollisionWithFalling = false;
 
 	public PieceModel(BlockModel[][] childs, Point spawnPoint, Point centerOfgravity, String name) {
 		this.childs = childs;
@@ -154,6 +155,19 @@ class PieceModel {
 				new Point(this.centerOfgravity.x,this.centerOfgravity.y),
 				this.name
 		);
+	}
+
+	int getPieceHeight() {
+		int total = 0;
+		for (int y = 0; y < childs.length; y++) {
+			boolean empty = true;
+			for (int x = 0; x < childs[y].length && empty; x++) {
+				if(childs[y][x] == null) empty=false;
+			}
+
+			if(!empty) total++;
+		}
+		return total;
 	}
 
 	static PieceModel PieceT = new PieceModel(

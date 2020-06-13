@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
@@ -129,7 +128,7 @@ class GamePanelSolo extends JPanel {
 		add(scoreLabel);
 
 		try {
-			Object[][] grid = model.computeMixedGrid();
+			Object[][] grid = model.computeMixedGrid(false);
 			for (Object[] objects : grid) {
 				for (int x = 0; x < objects.length; x++) {
 					TetrisBlock b = new TetrisBlock(squareSize);
@@ -192,7 +191,7 @@ class GamePanelSolo extends JPanel {
 		if(model.gameState==GameState.PLAYING) {
 			try {
 				nextPiecePanel.recalulate(model.nextPiece);
-				BlockModel[][] grid = model.computeMixedGrid();
+				BlockModel[][] grid = model.computeMixedGrid(true);
 
 				for (int y = 0; y < grid.length; y++) {
 					for (int x = 0; x < grid[y].length; x++) {

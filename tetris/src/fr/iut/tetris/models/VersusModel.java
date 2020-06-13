@@ -7,6 +7,7 @@ import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.enums.LineCompleted;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
+import fr.iut.tetris.vues.Common;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -85,7 +86,7 @@ public class VersusModel {
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN_PLAYER_A"));
         }
         try {
-            computeMixedGrid(0);
+            computeMixedGrid(0, false);
         } catch (OverlappedPieceException | PieceOutOfBoardException e) {
             winner = "B";
             gameState = GameState.FINISHED;
@@ -106,7 +107,7 @@ public class VersusModel {
         }
 
         try {
-            computeMixedGrid(1);
+            computeMixedGrid(1, false);
         } catch (OverlappedPieceException | PieceOutOfBoardException e) {
             winner = "A";
             gameState = GameState.FINISHED;
@@ -120,7 +121,7 @@ public class VersusModel {
      * @throws OverlappedPieceException in case a piece collide with an other one
      * @throws PieceOutOfBoardException if a piece has a position outside of the board
      */
-    public BlockModel[][] computeMixedGrid(int player) throws OverlappedPieceException, PieceOutOfBoardException {
+    public BlockModel[][] computeMixedGrid(int player, boolean render_dropped_piece) throws OverlappedPieceException, PieceOutOfBoardException {
         BlockModel[][] table = new BlockModel[height][width];
 
         ArrayList<Object> pieceList;
@@ -142,7 +143,7 @@ public class VersusModel {
                         if(piece.childs[y-piece.y][x-piece.x] != null) {
                             if(y> height-1 || y<0) throw new PieceOutOfBoardException();
                             if(x> width -1 || x<0) throw new PieceOutOfBoardException();
-                            if(table[y][x] != null) throw new OverlappedPieceException();
+                            if(table[y][x] != null &&!(piece.ignoreCollisionWithFalling && (table[y][x].parent==fallingPiecePlayerA||table[y][x].parent==fallingPiecePlayerB)) ) throw new OverlappedPieceException();
                             table[y][x] = piece.childs[y-piece.y][x-piece.x];
                         }
                     }
@@ -150,6 +151,47 @@ public class VersusModel {
             }
 
         }
+
+        PieceModel piece = fallingPiecePlayerA;
+        if(player != 0) {
+            piece = fallingPiecePlayerB;
+        }
+
+        if(render_dropped_piece && piece!= null) {
+            PieceModel tmp = piece.clone();
+            pieceList.add(tmp);
+            //tmp.y = Math.min(fallingPiece.y+fallingPiece.getPieceHeight()-1,height-fallingPiece.getPieceHeight()+1);
+            tmp.y = piece.y;
+            tmp.x = piece.x;
+            tmp.ignoreCollisionWithFalling =true;
+
+            while (true) {
+                tmp.y++;
+                try {
+                    computeMixedGrid(player,false);
+                } catch (PieceOutOfBoardException | OverlappedPieceException e) {
+                    tmp.y--;
+                    break;
+                }
+            }
+            pieceList.remove(tmp);
+
+            for (int y = tmp.y; y < tmp.y+4; y++) {
+                for (int x = tmp.x; x < tmp.x+4; x++) {
+                    if(tmp.childs[y-tmp.y][x-tmp.x] != null) {
+                        if(y> height-1 || y<0) continue;
+                        if(x> width -1 || x<0) continue;
+                        if(table[y][x] != null) continue;
+                        tmp.childs[y-tmp.y][x-tmp.x].color = tmp.childs[y-tmp.y][x-tmp.x].color.darker().darker().darker();
+                        tmp.childs[y-tmp.y][x-tmp.x].recalculate();
+                        table[y][x] = tmp.childs[y-tmp.y][x-tmp.x];
+                    }
+                }
+            }
+
+        }
+
+
         return table;
     }
 
@@ -160,7 +202,7 @@ public class VersusModel {
      */
     Object checkForFullLineAndRemoveIt(boolean firstCall, int player){
         try {
-            BlockModel[][] grid = computeMixedGrid(player);
+            BlockModel[][] grid = computeMixedGrid(player, false);
             int firstLineY = 0;
             Integer lineCount = 0;
 
@@ -251,7 +293,7 @@ public class VersusModel {
             if(fallingPiecePlayerA != null) {
                 fallingPiecePlayerA.x += dir.step;
                 try {
-                    computeMixedGrid(0);
+                    computeMixedGrid(0, false);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerA.x -= dir.step;
@@ -265,7 +307,7 @@ public class VersusModel {
             if(fallingPiecePlayerB != null) {
                 fallingPiecePlayerB.x += dir.step;
                 try {
-                    computeMixedGrid(1);
+                    computeMixedGrid(1, false);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerB.x -= dir.step;
@@ -288,7 +330,7 @@ public class VersusModel {
             if(fallingPiecePlayerA != null) {
                 fallingPiecePlayerA.rotateModel(dir.step, fallingPiecePlayerA.name);
                 try {
-                    computeMixedGrid(0);
+                    computeMixedGrid(0, false);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerA.rotateModel(dir.step * -1, fallingPiecePlayerA.name);
@@ -302,7 +344,7 @@ public class VersusModel {
             if(fallingPiecePlayerB != null) {
                 fallingPiecePlayerB.rotateModel(dir.step, fallingPiecePlayerB.name);
                 try {
-                    computeMixedGrid(1);
+                    computeMixedGrid(1, false);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerB.rotateModel(dir.step * -1, fallingPiecePlayerB.name);
@@ -322,7 +364,7 @@ public class VersusModel {
         if(fallingPiecePlayerA != null) {
             fallingPiecePlayerA.y++;
             try {
-                computeMixedGrid(0);
+                computeMixedGrid(0, false);
             } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                 fallingPiecePlayerA.y--;
                 convertFullPiecesToBlocks(fallingPiecePlayerA, 0);
@@ -348,7 +390,7 @@ public class VersusModel {
         if(fallingPiecePlayerB != null) {
             fallingPiecePlayerB.y++;
             try {
-                computeMixedGrid(1);
+                computeMixedGrid(1, false);
             } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                 fallingPiecePlayerB.y--;
                 convertFullPiecesToBlocks(fallingPiecePlayerB, 2);
