@@ -298,7 +298,7 @@ class RandomBlock extends EffectModel {
         this.player = player;
         this.tmp = this;
 
-        Timer timer = new Timer(2 * 1000, new ActionListener() {
+        Timer timer = new Timer(new Random().nextInt(2000)+2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 doEffect();
@@ -348,27 +348,14 @@ class RandomBlock extends EffectModel {
                 }
         	}
 
+            BlockModel m = new BlockModel(PieceModel.COLOR_WHITE);
+            m.standAlonePos = spawn;
+            m.recalculate();
 
-            PieceModel p = new PieceModel(
-        			new BlockModel[][] {
-        					{new BlockModel(PieceModel.COLOR_WHITE), null, null, null},
-        					{null, null, null, null},
-        					{null, null, null, null},
-        					{null, null, null, null}
-
-        			},
-        			spawn,
-        			new Point(0,0),
-        			"PieceCube"
-        	);
-            
-            models[spawn.y][spawn.x].standAlonePos = spawn;
-            
-            if(player == 0){
-            	model.pieceListPlayerA.add(p);
-            }else{
-            	model.pieceListPlayerB.add(p);
-            }
+            if(player == 0)
+            	model.pieceListPlayerA.add(m);
+            else
+            	model.pieceListPlayerB.add(m);
         }
     }
 }

@@ -446,7 +446,7 @@ public class VersusModel {
                     break;
                 }
             }
-            int n = 7; // rand.nextInt(8);
+            int n = rand.nextInt(8);
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:GOT_BOUNS"));
             switch (n) {
 	            case 0:
@@ -493,7 +493,7 @@ public class VersusModel {
 	                if (ennemyShieldIndex != -1)
 	                    effectListPlayerB.remove(ennemyShieldIndex);
 	                else
-	                    effectListPlayerB.add(new RandomBlock(this, 0));
+	                    effectListPlayerB.add(new RandomBlock(this, 1));
 	                break;
             }
             nextEffectPlayerA += effectStep;
@@ -506,7 +506,7 @@ public class VersusModel {
                     break;
                 }
             }
-            int n = 7; //rand.nextInt(8);
+            int n = rand.nextInt(8);
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:GOT_BOUNS"));
             switch (n) {
 	            case 0:
