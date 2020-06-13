@@ -462,31 +462,31 @@ public class VersusModel {
 	                if (ennemyShieldIndex != -1)
                         effectListPlayerB.remove(ennemyShieldIndex);
 	                else
-	                    effectListPlayerB.add(new HideNextPiece(this, 1, 20 * 1000));
+	                    effectListPlayerB.add(new HideNextPiece(this, 1, 25 * 1000));
 	                break;
                 case 1:
                     effectListPlayerA.add(new RandomLine(this, 0));
                     break;
                 case 2:
-                    effectListPlayerA.add(new BonusSpeed(this, 0, 10000));
+                    effectListPlayerA.add(new BonusSpeed(this, 0, 15 * 1000));
                     break;
                 case 3:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerB.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerB.add(new InvertControls(this, 1, 10000));
+                        effectListPlayerB.add(new InvertControls(this, 1, 15 * 1000));
                     break;
                 case 4:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerB.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerB.add(new MalusSpeed(this, 1, 10000));
+                        effectListPlayerB.add(new MalusSpeed(this, 1, 15 * 1000));
                     break;
                 case 5:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerB.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerB.add(new RandomRotation(this, 1, 10000));
+                        effectListPlayerB.add(new RandomRotation(this, 1, 10*1000));
                     break;
                 case 6:
                     boolean alreadyHasMalus = false;
@@ -522,31 +522,31 @@ public class VersusModel {
                     if (ennemyShieldIndex != -1)
                         effectListPlayerA.remove(ennemyShieldIndex);
                     else
-	                    effectListPlayerA.add(new HideNextPiece(this, 0, 20 * 1000));
+	                    effectListPlayerA.add(new HideNextPiece(this, 0, 25 * 1000));
 	                break;
                 case 1:
                     effectListPlayerB.add(new RandomLine(this, 1));
                     break;
                 case 2:
-                    effectListPlayerB.add(new BonusSpeed(this, 1, 10000));
+                    effectListPlayerB.add(new BonusSpeed(this, 1, 15 * 1000));
                     break;
                 case 3:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerA.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerA.add(new InvertControls(this, 0, 10000));
+                        effectListPlayerA.add(new InvertControls(this, 0, 15 * 1000));
                     break;
                 case 4:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerA.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerA.add(new MalusSpeed(this, 0, 10000));
+                        effectListPlayerA.add(new MalusSpeed(this, 0, 15 * 1000));
                     break;
                 case 5:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerA.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerA.add(new RandomRotation(this, 0, 10000));
+                        effectListPlayerA.add(new RandomRotation(this, 0, 10* 1000));
                     break;
                 case 6:
                     boolean alreadyHasMalus = false;
