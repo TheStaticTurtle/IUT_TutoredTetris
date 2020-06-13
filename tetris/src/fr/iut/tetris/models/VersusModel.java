@@ -212,8 +212,6 @@ public class VersusModel {
             int firstLineY = 0;
             Integer lineCount = 0;
 
-            if (player == 0) { currentScorePlayerA += 4; }
-            else { currentScorePlayerB += 4; }
             // Difficulty
             if (player == 0) {
                 if(fallSpeedPlayerA > 75) {
@@ -374,6 +372,7 @@ public class VersusModel {
             } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                 fallingPiecePlayerA.y--;
                 convertFullPiecesToBlocks(fallingPiecePlayerA, 0);
+                currentScorePlayerA += fallingPiecePlayerA.getBlockCount();
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 0);
                 this.calculateScore(score, 0);
                 if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
@@ -400,6 +399,7 @@ public class VersusModel {
             } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                 fallingPiecePlayerB.y--;
                 convertFullPiecesToBlocks(fallingPiecePlayerB, 2);
+                currentScorePlayerB += fallingPiecePlayerB.getBlockCount();
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 1);
                 this.calculateScore(score, 1);
                 if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {

@@ -220,7 +220,6 @@ public class CoopModel{
 			int firstLineY = 0;
 			Integer lineCount = 0;
 
-			currentScore += 4;
 			// Difficulty
 			if(fallSpeed > 75) {
 				fallSpeed = (int)(1000 - 0.3*currentScore);
@@ -377,7 +376,8 @@ public class CoopModel{
 				computeMixedGrid(false);
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiecePlayerA.y--;
-				convertFullPiecesToBlocks(fallingPiecePlayerA);
+				convertFullPiecesToBlocks(fallingPiecePlayerA);;
+				currentScore += fallingPiecePlayerA.getBlockCount();
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
 				if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
@@ -404,6 +404,7 @@ public class CoopModel{
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiecePlayerB.y--;
 				convertFullPiecesToBlocks(fallingPiecePlayerB);
+				currentScore += fallingPiecePlayerB.getBlockCount();
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
 				if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {

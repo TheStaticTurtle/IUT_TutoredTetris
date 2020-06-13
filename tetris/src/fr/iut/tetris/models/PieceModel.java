@@ -175,6 +175,20 @@ class PieceModel {
 		return total;
 	}
 
+	/**
+	 * Calculate a number of block in a piece
+	 * @return the block count
+	 */
+	int getBlockCount() {
+		int total = 0;
+		for (int y = 0; y < childs.length; y++) {
+			for (int x = 0; x < childs[y].length; x++) {
+				if(childs[y][x] != null) total+=1;
+			}
+		}
+		return total;
+	}
+
 	static PieceModel PieceT = new PieceModel(
 			new BlockModel[][] {
 

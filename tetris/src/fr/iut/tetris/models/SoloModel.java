@@ -160,7 +160,6 @@ public class SoloModel {
 			int firstLineY = 0;
 			Integer lineCount = 0;
 
-			currentScore += 4;
 			// Difficulty
 			if(fallSpeed > 75) {
 				fallSpeed = (int)(1000 - 0.3*currentScore);
@@ -277,6 +276,7 @@ public class SoloModel {
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.y--;
 				convertFullPiecesToBlocks(fallingPiece);
+				currentScore += fallingPiece.getBlockCount();
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
 				if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
