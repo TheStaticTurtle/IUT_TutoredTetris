@@ -3,6 +3,7 @@ package fr.iut.tetris.models;
 import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.enums.Direction;
+import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 
@@ -17,10 +18,18 @@ class BonusSpeed extends EffectModel {
     public BonusSpeed(VersusModel model, int player, int duration) {
         super("/res/effects/bonus_speed.png");
         Timer timer = new Timer(duration, actionEvent -> {
-            if (player == 0)
+            if (player == 0) {
                 model.effectListPlayerA.remove(this);
-            if (player == 1)
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerA.add(new BonusSpeed(model,player,duration));
+                }
+            }
+            if (player == 1) {
                 model.effectListPlayerB.remove(this);
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerB.add(new BonusSpeed(model,player,duration));
+                }
+            }
         });
         timer.setRepeats(false);
         timer.start();
@@ -36,10 +45,18 @@ class MalusSpeed extends EffectModel {
     public MalusSpeed(VersusModel model, int player, int duration) {
         super("/res/effects/malus_speed.png");
         Timer timer = new Timer(duration, actionEvent -> {
-            if (player == 0)
+            if (player == 0) {
                 model.effectListPlayerA.remove(this);
-            if (player == 1)
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerA.add(new MalusSpeed(model,player,duration));
+                }
+            }
+            if (player == 1) {
                 model.effectListPlayerB.remove(this);
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerB.add(new MalusSpeed(model,player,duration));
+                }
+            }
         });
         timer.setRepeats(false);
         timer.start();
@@ -138,10 +155,18 @@ class InvertControls extends EffectModel {
         this.model = model;
         this.player = player;
         Timer timer = new Timer(duration, actionEvent -> {
-            if (this.player == 0)
+            if (player == 0) {
                 model.effectListPlayerA.remove(this);
-            if (this.player == 1)
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerA.add(new InvertControls(model,player,duration));
+                }
+            }
+            if (player == 1) {
                 model.effectListPlayerB.remove(this);
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerB.add(new InvertControls(model,player,duration));
+                }
+            }
         });
         timer.setRepeats(false);
         timer.start();
@@ -182,10 +207,18 @@ class RandomRotation extends EffectModel {
         this.model = model;
         this.player = player;
         Timer timer = new Timer(duration, actionEvent -> {
-            if (this.player == 0)
+            if (player == 0) {
                 model.effectListPlayerA.remove(this);
-            if (this.player == 1)
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerA.add(new RandomRotation(model,player,duration));
+                }
+            }
+            if (player == 1) {
                 model.effectListPlayerB.remove(this);
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerB.add(new RandomRotation(model,player,duration));
+                }
+            }
         });
         timer.setRepeats(false);
         timer.start();
@@ -228,14 +261,20 @@ class HideNextPiece extends EffectModel {
             model.hideNextPieceB = true;
         
         Timer timer = new Timer(duration, actionEvent -> {
-            if (player == 0){
+            if (player == 0) {
                 model.hideNextPieceA = false;
-            	model.effectListPlayerA.remove(this);
+                model.effectListPlayerA.remove(this);
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerA.add(new HideNextPiece(model,player,duration));
+                }
             }
-            if (player == 1){
+            if (player == 1) {
                 model.hideNextPieceB = false;
-            	model.effectListPlayerB.remove(this);
-            } 
+                model.effectListPlayerB.remove(this);
+                if(model.gameState == GameState.PAUSED) {
+                    model.effectListPlayerB.add(new HideNextPiece(model,player,duration));
+                }
+            }
         });
         timer.setRepeats(false);
         timer.start();
