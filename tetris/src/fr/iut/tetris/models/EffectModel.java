@@ -248,6 +248,13 @@ class HideNextPiece extends EffectModel {
 }
 
 
+class RemoveMalus extends EffectModel{
+    public RemoveMalus(){
+        super("/res/effects/malus_remove_malus.png");
+    }
+}
+
+
 
 
 public class EffectModel {
