@@ -1,5 +1,6 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.VersusController;
 import fr.iut.tetris.enums.Direction;
@@ -443,7 +444,10 @@ public class VersusModel {
     }
 
     private void checkEffect() {
-        if (currentScorePlayerA >= nextEffectPlayerA) {
+        if(!Config.getInstance().getBool("VERSUS_EFFECTS")) {
+            return;
+        }
+        if (currentScorePlayerA >= nextEffectPlayerA ) {
             int ennemyShieldIndex = -1;
             for (int i = 0; i < effectListPlayerB.size(); i++) {
                 if (effectListPlayerB.get(i) instanceof RemoveMalus) {

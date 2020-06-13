@@ -257,7 +257,7 @@ public class Config {
 	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
-		p.put("CONFIG_VERSION"     ,"8");
+		p.put("CONFIG_VERSION"     ,"9");
 
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
@@ -295,6 +295,8 @@ public class Config {
 		p.put("FONT_VERYTINY" ,"16");
 
 		p.put("LEGACY_PIECES" ,"false");
+		p.put("VERSUS_EFFECTS","true");
+
 		return p;
 	}
 }

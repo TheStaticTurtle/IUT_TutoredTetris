@@ -38,6 +38,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 		vue.soundMusicLevel.setValue( (int)audio.musicLineVolumeControl );
 		vue.soundSFXMusicLevel.setValue( (int)audio.soundEffetLineVolumeControl );
 		vue.legacyCheckbox.setSelected(Config.getInstance().getBool("LEGACY_PIECES"));
+		vue.versusEffectCheckBox.setSelected(Config.getInstance().getBool("VERSUS_EFFECTS"));
 	}
 
 	/**
@@ -47,6 +48,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 		Config.getInstance().putInt("VOLUME_SFX",(int)audio.soundEffetLineVolumeControl);
 		Config.getInstance().putInt("VOLUME_MUSIC",(int)audio.musicLineVolumeControl);
 		Config.getInstance().putBool("LEGACY_PIECES",vue.legacyCheckbox.isSelected());
+		Config.getInstance().putBool("VERSUS_EFFECTS",vue.versusEffectCheckBox.isSelected());
 		Config.getInstance().saveAsync();
 	}
 

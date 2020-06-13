@@ -21,6 +21,7 @@ public class SettingsVue extends JPanel{
 	public JSlider soundSFXMusicLevel;
 	public JComboBox<Resolution> resolutionDropdown;
 	public JCheckBox legacyCheckbox;
+	public JCheckBox versusEffectCheckBox;
 
 	public SettingsVue(SettingsModel model, SettingsController ctrl) {
 		this.model = model;
@@ -54,6 +55,8 @@ public class SettingsVue extends JPanel{
 		resolutionDropdown = new JComboBox<Resolution>();
 		JLabel legacyLabel = new JLabel("<html>Legacy: ");
 		legacyCheckbox = new JCheckBox();
+		JLabel versusEffectLabel = new JLabel("<html>Effect: ");
+		versusEffectCheckBox = new JCheckBox();
 
 		JButton gotoKeysButton = new MenuButton("Controls",Color.orange,Color.WHITE,ctrl);
 		JButton backButton = new MenuButton("Save",Color.GREEN,Color.WHITE,ctrl);
@@ -70,6 +73,8 @@ public class SettingsVue extends JPanel{
 		resolutionLabel.setForeground(Color.white);
 		legacyLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		legacyLabel.setForeground(Color.white);
+		versusEffectLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		versusEffectLabel.setForeground(Color.white);
 
 		gotoKeysButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
@@ -91,6 +96,10 @@ public class SettingsVue extends JPanel{
 		legacyCheckbox.setIcon(new CheckBoxIcon(16,Color.RED,Color.black));
 		legacyCheckbox.setSelectedIcon(new CheckBoxIcon(16,Color.GREEN,Color.black));
 		legacyCheckbox.setOpaque(false);
+
+		versusEffectCheckBox.setIcon(new CheckBoxIcon(16,Color.RED,Color.black));
+		versusEffectCheckBox.setSelectedIcon(new CheckBoxIcon(16,Color.GREEN,Color.black));
+		versusEffectCheckBox.setOpaque(false);
 
 		gotoKeysButton.addActionListener(ctrl);
 		gotoKeysButton.setActionCommand("CLICK:MENU:SETTINGS:KEYS");
@@ -134,8 +143,14 @@ public class SettingsVue extends JPanel{
 		legacyCtrlPannel.add(legacyCheckbox);
 		mainPanel.add(legacyCtrlPannel);
 
+		JPanel veffectCtrlPannel = new JPanel();
+		veffectCtrlPannel.setOpaque(false);
+		veffectCtrlPannel.setLayout(subLayout);
+		veffectCtrlPannel.add(versusEffectLabel);
+		veffectCtrlPannel.add(versusEffectCheckBox);
+		mainPanel.add(veffectCtrlPannel);
+
 		mainPanel.add(gotoKeysButton);
-		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 		mainPanel.add(backButton);
@@ -162,6 +177,9 @@ public class SettingsVue extends JPanel{
 
 		legacyCheckbox.setSelectedIcon(new CheckBoxIcon(legacyCtrlPannel.getPreferredSize().height,Color.GREEN,Color.black));
 		legacyCheckbox.setIcon(new CheckBoxIcon(legacyCtrlPannel.getPreferredSize().height,Color.RED,Color.black));
+
+		versusEffectCheckBox.setSelectedIcon(new CheckBoxIcon(veffectCtrlPannel.getPreferredSize().height,Color.GREEN,Color.black));
+		versusEffectCheckBox.setIcon(new CheckBoxIcon(veffectCtrlPannel.getPreferredSize().height,Color.RED,Color.black));
 
 		add(testPane);
 

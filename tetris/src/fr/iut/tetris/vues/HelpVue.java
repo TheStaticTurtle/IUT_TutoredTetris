@@ -51,7 +51,7 @@ public class HelpVue extends JPanel {
 
         JLabel helpEffectLabel = new JLabel("Effects:"); labels.add(helpEffectLabel); images.add("");
 
-        JLabel helpEffectgeneral = new JLabel("<html>In versus mode there are custom effects. Purple effects are malus and yellow effects are bonuses you gain / send one every 80 points and they stay for a variable length"); labels.add(helpEffectgeneral); images.add("");
+        JLabel helpEffectgeneral = new JLabel("<html>In versus mode there are custom effects (if enabled in the settings). Purple effects are malus and yellow effects are bonuses you gain / send one every 80 points and they stay for a variable duration"); labels.add(helpEffectgeneral); images.add("");
         JLabel effectDeleteLine = new JLabel("<html>This will randomly delete a line"); labels.add(effectDeleteLine); images.add("/res/effects/bonus_delete_line.png");
         JLabel effectBSpeed = new JLabel("<html>This effect will slow your game down"); labels.add(effectBSpeed); images.add("/res/effects/bonus_speed.png");
         JLabel effectRemoveMalus = new JLabel("<html>This will remove a malus"); labels.add(effectRemoveMalus); images.add("/res/effects/malus_remove_malus.png");
