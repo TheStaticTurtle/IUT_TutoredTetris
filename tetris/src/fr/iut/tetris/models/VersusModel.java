@@ -439,10 +439,20 @@ public class VersusModel {
 
     private void checkEffect() {
         if (currentScorePlayerA >= nextEffectPlayerA) {
-            int n = rand.nextInt(6);
+            int ennemyShieldIndex = -1;
+            for (int i = 0; i < effectListPlayerB.size(); i++) {
+                if (effectListPlayerB.get(i) instanceof RemoveMalus) {
+                    ennemyShieldIndex = i;
+                    break;
+                }
+            }
+            int n = rand.nextInt(7);
             switch (n) {
 	            case 0:
-	                effectListPlayerB.add(new HideNextPiece(this, 1, 20 * 1000));
+	                if (ennemyShieldIndex != -1)
+                        effectListPlayerB.remove(ennemyShieldIndex);
+	                else
+	                    effectListPlayerB.add(new HideNextPiece(this, 1, 20 * 1000));
 	                break;
                 case 1:
                     effectListPlayerA.add(new RandomLine(this, 0));
@@ -451,22 +461,51 @@ public class VersusModel {
                     effectListPlayerA.add(new BonusSpeed(this, 0, 10000));
                     break;
                 case 3:
-                    effectListPlayerB.add(new InvertControls(this, 1, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerB.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerB.add(new InvertControls(this, 1, 10000));
                     break;
                 case 4:
-                    effectListPlayerB.add(new MalusSpeed(this, 1, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerB.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerB.add(new MalusSpeed(this, 1, 10000));
                     break;
                 case 5:
-                    effectListPlayerB.add(new RandomRotation(this, 1, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerB.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerB.add(new RandomRotation(this, 1, 10000));
+                    break;
+                case 6:
+                    boolean alreadyHasMalus = false;
+                    for (EffectModel effectModel: effectListPlayerA)
+                        if (effectModel instanceof HideNextPiece || effectModel instanceof InvertControls || effectModel instanceof MalusSpeed || effectModel instanceof RandomRotation){
+                            effectListPlayerA.remove(effectModel);
+                            alreadyHasMalus = true;
+                        }
+                    if (!alreadyHasMalus)
+                        effectListPlayerA.add(new RemoveMalus());
                     break;
             }
             nextEffectPlayerA += effectStep;
         }
         if (currentScorePlayerB >= nextEffectPlayerB) {
-            int n = rand.nextInt(6);
+            int ennemyShieldIndex = -1;
+            for (int i = 0; i < effectListPlayerA.size(); i++) {
+                if (effectListPlayerA.get(i) instanceof RemoveMalus) {
+                    ennemyShieldIndex = i;
+                    break;
+                }
+            }
+            int n = rand.nextInt(7);
             switch (n) {
 	            case 0:
-	                effectListPlayerA.add(new HideNextPiece(this, 0, 20 * 1000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+	                    effectListPlayerA.add(new HideNextPiece(this, 0, 20 * 1000));
 	                break;
                 case 1:
                     effectListPlayerB.add(new RandomLine(this, 1));
@@ -475,13 +514,32 @@ public class VersusModel {
                     effectListPlayerB.add(new BonusSpeed(this, 1, 10000));
                     break;
                 case 3:
-                    effectListPlayerA.add(new InvertControls(this, 0, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerA.add(new InvertControls(this, 0, 10000));
                     break;
                 case 4:
-                    effectListPlayerA.add(new MalusSpeed(this, 0, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerA.add(new MalusSpeed(this, 0, 10000));
                     break;
                 case 5:
-                    effectListPlayerA.add(new RandomRotation(this, 0, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerA.add(new RandomRotation(this, 0, 10000));
+                    break;
+                case 6:
+                    boolean alreadyHasMalus = false;
+                    for (EffectModel effectModel: effectListPlayerB)
+                        if (effectModel instanceof HideNextPiece || effectModel instanceof InvertControls || effectModel instanceof MalusSpeed || effectModel instanceof RandomRotation){
+                            effectListPlayerB.remove(effectModel);
+                            alreadyHasMalus = true;
+                        }
+                    if (!alreadyHasMalus)
+                        effectListPlayerB.add(new RemoveMalus());
                     break;
             }
             nextEffectPlayerB += effectStep;
