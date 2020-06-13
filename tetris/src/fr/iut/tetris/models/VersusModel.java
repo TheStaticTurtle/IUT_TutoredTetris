@@ -447,6 +447,7 @@ public class VersusModel {
                 }
             }
             int n = rand.nextInt(7);
+            this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:GOT_BOUNS"));
             switch (n) {
 	            case 0:
 	                if (ennemyShieldIndex != -1)
@@ -500,6 +501,7 @@ public class VersusModel {
                 }
             }
             int n = rand.nextInt(7);
+            this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:GOT_BOUNS"));
             switch (n) {
 	            case 0:
                     if (ennemyShieldIndex != -1)

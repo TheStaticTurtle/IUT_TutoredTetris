@@ -174,6 +174,9 @@ public class VersusController implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand() ) {
+            case "GAME:GOT_BOUNS":
+                this.audio.playSFX(getClass().getResource( "/res/sounds/bonus.wav"));
+                break;
             case "GAME:FOURLINES_COMPLETE":
                 this.audio.playSFX(getClass().getResource( "/res/sounds/fourlines_completed.wav"));
                 break;
