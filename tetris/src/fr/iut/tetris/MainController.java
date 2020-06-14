@@ -50,7 +50,7 @@ public class MainController implements ActionListener, KeyListener {
 		config = new Config(); //Need's to be instentiated first in order to be able to use Config.getInstance() on other methods
 
 		audio = new AudioController();
-		audio.setMusicTrack(getClass().getResource("/sounds/music.wav"));
+		audio.setMusicTrack(getClass().getResource("/res/sounds/music.wav"));
 
 		mainVue = new MainVue(this);
 
