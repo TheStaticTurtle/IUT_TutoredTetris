@@ -52,7 +52,7 @@ public class HelpVue extends JPanel {
 
         JLabel helpEffectLabel = new JLabel("Effects:"); labels.add(helpEffectLabel); images.add(""); durations.add(0);
 
-        JLabel helpEffectgeneral = new JLabel("<html>In versus mode there are custom effects (if enabled in the settings). Purple effects are malus and yellow effects are bonuses you gain / send one every 80 points and they stay for a variable duration"); labels.add(helpEffectgeneral); images.add(""); durations.add(0);
+        JLabel helpEffectgeneral = new JLabel("<html>In versus mode there are custom effects (if enabled in the settings). Purple effects are malus and yellow effects are bonuses you gain / send one every "+Config.getInstance().getInt("VERSUS_EFFECT_EVERY")+" points and they stay for a variable duration"); labels.add(helpEffectgeneral); images.add(""); durations.add(0);
         JLabel effectDeleteLine = new JLabel("<html>This will randomly delete a line"); labels.add(effectDeleteLine); images.add("/res/effects/bonus_delete_line.png"); durations.add(0);
         JLabel effectBSpeed = new JLabel("<html>This will slow your game down"); labels.add(effectBSpeed); images.add("/res/effects/bonus_speed.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_BONUS_SPEED"));
         JLabel effectRemoveMalus = new JLabel("<html>This will remove a malus"); labels.add(effectRemoveMalus); images.add("/res/effects/malus_remove_malus.png"); durations.add(0);
@@ -100,6 +100,10 @@ public class HelpVue extends JPanel {
                 c1.gridx = 0;
                 mainPanel.add(new EffectImage(images.get(i),true),c1);
 
+                c1.weightx = 0.87;
+                c1.gridx = 1;
+                mainPanel.add(labels.get(i),c1);
+
                 if(durations.get(i) != 0) {
                     c1.gridy = i;
                     c1.gridx = 2;
@@ -118,9 +122,6 @@ public class HelpVue extends JPanel {
                     mainPanel.add(label,c1);
                 }
 
-                c1.weightx = 0.87;
-                c1.gridx = 1;
-                mainPanel.add(labels.get(i),c1);
             } else {
                 c1.fill = GridBagConstraints.BOTH;
                 c1.weightx = 1;
