@@ -690,7 +690,8 @@ class SplashScreenPanel extends JPanel {
 		mainPanel.setVisible(true);
 		mainPanel.setOpaque(false);
 
-		pressSpace = new JLabel("<html><div style='text-align: center;'>Press \"SPACE\" to start</div></html>");
+		String keyName = new SettingsKeysModel().keycodes.get(Config.getInstance().getInt("KEYCODE_STARTGAME"));
+		pressSpace = new JLabel("<html><div style='text-align: center;'>Press \""+keyName+"\" to start</div></html>");
 		pressSpace.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		pressSpace.setForeground(Color.white);
 		mainPanel.add(pressSpace);
