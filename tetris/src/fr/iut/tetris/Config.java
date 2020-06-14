@@ -273,7 +273,7 @@ public class Config {
 		p.put("KEYCODE_STARTGAME"  ,"32"); // Space key
 
 		p.put("VOLUME_MUSIC", "-11"); //-11dB
-		p.put("VOLUME_SFX"  , "-21"); //-21dB
+		p.put("VOLUME_SFX"  , "-18"); //-18dB
 
 		p.put("SCORE_SOLO_BEST" ,"0");
 		p.put("SCORE_COOP_BEST" ,"0");
