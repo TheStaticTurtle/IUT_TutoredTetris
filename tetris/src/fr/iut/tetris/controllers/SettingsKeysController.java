@@ -76,6 +76,7 @@ public class SettingsKeysController implements ActionListener, KeyListener/*, Ch
 				break;
 			case "CLICK:BACK":
 				mainCtrl.actionPerformed(new ActionEvent(e.getSource(),e.getID(),"CLICK:MENU:SETTINGS"));
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
 				break;
 			default:
 				break;

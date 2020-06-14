@@ -110,6 +110,12 @@ public class SettingsVue extends JPanel{
 		soundMusicLevel.addChangeListener(ctrl);
 		soundSFXMusicLevel.addChangeListener(ctrl);
 
+		legacyCheckbox.addActionListener(ctrl);
+		legacyCheckbox.setActionCommand("CLICK:CHECKBOX_TICK:LEGACY");
+
+		versusEffectCheckBox.addActionListener(ctrl);
+		versusEffectCheckBox.setActionCommand("CLICK:CHECKBOX_TICK:EFFECT");
+
 		mainPanel.add(myLabel);
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());

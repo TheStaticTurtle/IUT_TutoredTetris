@@ -49,6 +49,7 @@ public class AudioController {
 								clip.close();
 							}
 						});
+						clip.flush();
 					} catch (LineUnavailableException e) {
 						e.printStackTrace();
 					}

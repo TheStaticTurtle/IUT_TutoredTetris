@@ -60,6 +60,10 @@ public class SettingsController implements ActionListener, ChangeListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
+			case "CLICK:CHECKBOX_TICK:EFFECT":
+			case "CLICK:CHECKBOX_TICK:LEGACY":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
+				break;
 			case "RESOLUTION_SELECT":
 				JComboBox<Resolution> box = (JComboBox<Resolution>) e.getSource();
 				Resolution r = (Resolution) box.getSelectedItem();

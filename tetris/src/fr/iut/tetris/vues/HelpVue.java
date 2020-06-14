@@ -88,9 +88,6 @@ public class HelpVue extends JPanel {
         assert labels.size() == images.size();
         assert labels.size() == durations.size();
         for (int i = 0; i < labels.size(); i++) {
-            /*JPanel pan = new JPanel();
-            pan.setOpaque(false);
-            pan.setLayout(subLayout);*/
             if (!images.get(i).equals("")) {
                 c1.fill = GridBagConstraints.BOTH;
                 c1.gridwidth = 1;
