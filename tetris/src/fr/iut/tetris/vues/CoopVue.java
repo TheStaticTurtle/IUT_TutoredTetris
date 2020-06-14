@@ -10,9 +10,6 @@ import fr.iut.tetris.models.CoopModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 public class CoopVue extends JPanel {
 	CoopModel model;
@@ -64,10 +61,10 @@ public class CoopVue extends JPanel {
 		add(testPane);
 
 		JPanel t = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 
 	public void setModel(CoopModel model) {
@@ -84,7 +81,6 @@ public class CoopVue extends JPanel {
 class GamePanelCoop extends JPanel {
 	CoopModel model;
 	int squareSize = 40;
-	BufferedImage img = null;
 	JPanel mainPanel;
 	NextPiecePanel nextPiecePanelPlayerA;
 	NextPiecePanel nextPiecePanelPlayerB;
@@ -138,7 +134,7 @@ class GamePanelCoop extends JPanel {
 		add(scoreLabel);
 
 		try {
-			Object[][] grid = model.computeMixedGrid();
+			Object[][] grid = model.computeMixedGrid(false);
 			for (Object[] objects : grid) {
 				for (int x = 0; x < objects.length; x++) {
 					TetrisBlock b = new TetrisBlock(squareSize);
@@ -185,8 +181,8 @@ class GamePanelCoop extends JPanel {
 		t.width = model.width * squareSize;
 		mainPanel.setPreferredSize(t);
 
-		nextPiecePanelPlayerA.resetSize((int)(squareSize/2));
-		nextPiecePanelPlayerB.resetSize((int)(squareSize/2));
+		nextPiecePanelPlayerA.resetSize(squareSize/2);
+		nextPiecePanelPlayerB.resetSize(squareSize/2);
 
 		layout.putConstraint(SpringLayout.NORTH, labelNextPieceB, squareSize*4, SpringLayout.SOUTH, nextPiecePanelPlayerA);
 		layout.putConstraint(SpringLayout.WEST, labelNextPieceB, 10, SpringLayout.EAST, mainPanel);
@@ -206,7 +202,7 @@ class GamePanelCoop extends JPanel {
 			try {
 				nextPiecePanelPlayerA.recalulate(model.nextPiecePlayerA);
 				nextPiecePanelPlayerB.recalulate(model.nextPiecePlayerB);
-				BlockModel[][] grid = model.computeMixedGrid();
+				BlockModel[][] grid = model.computeMixedGrid(true);
 
 				for (int y = 0; y < grid.length; y++) {
 					for (int x = 0; x < grid[y].length; x++) {

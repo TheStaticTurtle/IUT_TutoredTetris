@@ -118,9 +118,7 @@ public class Config {
 			} catch (IOException | IllegalArgumentException e) {
 				Log.error(this,"Could not load image at location: "+name+" loading default texture");
 
-				BufferedImage b = null;
-
-				b = new BufferedImage(5,5,BufferedImage.TYPE_INT_RGB);
+				BufferedImage b = new BufferedImage(5,5,BufferedImage.TYPE_INT_RGB);
 				Graphics2D g2d = (Graphics2D) b.getGraphics();
 				g2d.setColor(Color.BLACK);
 				g2d.fillRect(0,0,5,5);
@@ -217,7 +215,7 @@ public class Config {
 
 	/**
 	 * Read a string from the config file
-	 * @param key
+	 * @param key The emplacement of the string
 	 * @return the string a the emplacement "key"
 	 */
 	public String getString(String key) {
@@ -229,7 +227,7 @@ public class Config {
 
 	/**
 	 * Read a int from the config file
-	 * @param key
+	 * @param key The emplacement of the int
 	 * @return the int a the emplacement "key"
 	 */
 	public int getInt(String key) {
@@ -241,12 +239,12 @@ public class Config {
 
 	/**
 	 * Read a boolean from the config file
-	 * @param key
+	 * @param key The emplacement of the boolean
 	 * @return the boolean a the emplacement "key"
 	 */
 	public boolean getBool(String key) {
 		if(config.containsKey(key)) {
-			return ((String)config.get(key)).equals("true");
+			return config.get(key).equals("true");
 		}
 		return false;
 	}
@@ -257,7 +255,7 @@ public class Config {
 	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
-		p.put("CONFIG_VERSION"     ,"8");
+		p.put("CONFIG_VERSION"     ,"11");
 
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
@@ -274,8 +272,8 @@ public class Config {
 		p.put("KEYCODE_GOBACK"     ,"27"); // Esc key
 		p.put("KEYCODE_STARTGAME"  ,"32"); // Space key
 
-		p.put("VOLUME_MUSIC", "0"); //0Gain
-		p.put("VOLUME_SFX"  , "0"); //0Gain
+		p.put("VOLUME_MUSIC", "-11"); //-11dB
+		p.put("VOLUME_SFX"  , "-18"); //-18dB
 
 		p.put("SCORE_SOLO_BEST" ,"0");
 		p.put("SCORE_COOP_BEST" ,"0");
@@ -295,6 +293,20 @@ public class Config {
 		p.put("FONT_VERYTINY" ,"16");
 
 		p.put("LEGACY_PIECES" ,"false");
+		p.put("VERSUS_EFFECTS","true");
+
+		p.put("VERSUS_EFFECT_EVERY","80");
+
+
+		p.put("EFFECT_DURATION_BONUS_SPEED","15");
+		p.put("EFFECT_DURATION_MALUS_SPEED","15");
+		p.put("EFFECT_DURATION_MALUS_BLIND","25");
+		p.put("EFFECT_DURATION_MALUS_REVERSE","15");
+		p.put("EFFECT_DURATION_MALUS_ROTATE","10");
+
+
+		p.put("START_SPEED","1000");
+
 		return p;
 	}
 }

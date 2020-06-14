@@ -1,4 +1,6 @@
 fr.iut.tetris
 fr.iut.tetris.controllers
+fr.iut.tetris.enums
+fr.iut.tetris.exceptions
 fr.iut.tetris.models
 fr.iut.tetris.vues

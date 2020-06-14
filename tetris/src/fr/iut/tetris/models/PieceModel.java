@@ -16,7 +16,7 @@ class PieceModel {
 	public static final Color COLOR_BLUE = Color.decode("#0026FF");
 	public static final Color COLOR_YELLOW = Color.decode("#FFF500");
 	public static final Color COLOR_OLIVE = Color.decode("#D4FF00");
-	public static final Color COLOR_LIGHTBLUE = Color.decode("#00BFFF");
+	//public static final Color COLOR_LIGHTBLUE = Color.decode("#00BFFF");
 	public static final Color COLOR_ORANGERED = Color.decode("#FF4300");
 	public static final Color COLOR_CYAN = Color.decode("#00FFA5");
 	public static final Color COLOR_DARKPURPLE = Color.decode("#7200FF");
@@ -25,29 +25,29 @@ class PieceModel {
 	public static final Color COLOR_DARKPINK = Color.decode("#FF0059");
 	public static final Color COLOR_LIGHTPINK = Color.decode("#FF00B6");
 	public static final Color COLOR_GRAY = Color.decode("#DBDBDB");
-	public static final Color COLOR_DARKGRAY = Color.decode("#808080");
-	public static final Color COLOR_PURPLE2 = Color.decode("#8E00DB");
-
-	public BlockModel[][] childs = new BlockModel[4][4];
+	//public static final Color COLOR_DARKGRAY = Color.decode("#808080");
+	//public static final Color COLOR_PURPLE2 = Color.decode("#8E00DB");
+	public static final Color COLOR_WHITE = Color.decode("#FFFFFF");
+	
+	public BlockModel[][] childs;
 
 	//Position represent top-left corner of the 4x4 grid
-	int x = 0;
-	int y = 0;
-	Point centerOfgravity;
+	int x;
+	int y;
 	Point spawnPoint; //Just for the clone()
 	String name;
+	public boolean ignoreCollisionWithFalling = false;
 
-	public PieceModel(BlockModel[][] childs, Point spawnPoint, Point centerOfgravity, String name) {
+	public PieceModel(BlockModel[][] childs, Point spawnPoint, String name) {
 		this.childs = childs;
 		this.x = spawnPoint.x;
 		this.y = spawnPoint.y;
 		this.spawnPoint = spawnPoint; //Just for the clone()
-		this.centerOfgravity = centerOfgravity;
 		this.name = name;
-		for (int y = 0; y < childs.length; y++) {
-			for (int x = 0; x < childs[y].length; x++) {
-				if(childs[y][x] != null) {
-					childs[y][x].setParent(this);
+		for (BlockModel[] child : childs) {
+			for (BlockModel blockModel : child) {
+				if (blockModel != null) {
+					blockModel.setParent(this);
 				}
 			}
 		}
@@ -59,11 +59,11 @@ class PieceModel {
 	 * @param color the color to change to
 	 */
 	public void changeColor(Color color) {
-		for (int y = 0; y < childs.length; y++) {
-			for (int x = 0; x < childs[y].length; x++) {
-				if(childs[y][x] != null) {
-					childs[y][x].color = color;
-					childs[y][x].recalculate();
+		for (BlockModel[] child : childs) {
+			for (BlockModel blockModel : child) {
+				if (blockModel != null) {
+					blockModel.color = color;
+					blockModel.recalculate();
 				}
 			}
 		}
@@ -72,7 +72,7 @@ class PieceModel {
 	/**
 	 * Rotate a given array of blocks
 	 * @param matrix the arrays
-	 * @param name
+	 * @param name Name of the piece (used for rotation)
 	 * @return the array rotated clockwise
 	 */
 	private static BlockModel[][] rotateClockWise(BlockModel[][] matrix, String name) {
@@ -99,7 +99,7 @@ class PieceModel {
 	/**
 	 * Rotate a given array of blocks
 	 * @param matrix the arrays
-	 * @param name
+	 * @param name Name of the piece (used for rotation)
 	 * @return the array rotated counter clockwise
 	 */
 	private static BlockModel[][] rotateConterClockWise(BlockModel[][] matrix, String name) {
@@ -126,7 +126,7 @@ class PieceModel {
 	/**
 	 * Rotate the piece based on the given direction
 	 * @param direction the direction
-	 * @param name
+	 * @param name Name of the piece (used for rotation)
 	 */
 	void rotateModel(int direction, String name) { // -1LEFT / 1RIGHT
 		if(direction == -1) {
@@ -151,9 +151,42 @@ class PieceModel {
 		return new PieceModel(
 				c,
 				new Point(this.spawnPoint.x,this.spawnPoint.y),
-				new Point(this.centerOfgravity.x,this.centerOfgravity.y),
 				this.name
 		);
+	}
+
+	/**
+	 * Calculate a piece height (was used for the drop preview)
+	 * @return the piece height
+	 */
+	int getPieceHeight() {
+		int total = 0;
+		for (BlockModel[] child : childs) {
+			boolean empty = true;
+			for (BlockModel blockModel : child) {
+				if (blockModel == null) {
+					empty = false;
+					break;
+				}
+			}
+
+			if (!empty) total++;
+		}
+		return total;
+	}
+
+	/**
+	 * Calculate a number of block in a piece
+	 * @return the block count
+	 */
+	int getBlockCount() {
+		int total = 0;
+		for (BlockModel[] child : childs) {
+			for (BlockModel blockModel : child) {
+				if (blockModel != null) total += 1;
+			}
+		}
+		return total;
 	}
 
 	static PieceModel PieceT = new PieceModel(
@@ -165,7 +198,6 @@ class PieceModel {
 					{null						 , null						   , null						 , null}
 			},
 			new Point(3,-1),
-			new Point(3,1),
 			"PieceT"
 	);
 	static PieceModel PieceL = new PieceModel(
@@ -177,7 +209,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,2),
 			"PieceL"
 	);
 	static PieceModel PieceJ = new PieceModel(
@@ -189,7 +220,6 @@ class PieceModel {
 
 			},
 			new Point(4,0),
-			new Point(1,2),
 			"PieceJ"
 	);
 	static PieceModel PieceO = new PieceModel(
@@ -201,7 +231,6 @@ class PieceModel {
 
 			},
 			new Point(3,-1),
-			new Point(1,2),
 			"PieceO"
 	);
 	static PieceModel PieceS = new PieceModel(
@@ -213,7 +242,6 @@ class PieceModel {
 
 			},
 			new Point(4,-1),
-			new Point(1,2),
 			"PieceS"
 	);
 	static PieceModel PieceZ = new PieceModel(
@@ -225,7 +253,6 @@ class PieceModel {
 
 			},
 			new Point(3,-1),
-			new Point(1,2),
 			"PieceZ"
 	);
 	static PieceModel PieceI = new PieceModel(
@@ -236,7 +263,6 @@ class PieceModel {
 					{null                      , null                      , null                      , null},
 			},
 			new Point(3,-2),
-			new Point(1,2),
 			"PieceI"
 	);
 
@@ -249,7 +275,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,2),
 			"PieceStar"
 	);
 
@@ -262,7 +287,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,2),
 			"PieceU"
 	);
 	static PieceModel PieceBarre3 = new PieceModel(
@@ -274,7 +298,6 @@ class PieceModel {
 
 			},
 			new Point(3,-1),
-			new Point(1,1),
 			"PieceBarre3"
 	);
 	static PieceModel PieceMiniL = new PieceModel(
@@ -286,7 +309,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,1),
 			"PieceMiniL"
 	);
 	static PieceModel PieceTLongA = new PieceModel(
@@ -298,7 +320,6 @@ class PieceModel {
 					{null					         , null				     		   , null					    	 , null}
 			},
 			new Point(3,-1),
-			new Point(3,1),
 			"PieceTLongA"
 	);
 	static PieceModel PieceTLongB = new PieceModel(
@@ -310,7 +331,6 @@ class PieceModel {
 					{null						 , null						   , null						 , null}
 			},
 			new Point(3,-1),
-			new Point(3,1),
 			"PieceTLongB"
 	);
 	static PieceModel PieceBigL = new PieceModel(
@@ -322,7 +342,6 @@ class PieceModel {
 
 			},
 			new Point(3,0),
-			new Point(1,1),
 			"PieceBigL"
 	);
 
@@ -334,7 +353,6 @@ class PieceModel {
 					{null					       , null						   , null		   			       , null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBigT"
 	);
 
@@ -346,7 +364,6 @@ class PieceModel {
 					{null					        , null				   		     , null		   			          , null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBizzareA"
 	);
 
@@ -358,7 +375,6 @@ class PieceModel {
 					{null					   , null				   	   , null		   			   , null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBizzareB"
 	);
 
@@ -370,7 +386,6 @@ class PieceModel {
 					{null                     , null                     , null                     , null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBigZ"
 	);
 	static PieceModel PieceBigS = new PieceModel(
@@ -381,21 +396,24 @@ class PieceModel {
 					{null                       ,                        null,                        null,                        null}
 			},
 			new Point(3,0),
-			new Point(3,1),
 			"PieceBigS"
 	);
 
 
-	static PieceModel[] PiecesLegacy = new PieceModel[]{PieceModel.PieceL, PieceModel.PieceT, PieceModel.PieceO, PieceModel.PieceS,PieceModel.PieceZ,PieceModel.PieceI,PieceModel.PieceJ};
+	static PieceModel[] PiecesLegacy = new PieceModel[]{PieceL, PieceT, PieceO, PieceS,PieceZ,PieceI,PieceJ};
 	static PieceModel[] PiecesCustoms = new PieceModel[]{PieceStar,PieceU,PieceBarre3,PieceMiniL,PieceTLongA,PieceTLongB,PieceBigL,PieceBigT,PieceBizzareA,PieceBizzareB,PieceBigZ,PieceBigS};
 
+	/**
+	 * Get all the pieces depending if the legacy option is used
+	 * @return an array containing all the pieces
+	 */
 	static public PieceModel[] getPieces() {
 		if(Config.getInstance().getBool("LEGACY_PIECES")) {
 			return PiecesLegacy;
 		} else {
 			ArrayList<PieceModel> baseArray = new ArrayList<>(Arrays.asList(PiecesLegacy));
 			baseArray.addAll(Arrays.asList(PiecesCustoms));
-			return baseArray.toArray(new PieceModel[baseArray.size()]);
+			return baseArray.toArray(new PieceModel[0]);
 		}
 	}
 }

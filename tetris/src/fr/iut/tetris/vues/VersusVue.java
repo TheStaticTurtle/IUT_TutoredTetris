@@ -1,7 +1,6 @@
 package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
-import fr.iut.tetris.models.EffectModel;
 import fr.iut.tetris.models.VersusModel;
 import fr.iut.tetris.controllers.VersusController;
 import fr.iut.tetris.enums.GameState;
@@ -11,9 +10,7 @@ import fr.iut.tetris.models.BlockModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+
 
 public class VersusVue extends JPanel {
 	
@@ -72,10 +69,10 @@ public class VersusVue extends JPanel {
         add(testPane);
 
         JPanel t = this;
-        new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+        new Timer(10, e -> {
             t.repaint();
             t.revalidate();
-        }}).start();
+        }).start();
     }
 
     public void setModel(VersusModel model) {
@@ -92,11 +89,8 @@ public class VersusVue extends JPanel {
 
 class GamePanelVersus extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	
 	VersusModel model;
     int squareSize = 40;
-    BufferedImage img = null;
     JPanel mainPanel;
     NextPiecePanel nextPiecePanel;
     BlockModel noBlockModel;
@@ -130,7 +124,7 @@ class GamePanelVersus extends JPanel {
 
         JLabel labelNextPiece;
 
-        if (this.player == 1)
+        if (this.player == 0)
             labelNextPiece = new JLabel("<html>Next A:");
         else
             labelNextPiece = new JLabel("<html>Next B:");
@@ -159,7 +153,7 @@ class GamePanelVersus extends JPanel {
 
         if (this.player == 0) {
             try {
-                Object[][] grid = model.computeMixedGrid(0);
+                Object[][] grid = model.computeMixedGrid(0, false);
                 for (Object[] objects : grid) {
                     for (int x = 0; x < objects.length; x++) {
                         TetrisBlock b = new TetrisBlock(squareSize);
@@ -173,7 +167,7 @@ class GamePanelVersus extends JPanel {
         }
         else {
             try {
-                Object[][] grid = model.computeMixedGrid(1);
+                Object[][] grid = model.computeMixedGrid(1, false);
                 for (Object[] objects : grid) {
                     for (int x = 0; x < objects.length; x++) {
                         TetrisBlock b = new TetrisBlock(squareSize);
@@ -222,7 +216,6 @@ class GamePanelVersus extends JPanel {
             layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.SOUTH, labelNextPiece);
             layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
 
-            //layout.putConstraint(SpringLayout.NORTH, effectsPanel, 10, SpringLayout.SOUTH, nextPiecePanel);
             layout.putConstraint(SpringLayout.WEST, effectsPanel, 10, SpringLayout.EAST, mainPanel);
             layout.putConstraint(SpringLayout.EAST, effectsPanel, -10, SpringLayout.EAST, this);
         }
@@ -243,7 +236,7 @@ class GamePanelVersus extends JPanel {
         t.width = model.width * squareSize;
         mainPanel.setPreferredSize(t);
 
-        nextPiecePanel.resetSize((int)(squareSize/2));
+        nextPiecePanel.resetSize(squareSize/2);
 
         layout.putConstraint(SpringLayout.NORTH, effectsPanel, squareSize*4, SpringLayout.SOUTH, nextPiecePanel);
 
@@ -261,8 +254,9 @@ class GamePanelVersus extends JPanel {
         if(model.gameState==GameState.PLAYING) {
             if (this.player == 0) {
                 try {
-                    nextPiecePanel.recalulate(model.nextPiecePlayerA);
-                    BlockModel[][] grid = model.computeMixedGrid(0);
+                    nextPiecePanel.recalulate( model.hideNextPieceA?null:model.nextPiecePlayerA );
+                    
+                    BlockModel[][] grid = model.computeMixedGrid(0, true);
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {
@@ -280,8 +274,8 @@ class GamePanelVersus extends JPanel {
             }
             else {
                 try {
-                    nextPiecePanel.recalulate(model.nextPiecePlayerB);
-                    BlockModel[][] grid = model.computeMixedGrid(1);
+                	nextPiecePanel.recalulate( model.hideNextPieceB?null:model.nextPiecePlayerB );
+                    BlockModel[][] grid = model.computeMixedGrid(1, true);
 
                     for (int y = 0; y < grid.length; y++) {
                         for (int x = 0; x < grid[y].length; x++) {

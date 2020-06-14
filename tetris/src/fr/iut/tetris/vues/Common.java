@@ -2,14 +2,13 @@ package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
-import fr.iut.tetris.controllers.CreditController;
-import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.plaf.basic.BasicComboBoxEditor;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -23,6 +22,11 @@ import java.util.Random;
 
 public class Common {
 
+	/**
+	 * Find the height in pixel of a given string
+	 * @param str a string
+	 * @return the height in pixel
+	 */
 	public static int getStringHeight(String str)
 	{
 		Graphics2D g2 = new BufferedImage(10,10,BufferedImage.TYPE_INT_ARGB).createGraphics();
@@ -122,14 +126,6 @@ class MenuButton extends JButton implements MouseListener {
 	Color backGroundColor;
 	ActionListener listener;
 
-	public MenuButton(String text, CreditController ctrl) {
-		this(text);
-		listener = ctrl;
-	}
-	public MenuButton(String text, MenuController ctrl) {
-		this(text);
-		listener = ctrl;
-	}
 	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, ActionListener ctrl) {
 		this(text,foreGroundColor,backGroundColor);
 		listener = ctrl;
@@ -194,19 +190,19 @@ class TetrisLogo extends JPanel {
 
 	int offset = 10;
 
-	int canvasWidth = 450;
-	int canvasHeight = (int)(canvasWidth*0.333);
-	int baseWidth = canvasWidth-offset;
-	int baseHeight = canvasHeight-offset;
+	int canvasWidth;
+	int canvasHeight;
+	int baseWidth;
+	int baseHeight;
 
-	int width = baseWidth;
-	int height = baseHeight;
+	int width;
+	int height;
 
 	int speed = 2;
 	int direction = speed;
 	Image img;
 
-	TetrisLogo(JPanel parent, int width) {
+	TetrisLogo(int width) {
 		this.canvasWidth = width;
 		this.canvasHeight = (int)(this.canvasWidth*0.333);
 		this.baseWidth = this.canvasWidth-offset;
@@ -218,9 +214,7 @@ class TetrisLogo extends JPanel {
 
 
 		final TetrisLogo p = this;
-		new Timer(100, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			p.update_size();
-		}}).start();
+		new Timer(100, e -> p.update_size()).start();
 	}
 
 	public void update_size() {
@@ -248,7 +242,7 @@ class TetrisLogo extends JPanel {
 }
 class CustomSlider extends JSlider implements MouseListener {
 
-	int borderSize = 10;
+	int borderSize;
 	int space = 5;
 	int raw_thumb_x;
 	int thumbSpaceing;
@@ -366,6 +360,52 @@ class CheckBoxIcon implements Icon {
 	public int getIconHeight() { return this.size; }
 }
 
+class HelpButton extends JButton implements MouseListener {
+
+	private static final long serialVersionUID = 1L;
+
+	int size;
+	ActionListener listener;
+
+	public HelpButton(int size, ActionListener listener) {
+		this.size = size;
+		this.listener = listener;
+
+		addMouseListener(this);
+		setBorder(null);
+		setText("?");
+		setForeground(Color.WHITE);
+		setFont(Config.getInstance().getFont("FONT_BIG"));
+		setPreferredSize(new Dimension(size,size));
+		int bs = Config.getInstance().getInt("BORDER_SIZES")/2;
+		setBorder(new MatteBorder(bs,bs,bs,bs,Color.WHITE));
+		setContentAreaFilled(false);
+		setFocusPainted(false);
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
+	}
+
+	@Override public void mouseClicked(MouseEvent e) { }
+	@Override public void mousePressed(MouseEvent e) { }
+	@Override public void mouseReleased(MouseEvent e) { }
+
+	@Override public void mouseEntered(MouseEvent e) {
+		if(listener!=null)
+			listener.actionPerformed(new ActionEvent(this,0,"MOUSE:ENTER"));
+
+		int bs = (int) (Config.getInstance().getInt("BORDER_SIZES")/1.5);
+		setBorder(new MatteBorder(bs,bs,bs,bs,Color.WHITE));
+		//setIcon(new HoveredButtonIcon(getHeight(),getWidth(),this.font, this.text, this.foreGroundColor, this.backGroundColor));
+	}
+	@Override public void mouseExited(MouseEvent e) {
+		if(listener!=null)
+			listener.actionPerformed(new ActionEvent(this,0,"MOUSE:EXIT"));
+
+		int bs = Config.getInstance().getInt("BORDER_SIZES")/2;
+		setBorder(new MatteBorder(bs,bs,bs,bs,Color.WHITE));
+		//setIcon(null);
+	}
+}
+
 class CustomComboBoxRenderer extends JLabel implements ListCellRenderer<Object>  {
 	public CustomComboBoxRenderer() {
 		setOpaque(true);
@@ -474,7 +514,6 @@ class NextPiecePanel extends JPanel {
 	int canvasWidth;
 	int canvasHeight;
 	int blockSize;
-	BufferedImage img;
 	PieceModel piece;
 	BlockModel noBlockModel;
 
@@ -566,7 +605,9 @@ class PauseMenu extends JPanel {
 		backResumePanel.setLayout(subLayout);
 		mainPanel.add(backResumePanel);
 
-		MovingStarsAnimation animation = new MovingStarsAnimation(mainPanel.getPreferredSize(),Color.black,10,Color.red);
+		Dimension d = mainPanel.getPreferredSize();
+		d.width += 150;
+		MovingStarsAnimation animation = new MovingStarsAnimation(d,Color.black,18,Color.red);
 
 		JLayeredPane testPane = new JLayeredPane();
 		testPane.add(animation,JLayeredPane.DEFAULT_LAYER);
@@ -594,10 +635,10 @@ class PauseMenu extends JPanel {
 
 		recalculate(GameState.WAITING);
 		JPanel t = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 
 	@Override
@@ -649,7 +690,8 @@ class SplashScreenPanel extends JPanel {
 		mainPanel.setVisible(true);
 		mainPanel.setOpaque(false);
 
-		pressSpace = new JLabel("<html><div style='text-align: center;'>Press \"SPACE\" to start</div></html>");
+		String keyName = new SettingsKeysModel().keycodes.get(Config.getInstance().getInt("KEYCODE_STARTGAME"));
+		pressSpace = new JLabel("<html><div style='text-align: center;'>Press \""+keyName+"\" to start</div></html>");
 		pressSpace.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		pressSpace.setForeground(Color.white);
 		mainPanel.add(pressSpace);
@@ -705,10 +747,10 @@ class SplashScreenPanel extends JPanel {
 		setVisible(true);
 
 		JPanel t = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 
 	public void recalculate(boolean visible, GameState state) {
@@ -757,12 +799,20 @@ class EffectImage extends JPanel {
 	Dimension size = new Dimension(64,64);
 	BufferedImage image;
 	String imagePath;
+	boolean scale_to_height = false;
 
-	public EffectImage(String image_path) {
+	public EffectImage(String image_path, boolean scale_to_height) {
+		this.scale_to_height = scale_to_height;
 		imagePath = image_path;
 		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(32,32, Image.SCALE_REPLICATE));
 		setOpaque(false);
 	}
+
+	/*public EffectImage(String image_path) {
+		imagePath = image_path;
+		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(32,32, Image.SCALE_REPLICATE));
+		setOpaque(false);
+	}*/
 
 	public void setImage(BufferedImage image) {
 		this.image = image;
@@ -773,25 +823,6 @@ class EffectImage extends JPanel {
 		setOpaque(false);
 	}
 
-	/*@Override
-	public void setPreferredSize(Dimension size) {
-		super.setPreferredSize(size);
-		this.size = size;
-		this.size.height = this.size.width;
-
-		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
-		updateUI();
-	}
-	@Override
-	public void setSize(Dimension size) {
-		super.setSize(size);
-		this.size = size;
-		this.size.height = this.size.width;
-
-		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
-		updateUI();
-	}*/
-
 	@Override
 	public Dimension getPreferredSize() {
 		return size;
@@ -799,15 +830,35 @@ class EffectImage extends JPanel {
 
 	@Override
 	public int getHeight() {
-		this.size = new Dimension(getWidth(),getWidth());
-		return getWidth();
+		if(!this.scale_to_height) {
+			this.size = new Dimension(super.getWidth(),super.getWidth());
+			return super.getWidth();
+		} else {
+			this.size = new Dimension(super.getHeight(),super.getHeight());
+			return super.getHeight();
+		}
+	}
+
+	@Override
+	public int getWidth() {
+		if(!this.scale_to_height) {
+			this.size = new Dimension(super.getWidth(),super.getWidth());
+			return super.getWidth();
+		} else {
+			this.size = new Dimension(super.getHeight(),super.getHeight());
+			return super.getHeight();
+		}
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
 		setSize(this.size);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(this.image,0,0,getWidth(),getWidth(),null);
+		if(this.scale_to_height) {
+			g2d.drawImage(this.image, 0, 0, getHeight(), getHeight(), null);
+		} else {
+			g2d.drawImage(this.image,0,0,getWidth(),getWidth(),null);
+		}
 	}
 }
 
@@ -816,8 +867,8 @@ class MovingStarModel {
 	Point position;
 	Dimension parent;
 	Random rng;
-	int speed = 0;
-	int offset = 150;
+	int speed;
+	int offset = 300;
 	public MovingStarModel(Random rng, Dimension parent, int speed) {
 		this.parent = parent;
 		this.speed = speed;
@@ -884,11 +935,11 @@ class MovingStarsAnimation extends JPanel {
 		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 
 		MovingStarsAnimation p = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			for (MovingStarModel star : p.stars) {
 				star.move();
 			}
-		}}).start();
+		}).start();
 	}
 
 	public MovingStarsAnimation(Dimension size) {
@@ -910,11 +961,11 @@ class MovingStarsAnimation extends JPanel {
 		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 
 		MovingStarsAnimation p = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			for (MovingStarModel star : p.stars) {
 				star.move();
 			}
-		}}).start();
+		}).start();
 	}
 
 	public void resetSize(Dimension size) {
@@ -951,8 +1002,8 @@ class StaticStarModel {
 
 	Image resize_img;
 
-	double base_size = 0;
-	double size = 0;
+	double base_size;
+	double size;
 	double max_diff = 0.8;
 	double direction = 0.1;
 
@@ -1012,11 +1063,11 @@ class StaticStarAnimation extends JPanel {
 		}
 
 		StaticStarAnimation p = this;
-		new Timer(250, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(250, e -> {
 			for (StaticStarModel star : p.stars) {
 				star.move();
 			}
-		}}).start();
+		}).start();
 	}
 
 	@Override public Dimension getPreferredSize() {return size;}

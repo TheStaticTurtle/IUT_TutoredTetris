@@ -4,6 +4,8 @@ then
 	rm -rf out
 fi
 
+mkdir out
+
 echo "Building models"
 javac -classpath tetris/libs/discord-rpc.jar:out -sourcepath tetris/src -d out tetris/src/fr/iut/tetris/models/*.java
 echo "Building controllers"

@@ -1,5 +1,6 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.VersusController;
 import fr.iut.tetris.enums.Direction;
@@ -17,8 +18,9 @@ public class VersusModel {
 
     public int height = 20;
     public int width = 10;
-    public int fallSpeedPlayerA = 1000; //ms
-    public int fallSpeedPlayerB = 1000; //ms
+    public int baseSpeed;
+    public int fallSpeedPlayerA; //ms
+    public int fallSpeedPlayerB; //ms
     ArrayList<Object> pieceListPlayerA = new ArrayList<>();
     ArrayList<Object> pieceListPlayerB = new ArrayList<>();
     public ArrayList<EffectModel> effectListPlayerA = new ArrayList<>();
@@ -28,24 +30,35 @@ public class VersusModel {
     public PieceModel fallingPiecePlayerB = null;
     public PieceModel nextPiecePlayerA;
     public PieceModel nextPiecePlayerB;
+    public boolean hideNextPieceA;
+    public boolean hideNextPieceB;
     VersusController ctrl;
     public int bestScore = 0;
     public int currentScorePlayerA = 0;
     public int currentScorePlayerB = 0;
     public int nextEffectPlayerA;
     public int nextEffectPlayerB;
-    public final int effectStep = 200;
-    public EffectModel[] effectsList;
+    public int effectStep = 80;
     public String winner;
     Random rand = new Random();
 
     public VersusModel() {
-        nextPiecePlayerA = getRandomPiece(0);
-        nextPiecePlayerB = getRandomPiece(1);
+        nextPiecePlayerA = getRandomPiece();
+        nextPiecePlayerB = getRandomPiece();
         nextEffectPlayerA = effectStep;
         nextEffectPlayerB = effectStep;
+        hideNextPieceA = false;
+        hideNextPieceB = false;
+        effectStep = Config.getInstance().getInt("VERSUS_EFFECT_EVERY");
+        baseSpeed = Config.getInstance().getInt("START_SPEED");
+        fallSpeedPlayerA = baseSpeed; //ms
+        fallSpeedPlayerB = baseSpeed; //ms
     }
 
+    /**
+     * Sets the current controller
+     * @param ctrl an instance of VersusController
+     */
     public void setCtrl(VersusController ctrl) {
         this.ctrl = ctrl;
     }
@@ -64,9 +77,9 @@ public class VersusModel {
      * Return a random pieces from PieceModel.Pieces and colors it according to which player
      * @return a PieceModel
      */
-    public PieceModel getRandomPiece(int player) { //0=PlayerA 1=PlayerB
+    public PieceModel getRandomPiece() {
         Log.info(this,"Spawned a new random piece");
-        return ((PieceModel)getRandomElement(PieceModel.getPieces(),rand)).clone();
+        return ((PieceModel) getRandomElement(PieceModel.getPieces(),rand)).clone();
     }
 
     /**
@@ -77,11 +90,11 @@ public class VersusModel {
             PieceModel p = nextPiecePlayerA.clone();
             pieceListPlayerA.add(p);
             fallingPiecePlayerA = p;
-            nextPiecePlayerA = getRandomPiece(0);
+            nextPiecePlayerA = getRandomPiece();
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN_PLAYER_A"));
         }
         try {
-            computeMixedGrid(0);
+            computeMixedGrid(0, false);
         } catch (OverlappedPieceException | PieceOutOfBoardException e) {
             winner = "B";
             gameState = GameState.FINISHED;
@@ -97,12 +110,12 @@ public class VersusModel {
             PieceModel p = nextPiecePlayerB.clone();
             pieceListPlayerB.add(p);
             fallingPiecePlayerB = p;
-            nextPiecePlayerB = getRandomPiece(1);
+            nextPiecePlayerB = getRandomPiece();
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN_PLAYER_B"));
         }
 
         try {
-            computeMixedGrid(1);
+            computeMixedGrid(1, false);
         } catch (OverlappedPieceException | PieceOutOfBoardException e) {
             winner = "A";
             gameState = GameState.FINISHED;
@@ -115,8 +128,9 @@ public class VersusModel {
      * @return an arrays of the game size that contains BlockModels for the vue to display
      * @throws OverlappedPieceException in case a piece collide with an other one
      * @throws PieceOutOfBoardException if a piece has a position outside of the board
+     * @param render_dropped_piece should be false is the function isn't used by the ui
      */
-    public BlockModel[][] computeMixedGrid(int player) throws OverlappedPieceException, PieceOutOfBoardException {
+    public BlockModel[][] computeMixedGrid(int player, boolean render_dropped_piece) throws OverlappedPieceException, PieceOutOfBoardException {
         BlockModel[][] table = new BlockModel[height][width];
 
         ArrayList<Object> pieceList;
@@ -138,7 +152,7 @@ public class VersusModel {
                         if(piece.childs[y-piece.y][x-piece.x] != null) {
                             if(y> height-1 || y<0) throw new PieceOutOfBoardException();
                             if(x> width -1 || x<0) throw new PieceOutOfBoardException();
-                            if(table[y][x] != null) throw new OverlappedPieceException();
+                            if(table[y][x] != null &&!(piece.ignoreCollisionWithFalling && (table[y][x].parent==fallingPiecePlayerA||table[y][x].parent==fallingPiecePlayerB)) ) throw new OverlappedPieceException();
                             table[y][x] = piece.childs[y-piece.y][x-piece.x];
                         }
                     }
@@ -146,6 +160,47 @@ public class VersusModel {
             }
 
         }
+
+        PieceModel piece = fallingPiecePlayerA;
+        if(player != 0) {
+            piece = fallingPiecePlayerB;
+        }
+
+        if(render_dropped_piece && piece!= null) {
+            PieceModel tmp = piece.clone();
+            pieceList.add(tmp);
+            //tmp.y = Math.min(fallingPiece.y+fallingPiece.getPieceHeight()-1,height-fallingPiece.getPieceHeight()+1);
+            tmp.y = piece.y;
+            tmp.x = piece.x;
+            tmp.ignoreCollisionWithFalling =true;
+
+            while (true) {
+                tmp.y++;
+                try {
+                    computeMixedGrid(player,false);
+                } catch (PieceOutOfBoardException | OverlappedPieceException e) {
+                    tmp.y--;
+                    break;
+                }
+            }
+            pieceList.remove(tmp);
+
+            for (int y = tmp.y; y < tmp.y+4; y++) {
+                for (int x = tmp.x; x < tmp.x+4; x++) {
+                    if(tmp.childs[y-tmp.y][x-tmp.x] != null) {
+                        if(y> height-1 || y<0) continue;
+                        if(x> width -1 || x<0) continue;
+                        if(table[y][x] != null) continue;
+                        tmp.childs[y-tmp.y][x-tmp.x].color = tmp.childs[y-tmp.y][x-tmp.x].color.darker().darker().darker();
+                        tmp.childs[y-tmp.y][x-tmp.x].recalculate();
+                        table[y][x] = tmp.childs[y-tmp.y][x-tmp.x];
+                    }
+                }
+            }
+
+        }
+
+
         return table;
     }
 
@@ -156,21 +211,19 @@ public class VersusModel {
      */
     Object checkForFullLineAndRemoveIt(boolean firstCall, int player){
         try {
-            BlockModel[][] grid = computeMixedGrid(player);
+            BlockModel[][] grid = computeMixedGrid(player, false);
             int firstLineY = 0;
             Integer lineCount = 0;
 
-            if (player == 0) { currentScorePlayerA += 4; }
-            else { currentScorePlayerB += 4; }
             // Difficulty
             if (player == 0) {
                 if(fallSpeedPlayerA > 75) {
-                    fallSpeedPlayerA = (int)(1000 - 0.3*currentScorePlayerA);
+                    fallSpeedPlayerA = (int)(baseSpeed - 0.3*currentScorePlayerA);
                     Log.debug(this, "FallSpeed Player A = " + this.fallSpeedPlayerA);
                 }
             } else {
                 if(fallSpeedPlayerB > 75) {
-                    fallSpeedPlayerB = (int)(1000 - 0.3*currentScorePlayerB);
+                    fallSpeedPlayerB = (int)(baseSpeed - 0.3*currentScorePlayerB);
                     Log.debug(this, "FallSpeed Player B = " + this.fallSpeedPlayerB);
                 }
             }
@@ -247,7 +300,7 @@ public class VersusModel {
             if(fallingPiecePlayerA != null) {
                 fallingPiecePlayerA.x += dir.step;
                 try {
-                    computeMixedGrid(0);
+                    computeMixedGrid(0, false);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerA.x -= dir.step;
@@ -261,7 +314,7 @@ public class VersusModel {
             if(fallingPiecePlayerB != null) {
                 fallingPiecePlayerB.x += dir.step;
                 try {
-                    computeMixedGrid(1);
+                    computeMixedGrid(1, false);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerB.x -= dir.step;
@@ -284,7 +337,7 @@ public class VersusModel {
             if(fallingPiecePlayerA != null) {
                 fallingPiecePlayerA.rotateModel(dir.step, fallingPiecePlayerA.name);
                 try {
-                    computeMixedGrid(0);
+                    computeMixedGrid(0, false);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerA.rotateModel(dir.step * -1, fallingPiecePlayerA.name);
@@ -298,7 +351,7 @@ public class VersusModel {
             if(fallingPiecePlayerB != null) {
                 fallingPiecePlayerB.rotateModel(dir.step, fallingPiecePlayerB.name);
                 try {
-                    computeMixedGrid(1);
+                    computeMixedGrid(1, false);
                     return true;
                 } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                     fallingPiecePlayerB.rotateModel(dir.step * -1, fallingPiecePlayerB.name);
@@ -318,10 +371,11 @@ public class VersusModel {
         if(fallingPiecePlayerA != null) {
             fallingPiecePlayerA.y++;
             try {
-                computeMixedGrid(0);
+                computeMixedGrid(0, false);
             } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                 fallingPiecePlayerA.y--;
                 convertFullPiecesToBlocks(fallingPiecePlayerA, 0);
+                currentScorePlayerA += fallingPiecePlayerA.getBlockCount();
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 0);
                 this.calculateScore(score, 0);
                 if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
@@ -344,10 +398,11 @@ public class VersusModel {
         if(fallingPiecePlayerB != null) {
             fallingPiecePlayerB.y++;
             try {
-                computeMixedGrid(1);
+                computeMixedGrid(1, false);
             } catch (PieceOutOfBoardException | OverlappedPieceException e) {
                 fallingPiecePlayerB.y--;
                 convertFullPiecesToBlocks(fallingPiecePlayerB, 2);
+                currentScorePlayerB += fallingPiecePlayerB.getBlockCount();
                 LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true, 1);
                 this.calculateScore(score, 1);
                 if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {
@@ -392,43 +447,125 @@ public class VersusModel {
     }
 
     private void checkEffect() {
-        if (currentScorePlayerA >= nextEffectPlayerA) {
-            int n = rand.nextInt(4);
+        if(!Config.getInstance().getBool("VERSUS_EFFECTS")) {
+            return;
+        }
+        if (currentScorePlayerA >= nextEffectPlayerA ) {
+            int ennemyShieldIndex = -1;
+            for (int i = 0; i < effectListPlayerB.size(); i++) {
+                if (effectListPlayerB.get(i) instanceof RemoveMalus) {
+                    ennemyShieldIndex = i;
+                    break;
+                }
+            }
+            int n = rand.nextInt(8);
+            this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:GOT_BOUNS"));
             switch (n) {
-                case 0:
+	            case 0:
+	                if (ennemyShieldIndex != -1)
+                        effectListPlayerB.remove(ennemyShieldIndex);
+	                else
+	                    effectListPlayerB.add(new HideNextPiece(this, 1, Config.getInstance().getInt("EFFECT_DURATION_MALUS_BLIND") * 1000));
+	                break;
+                case 1:
                     effectListPlayerA.add(new RandomLine(this, 0));
                     break;
-                case 1:
-                    effectListPlayerA.add(new BonusSpeed(this, 0, 10000));
-                    break;
                 case 2:
-                    effectListPlayerB.add(new InvertControls(this, 1, 10000));
+                    effectListPlayerA.add(new BonusSpeed(this, 0, Config.getInstance().getInt("EFFECT_DURATION_BONUS_SPEED") * 1000));
                     break;
                 case 3:
-                    effectListPlayerB.add(new MalusSpeed(this, 1, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerB.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerB.add(new InvertControls(this, 1, Config.getInstance().getInt("EFFECT_DURATION_MALUS_REVERSE") * 1000));
                     break;
                 case 4:
-                    effectListPlayerB.add(new RandomRotation(this, 1, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerB.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerB.add(new MalusSpeed(this, 1, Config.getInstance().getInt("EFFECT_DURATION_MALUS_SPEED") * 1000));
+                    break;
+                case 5:
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerB.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerB.add(new RandomRotation(this, 1, Config.getInstance().getInt("EFFECT_DURATION_MALUS_ROTATE")*1000));
+                    break;
+                case 6:
+                    boolean alreadyHasMalus = false;
+                    for (EffectModel effectModel: effectListPlayerA)
+                        if (effectModel instanceof HideNextPiece || effectModel instanceof InvertControls || effectModel instanceof MalusSpeed || effectModel instanceof RandomRotation){
+                            effectListPlayerA.remove(effectModel);
+                            alreadyHasMalus = true;
+                        }
+                    if (!alreadyHasMalus)
+                        effectListPlayerA.add(new RemoveMalus());
+                    break;
+                case 7:
+	                if (ennemyShieldIndex != -1)
+	                    effectListPlayerB.remove(ennemyShieldIndex);
+	                else
+	                    effectListPlayerB.add(new RandomBlock(this, 1));
+	                break;
             }
             nextEffectPlayerA += effectStep;
         }
         if (currentScorePlayerB >= nextEffectPlayerB) {
-            int n = rand.nextInt(4);
+            int ennemyShieldIndex = -1;
+            for (int i = 0; i < effectListPlayerA.size(); i++) {
+                if (effectListPlayerA.get(i) instanceof RemoveMalus) {
+                    ennemyShieldIndex = i;
+                    break;
+                }
+            }
+            int n = rand.nextInt(8);
+            this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:GOT_BOUNS"));
             switch (n) {
-                case 0:
+	            case 0:
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+	                    effectListPlayerA.add(new HideNextPiece(this, 0, Config.getInstance().getInt("EFFECT_DURATION_MALUS_BLIND") * 1000));
+	                break;
+                case 1:
                     effectListPlayerB.add(new RandomLine(this, 1));
                     break;
-                case 1:
-                    effectListPlayerB.add(new BonusSpeed(this, 1, 10000));
-                    break;
                 case 2:
-                    effectListPlayerA.add(new InvertControls(this, 0, 10000));
+                    effectListPlayerB.add(new BonusSpeed(this, 1, Config.getInstance().getInt("EFFECT_DURATION_BONUS_SPEED") * 1000));
                     break;
                 case 3:
-                    effectListPlayerA.add(new MalusSpeed(this, 0, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerA.add(new InvertControls(this, 0, Config.getInstance().getInt("EFFECT_DURATION_MALUS_REVERSE") * 1000));
                     break;
                 case 4:
-                    effectListPlayerA.add(new RandomRotation(this, 0, 10000));
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerA.add(new MalusSpeed(this, 0, Config.getInstance().getInt("EFFECT_DURATION_MALUS_SPEED") * 1000));
+                    break;
+                case 5:
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerA.add(new RandomRotation(this, 0, Config.getInstance().getInt("EFFECT_DURATION_MALUS_ROTATE")* 1000));
+                    break;
+                case 6:
+                    boolean alreadyHasMalus = false;
+                    for (EffectModel effectModel: effectListPlayerB)
+                        if (effectModel instanceof HideNextPiece || effectModel instanceof InvertControls || effectModel instanceof MalusSpeed || effectModel instanceof RandomRotation){
+                            effectListPlayerB.remove(effectModel);
+                            alreadyHasMalus = true;
+                        }
+                    if (!alreadyHasMalus)
+                        effectListPlayerB.add(new RemoveMalus());
+                    break;          
+                case 7:
+                    if (ennemyShieldIndex != -1)
+                        effectListPlayerA.remove(ennemyShieldIndex);
+                    else
+                        effectListPlayerA.add(new RandomBlock(this, 0));         
             }
             nextEffectPlayerB += effectStep;
         }

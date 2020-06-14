@@ -1,5 +1,6 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.Direction;
@@ -16,8 +17,8 @@ import java.util.Random;
 public class SoloModel {
 	public int height = 20;
 	public int width = 10;
-	public int fallSpeed = 1000; //ms
-	final public int FALL_SPEED = 1000; //ms
+	int baseSpeed;
+	public int fallSpeed; //ms
 	ArrayList<Object> pieceList = new ArrayList<>();
 	public PieceModel fallingPiece = null;
 	public PieceModel nextPiece;
@@ -29,8 +30,14 @@ public class SoloModel {
 
 	public SoloModel() {
 		nextPiece = getRandomPiece();
+		baseSpeed = Config.getInstance().getInt("START_SPEED");
+		fallSpeed = baseSpeed; //ms
 	}
 
+	/**
+	 * Sets the current controller
+	 * @param ctrl an instance of SoloController
+	 */
 	public void setCtrl(SoloController ctrl) {
 		this.ctrl = ctrl;
 	}
@@ -67,7 +74,7 @@ public class SoloModel {
 		this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN"));
 
 		try {
-			computeMixedGrid();
+			computeMixedGrid(false);
 		} catch (OverlappedPieceException | PieceOutOfBoardException e) {
 			gameState = GameState.FINISHED;
 			this.bestScore = this.ctrl.gameEnded();
@@ -79,8 +86,9 @@ public class SoloModel {
 	 * @return an arrays of the game size that contains BlockModels for the vue to display
 	 * @throws OverlappedPieceException in case a piece collide with an other one
 	 * @throws PieceOutOfBoardException if a piece has a position outside of the board
+	 * @param render_dropped_piece should be false is the function isn't used by the ui
 	 */
-	public BlockModel[][] computeMixedGrid() throws OverlappedPieceException, PieceOutOfBoardException {
+	public BlockModel[][] computeMixedGrid(boolean render_dropped_piece) throws OverlappedPieceException, PieceOutOfBoardException {
 		BlockModel[][] table = new BlockModel[height][width];
 		for (Object obj: pieceList) {
 
@@ -97,9 +105,44 @@ public class SoloModel {
 						if(piece.childs[y-piece.y][x-piece.x] != null) {
 							if(y> height-1 || y<0) throw new PieceOutOfBoardException();
 							if(x> width -1 || x<0) throw new PieceOutOfBoardException();
-							if(table[y][x] != null) throw new OverlappedPieceException();
+
+							if(table[y][x] != null &&!(piece.ignoreCollisionWithFalling && table[y][x].parent==fallingPiece) ) throw new OverlappedPieceException();
 							table[y][x] = piece.childs[y-piece.y][x-piece.x];
 						}
+					}
+				}
+			}
+
+		}
+
+		if(render_dropped_piece && fallingPiece != null) {
+			PieceModel tmp = fallingPiece.clone();
+			pieceList.add(tmp);
+			//tmp.y = Math.min(fallingPiece.y+fallingPiece.getPieceHeight()-1,height-fallingPiece.getPieceHeight()+1);
+			tmp.y = fallingPiece.y;
+			tmp.x = fallingPiece.x;
+			tmp.ignoreCollisionWithFalling =true;
+
+			while (true) {
+				tmp.y++;
+				try {
+					computeMixedGrid(false);
+				} catch (PieceOutOfBoardException | OverlappedPieceException e) {
+					tmp.y--;
+					break;
+				}
+			}
+			pieceList.remove(tmp);
+
+			for (int y = tmp.y; y < tmp.y+4; y++) {
+				for (int x = tmp.x; x < tmp.x+4; x++) {
+					if(tmp.childs[y-tmp.y][x-tmp.x] != null) {
+						if(y> height-1 || y<0) continue;
+						if(x> width -1 || x<0) continue;
+						if(table[y][x] != null) continue;
+						tmp.childs[y-tmp.y][x-tmp.x].color = tmp.childs[y-tmp.y][x-tmp.x].color.darker().darker().darker();
+						tmp.childs[y-tmp.y][x-tmp.x].recalculate();
+						table[y][x] = tmp.childs[y-tmp.y][x-tmp.x];
 					}
 				}
 			}
@@ -115,14 +158,13 @@ public class SoloModel {
 	 */
 	Object checkForFullLineAndRemoveIt(boolean firstCall){
 		try {
-			BlockModel[][] grid = computeMixedGrid();
+			BlockModel[][] grid = computeMixedGrid(false);
 			int firstLineY = 0;
 			Integer lineCount = 0;
 
-			currentScore += 4;
 			// Difficulty
 			if(fallSpeed > 75) {
-				fallSpeed = (int)(1000 - 0.3*currentScore);
+				fallSpeed = (int)(baseSpeed - 0.3*currentScore);
 				Log.debug(this, "FallSpeed = " + this.fallSpeed);
 			}
 
@@ -195,7 +237,7 @@ public class SoloModel {
 		if(fallingPiece != null) {
 			fallingPiece.x += dir.step;
 			try {
-				computeMixedGrid();
+				computeMixedGrid(false);
 				return true;
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.x -= dir.step;
@@ -214,7 +256,7 @@ public class SoloModel {
 		if(fallingPiece != null) {
 			fallingPiece.rotateModel(dir.step, fallingPiece.name);
 			try {
-				computeMixedGrid();
+				computeMixedGrid(false);
 				return true;
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.rotateModel(dir.step * -1, fallingPiece.name);
@@ -232,10 +274,11 @@ public class SoloModel {
 		if(fallingPiece != null) {
 			fallingPiece.y++;
 			try {
-				computeMixedGrid();
+				computeMixedGrid(false);
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiece.y--;
 				convertFullPiecesToBlocks(fallingPiece);
+				currentScore += fallingPiece.getBlockCount();
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);
 				if(score == LineCompleted.QUAD_LINE || score == LineCompleted.BOTTOM_QUAD_LINE) {

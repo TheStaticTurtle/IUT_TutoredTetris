@@ -8,9 +8,6 @@ import fr.iut.tetris.models.SettingsModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 
 public class SettingsVue extends JPanel{
 
@@ -21,6 +18,7 @@ public class SettingsVue extends JPanel{
 	public JSlider soundSFXMusicLevel;
 	public JComboBox<Resolution> resolutionDropdown;
 	public JCheckBox legacyCheckbox;
+	public JCheckBox versusEffectCheckBox;
 
 	public SettingsVue(SettingsModel model, SettingsController ctrl) {
 		this.model = model;
@@ -43,7 +41,7 @@ public class SettingsVue extends JPanel{
 		mainLayout.setVgap(5);
 
 
-		JPanel myLabel = new TetrisLogo(this, (int) (ww*0.7));
+		JPanel myLabel = new TetrisLogo((int) (ww*0.7));
 
 		JLabel soundSettingsLabel = new JLabel("Sound");
 		JLabel soundMusicLabel = new JLabel("<html>Music: ");
@@ -51,9 +49,11 @@ public class SettingsVue extends JPanel{
 		JLabel soundSFXMusicLabel = new JLabel("<html>SFX: ");
 		soundSFXMusicLevel = new CustomSlider(-50,5,Color.WHITE,Color.GREEN);
 		JLabel resolutionLabel = new JLabel("<html>Size: ");
-		resolutionDropdown = new JComboBox<Resolution>();
+		resolutionDropdown = new JComboBox<>();
 		JLabel legacyLabel = new JLabel("<html>Legacy: ");
 		legacyCheckbox = new JCheckBox();
+		JLabel versusEffectLabel = new JLabel("<html>Effect: ");
+		versusEffectCheckBox = new JCheckBox();
 
 		JButton gotoKeysButton = new MenuButton("Controls",Color.orange,Color.WHITE,ctrl);
 		JButton backButton = new MenuButton("Save",Color.GREEN,Color.WHITE,ctrl);
@@ -70,6 +70,8 @@ public class SettingsVue extends JPanel{
 		resolutionLabel.setForeground(Color.white);
 		legacyLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		legacyLabel.setForeground(Color.white);
+		versusEffectLabel.setFont(Config.getInstance().getFont("FONT_NORMAL"));
+		versusEffectLabel.setForeground(Color.white);
 
 		gotoKeysButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
 		backButton.setFont(Config.getInstance().getFont("FONT_NORMAL"));
@@ -92,6 +94,10 @@ public class SettingsVue extends JPanel{
 		legacyCheckbox.setSelectedIcon(new CheckBoxIcon(16,Color.GREEN,Color.black));
 		legacyCheckbox.setOpaque(false);
 
+		versusEffectCheckBox.setIcon(new CheckBoxIcon(16,Color.RED,Color.black));
+		versusEffectCheckBox.setSelectedIcon(new CheckBoxIcon(16,Color.GREEN,Color.black));
+		versusEffectCheckBox.setOpaque(false);
+
 		gotoKeysButton.addActionListener(ctrl);
 		gotoKeysButton.setActionCommand("CLICK:MENU:SETTINGS:KEYS");
 
@@ -100,6 +106,12 @@ public class SettingsVue extends JPanel{
 
 		soundMusicLevel.addChangeListener(ctrl);
 		soundSFXMusicLevel.addChangeListener(ctrl);
+
+		legacyCheckbox.addActionListener(ctrl);
+		legacyCheckbox.setActionCommand("CLICK:CHECKBOX_TICK:LEGACY");
+
+		versusEffectCheckBox.addActionListener(ctrl);
+		versusEffectCheckBox.setActionCommand("CLICK:CHECKBOX_TICK:EFFECT");
 
 		mainPanel.add(myLabel);
 		mainPanel.add( new Spacer());
@@ -134,8 +146,14 @@ public class SettingsVue extends JPanel{
 		legacyCtrlPannel.add(legacyCheckbox);
 		mainPanel.add(legacyCtrlPannel);
 
+		JPanel veffectCtrlPannel = new JPanel();
+		veffectCtrlPannel.setOpaque(false);
+		veffectCtrlPannel.setLayout(subLayout);
+		veffectCtrlPannel.add(versusEffectLabel);
+		veffectCtrlPannel.add(versusEffectCheckBox);
+		mainPanel.add(veffectCtrlPannel);
+
 		mainPanel.add(gotoKeysButton);
-		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 		mainPanel.add( new Spacer());
 		mainPanel.add(backButton);
@@ -163,13 +181,16 @@ public class SettingsVue extends JPanel{
 		legacyCheckbox.setSelectedIcon(new CheckBoxIcon(legacyCtrlPannel.getPreferredSize().height,Color.GREEN,Color.black));
 		legacyCheckbox.setIcon(new CheckBoxIcon(legacyCtrlPannel.getPreferredSize().height,Color.RED,Color.black));
 
+		versusEffectCheckBox.setSelectedIcon(new CheckBoxIcon(veffectCtrlPannel.getPreferredSize().height,Color.GREEN,Color.black));
+		versusEffectCheckBox.setIcon(new CheckBoxIcon(veffectCtrlPannel.getPreferredSize().height,Color.RED,Color.black));
+
 		add(testPane);
 
 		JPanel t = this;
-		new Timer(1, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(1, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 
 }

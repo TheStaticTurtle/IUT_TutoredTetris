@@ -34,26 +34,13 @@ public class VersusController implements ActionListener, KeyListener {
         model.setCtrl(this);
 
         VersusController me = this;
-        new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
-            me.timerTicked();
-        }}).start();
+        new Timer(10, e -> me.timerTicked()).start();
 
     }
 
     public void setVue(VersusVue vue) {
         this.vue = vue;
     }
-
-    /*
-    public int gameEnded() {
-        int bestScore = Config.getInstance().getInt("SCORE_COOP_BEST");
-        if(model.currentScore > bestScore) {
-            bestScore = model.currentScore;
-            Config.getInstance().putInt("SCORE_COOP_BEST",model.currentScore);
-            Config.getInstance().saveAsync();
-        }
-        return bestScore;
-    }*/
 
     /**
      * The main game timer ticks every 10 ms but to set adjustable times we increment the variable timerCounter by 10 and can then compare it with model.fallSpeed to seed if we should do something
@@ -158,16 +145,6 @@ public class VersusController implements ActionListener, KeyListener {
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottomForPlayerB(); vue.recalculate();}
         if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))   { model.rotateCurrent(1,Direction.RIGHT); vue.recalculate();}
 
-        //if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
-
-		/*
-			SPACE = 32
-			LEFT = 37
-			RIGHT = 39
-			UP = 38
-			DOWN = 40
-			ENTER = 10
-		*/
         Log.debug(this,e.toString());
     }
 
@@ -178,6 +155,9 @@ public class VersusController implements ActionListener, KeyListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand() ) {
+            case "GAME:GOT_BOUNS":
+                this.audio.playSFX(getClass().getResource( "/res/sounds/bonus.wav"));
+                break;
             case "GAME:FOURLINES_COMPLETE":
                 this.audio.playSFX(getClass().getResource( "/res/sounds/fourlines_completed.wav"));
                 break;
@@ -188,7 +168,8 @@ public class VersusController implements ActionListener, KeyListener {
             case "GAME:PIECE_PLACE":
                 this.audio.playSFX(getClass().getResource( "/res/sounds/piece_place.wav"));
                 break;
-            case "GAME:PIECE_SPAWN":
+            case "GAME:PIECE_SPAWN_PLAYER_A":
+            case "GAME:PIECE_SPAWN_PLAYER_B":
                 this.audio.playSFX(getClass().getResource( "/res/sounds/piece_spawn.wav"));
                 break;
             case "MOUSE:ENTER":
@@ -206,7 +187,6 @@ public class VersusController implements ActionListener, KeyListener {
                 mainCtrl.actionPerformed(new ActionEvent(this,0,"CLICK:MENU:VERSUS"));
                 break;
             case "CLICK:BACK":
-                this.audio.setMusicTrack(getClass().getResource("/res/sounds/music_calm.wav"));
                 this.audio.playSFX(getClass().getResource( "/res/sounds/menu_select.wav"));
                 mainCtrl.actionPerformed(e);
                 break;

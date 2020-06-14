@@ -12,7 +12,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
 public class SettingsController implements ActionListener, ChangeListener {
 	MainController mainCtrl;
@@ -38,6 +37,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 		vue.soundMusicLevel.setValue( (int)audio.musicLineVolumeControl );
 		vue.soundSFXMusicLevel.setValue( (int)audio.soundEffetLineVolumeControl );
 		vue.legacyCheckbox.setSelected(Config.getInstance().getBool("LEGACY_PIECES"));
+		vue.versusEffectCheckBox.setSelected(Config.getInstance().getBool("VERSUS_EFFECTS"));
 	}
 
 	/**
@@ -47,6 +47,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 		Config.getInstance().putInt("VOLUME_SFX",(int)audio.soundEffetLineVolumeControl);
 		Config.getInstance().putInt("VOLUME_MUSIC",(int)audio.musicLineVolumeControl);
 		Config.getInstance().putBool("LEGACY_PIECES",vue.legacyCheckbox.isSelected());
+		Config.getInstance().putBool("VERSUS_EFFECTS",vue.versusEffectCheckBox.isSelected());
 		Config.getInstance().saveAsync();
 	}
 
@@ -58,6 +59,11 @@ public class SettingsController implements ActionListener, ChangeListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		switch(e.getActionCommand() ) {
+			case "CLICK:CHECKBOX_TICK:EFFECT":
+			case "CLICK:CHECKBOX_TICK:LEGACY":
+			case "MOUSE:ENTER":
+				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
+				break;
 			case "RESOLUTION_SELECT":
 				JComboBox<Resolution> box = (JComboBox<Resolution>) e.getSource();
 				Resolution r = (Resolution) box.getSelectedItem();
@@ -73,9 +79,6 @@ public class SettingsController implements ActionListener, ChangeListener {
 				Config.getInstance().putInt("BORDER_SIZES" ,r.border_size);
 				Config.getInstance().reloadFonts();
 				Config.getInstance().saveAsync();
-				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
-				break;
-			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
 			case "CLICK:MENU:SETTINGS:KEYS":

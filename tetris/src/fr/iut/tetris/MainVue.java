@@ -9,7 +9,7 @@ public class MainVue extends JFrame {
 	JPanel currentVue;
 
 	public MainVue(MainController ctrl) {
-		setTitle("Tetris");
+		setTitle("TutoredTetris");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 

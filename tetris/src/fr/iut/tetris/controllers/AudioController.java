@@ -49,6 +49,7 @@ public class AudioController {
 								clip.close();
 							}
 						});
+						clip.flush();
 					} catch (LineUnavailableException e) {
 						e.printStackTrace();
 					}
@@ -81,6 +82,7 @@ public class AudioController {
 						clip.open(audioInputStream);
 
 						FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+						ctrl.setValue(soundEffetLineVolumeControl);
 
 						clip.loop(Clip.LOOP_CONTINUOUSLY);
 						clip.start();

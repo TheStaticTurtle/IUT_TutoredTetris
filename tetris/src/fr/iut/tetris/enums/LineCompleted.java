@@ -43,6 +43,6 @@ public enum LineCompleted {
 					return QUAD_LINE;
 			}
 		}
-		return NO_LINE; //Unkown state
+		return NO_LINE; //Unknown state
 	}
 }
