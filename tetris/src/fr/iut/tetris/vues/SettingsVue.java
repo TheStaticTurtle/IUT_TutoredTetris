@@ -8,9 +8,6 @@ import fr.iut.tetris.models.SettingsModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 
 public class SettingsVue extends JPanel{
 
@@ -44,7 +41,7 @@ public class SettingsVue extends JPanel{
 		mainLayout.setVgap(5);
 
 
-		JPanel myLabel = new TetrisLogo(this, (int) (ww*0.7));
+		JPanel myLabel = new TetrisLogo((int) (ww*0.7));
 
 		JLabel soundSettingsLabel = new JLabel("Sound");
 		JLabel soundMusicLabel = new JLabel("<html>Music: ");
@@ -52,7 +49,7 @@ public class SettingsVue extends JPanel{
 		JLabel soundSFXMusicLabel = new JLabel("<html>SFX: ");
 		soundSFXMusicLevel = new CustomSlider(-50,5,Color.WHITE,Color.GREEN);
 		JLabel resolutionLabel = new JLabel("<html>Size: ");
-		resolutionDropdown = new JComboBox<Resolution>();
+		resolutionDropdown = new JComboBox<>();
 		JLabel legacyLabel = new JLabel("<html>Legacy: ");
 		legacyCheckbox = new JCheckBox();
 		JLabel versusEffectLabel = new JLabel("<html>Effect: ");
@@ -190,10 +187,10 @@ public class SettingsVue extends JPanel{
 		add(testPane);
 
 		JPanel t = this;
-		new Timer(1, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(1, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 
 }

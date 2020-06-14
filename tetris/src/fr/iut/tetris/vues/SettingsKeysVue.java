@@ -2,19 +2,11 @@ package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
 import fr.iut.tetris.controllers.SettingsKeysController;
-import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.SettingsKeysModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SettingsKeysVue extends JPanel {
 
@@ -39,14 +31,10 @@ public class SettingsKeysVue extends JPanel {
 
 		mainPanel.setLayout(mainLayout);
 		mainPanel.setOpaque(false);
-		//mainLayout.setVgap(5);
 
 
-		/*JPanel myLabel = new TetrisLogo(this, (int) (ww*0.7));
-		myLabel.setFont(Config.getInstance().getFont("FONT_ULTRABIG"));*/
-
-		ArrayList<JLabel> labels = new ArrayList<JLabel>();
-		ArrayList<String> controls = new ArrayList<String>();
+		ArrayList<JLabel> labels = new ArrayList<>();
+		ArrayList<String> controls = new ArrayList<>();
 
 		JLabel generalControlLabel = new JLabel("General:"); labels.add(generalControlLabel); controls.add("unused");
 		JLabel backKeyLabel = new JLabel("<html>Back: "); labels.add(backKeyLabel);controls.add("KEYCODE_GOBACK");
@@ -128,9 +116,9 @@ public class SettingsKeysVue extends JPanel {
 		add(testPane);
 
 		JPanel t = this;
-		new Timer(1, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(1, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 }

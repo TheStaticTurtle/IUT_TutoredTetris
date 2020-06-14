@@ -12,7 +12,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Random;
 
 public class SettingsController implements ActionListener, ChangeListener {
 	MainController mainCtrl;
@@ -62,6 +61,7 @@ public class SettingsController implements ActionListener, ChangeListener {
 		switch(e.getActionCommand() ) {
 			case "CLICK:CHECKBOX_TICK:EFFECT":
 			case "CLICK:CHECKBOX_TICK:LEGACY":
+			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
 			case "RESOLUTION_SELECT":
@@ -79,9 +79,6 @@ public class SettingsController implements ActionListener, ChangeListener {
 				Config.getInstance().putInt("BORDER_SIZES" ,r.border_size);
 				Config.getInstance().reloadFonts();
 				Config.getInstance().saveAsync();
-				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
-				break;
-			case "MOUSE:ENTER":
 				this.audio.playSFX(getClass().getResource( "/res/sounds/menu_choose.wav"));
 				break;
 			case "CLICK:MENU:SETTINGS:KEYS":

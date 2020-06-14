@@ -10,9 +10,7 @@ import fr.iut.tetris.models.BlockModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+
 
 public class VersusVue extends JPanel {
 	
@@ -71,10 +69,10 @@ public class VersusVue extends JPanel {
         add(testPane);
 
         JPanel t = this;
-        new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+        new Timer(10, e -> {
             t.repaint();
             t.revalidate();
-        }}).start();
+        }).start();
     }
 
     public void setModel(VersusModel model) {
@@ -93,7 +91,6 @@ class GamePanelVersus extends JPanel {
 
 	VersusModel model;
     int squareSize = 40;
-    BufferedImage img = null;
     JPanel mainPanel;
     NextPiecePanel nextPiecePanel;
     BlockModel noBlockModel;
@@ -219,7 +216,6 @@ class GamePanelVersus extends JPanel {
             layout.putConstraint(SpringLayout.NORTH, nextPiecePanel, 10, SpringLayout.SOUTH, labelNextPiece);
             layout.putConstraint(SpringLayout.WEST, nextPiecePanel, 10, SpringLayout.EAST, mainPanel);
 
-            //layout.putConstraint(SpringLayout.NORTH, effectsPanel, 10, SpringLayout.SOUTH, nextPiecePanel);
             layout.putConstraint(SpringLayout.WEST, effectsPanel, 10, SpringLayout.EAST, mainPanel);
             layout.putConstraint(SpringLayout.EAST, effectsPanel, -10, SpringLayout.EAST, this);
         }
@@ -240,7 +236,7 @@ class GamePanelVersus extends JPanel {
         t.width = model.width * squareSize;
         mainPanel.setPreferredSize(t);
 
-        nextPiecePanel.resetSize((int)(squareSize/2));
+        nextPiecePanel.resetSize(squareSize/2);
 
         layout.putConstraint(SpringLayout.NORTH, effectsPanel, squareSize*4, SpringLayout.SOUTH, nextPiecePanel);
 

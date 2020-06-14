@@ -8,7 +8,6 @@ import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.enums.LineCompleted;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
-import fr.iut.tetris.vues.Common;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -19,9 +18,9 @@ public class VersusModel {
 
     public int height = 20;
     public int width = 10;
-    public int baseSpeed = 1000;
-    public int fallSpeedPlayerA = baseSpeed; //ms
-    public int fallSpeedPlayerB = baseSpeed; //ms
+    public int baseSpeed;
+    public int fallSpeedPlayerA; //ms
+    public int fallSpeedPlayerB; //ms
     ArrayList<Object> pieceListPlayerA = new ArrayList<>();
     ArrayList<Object> pieceListPlayerB = new ArrayList<>();
     public ArrayList<EffectModel> effectListPlayerA = new ArrayList<>();
@@ -40,13 +39,12 @@ public class VersusModel {
     public int nextEffectPlayerA;
     public int nextEffectPlayerB;
     public int effectStep = 80;
-    public EffectModel[] effectsList;
     public String winner;
     Random rand = new Random();
 
     public VersusModel() {
-        nextPiecePlayerA = getRandomPiece(0);
-        nextPiecePlayerB = getRandomPiece(1);
+        nextPiecePlayerA = getRandomPiece();
+        nextPiecePlayerB = getRandomPiece();
         nextEffectPlayerA = effectStep;
         nextEffectPlayerB = effectStep;
         hideNextPieceA = false;
@@ -79,7 +77,7 @@ public class VersusModel {
      * Return a random pieces from PieceModel.Pieces and colors it according to which player
      * @return a PieceModel
      */
-    public PieceModel getRandomPiece(int player) { //0=PlayerA 1=PlayerB
+    public PieceModel getRandomPiece() {
         Log.info(this,"Spawned a new random piece");
         return ((PieceModel) getRandomElement(PieceModel.getPieces(),rand)).clone();
     }
@@ -92,7 +90,7 @@ public class VersusModel {
             PieceModel p = nextPiecePlayerA.clone();
             pieceListPlayerA.add(p);
             fallingPiecePlayerA = p;
-            nextPiecePlayerA = getRandomPiece(0);
+            nextPiecePlayerA = getRandomPiece();
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN_PLAYER_A"));
         }
         try {
@@ -112,7 +110,7 @@ public class VersusModel {
             PieceModel p = nextPiecePlayerB.clone();
             pieceListPlayerB.add(p);
             fallingPiecePlayerB = p;
-            nextPiecePlayerB = getRandomPiece(1);
+            nextPiecePlayerB = getRandomPiece();
             this.ctrl.actionPerformed(new ActionEvent(this,0,"GAME:PIECE_SPAWN_PLAYER_B"));
         }
 

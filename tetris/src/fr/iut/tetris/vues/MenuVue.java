@@ -6,7 +6,6 @@ import fr.iut.tetris.models.MenuModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class MenuVue extends JPanel  {
 	MenuModel model;
@@ -29,7 +28,7 @@ public class MenuVue extends JPanel  {
 
 		mainPanel.setPreferredSize(new Dimension((int) (ww*0.7), (int) (wh*0.7)));
 
-		JPanel myLabel = new TetrisLogo(this, (int) (ww*0.7));
+		JPanel myLabel = new TetrisLogo((int) (ww*0.7));
 		JButton soloButton = new MenuButton("Solo",Color.YELLOW,Color.WHITE,ctrl);
 		JButton coopButton = new MenuButton("Coop",Color.RED,Color.WHITE,ctrl);
 		JButton versusButton = new MenuButton("Versus",Color.ORANGE,Color.WHITE,ctrl);
@@ -135,9 +134,9 @@ public class MenuVue extends JPanel  {
 		add(testPane);
 
 		JPanel t = this;
-		new Timer(1, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(1, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 }

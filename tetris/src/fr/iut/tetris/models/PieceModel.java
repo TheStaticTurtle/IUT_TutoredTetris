@@ -16,7 +16,7 @@ class PieceModel {
 	public static final Color COLOR_BLUE = Color.decode("#0026FF");
 	public static final Color COLOR_YELLOW = Color.decode("#FFF500");
 	public static final Color COLOR_OLIVE = Color.decode("#D4FF00");
-	public static final Color COLOR_LIGHTBLUE = Color.decode("#00BFFF");
+	//public static final Color COLOR_LIGHTBLUE = Color.decode("#00BFFF");
 	public static final Color COLOR_ORANGERED = Color.decode("#FF4300");
 	public static final Color COLOR_CYAN = Color.decode("#00FFA5");
 	public static final Color COLOR_DARKPURPLE = Color.decode("#7200FF");
@@ -25,15 +25,15 @@ class PieceModel {
 	public static final Color COLOR_DARKPINK = Color.decode("#FF0059");
 	public static final Color COLOR_LIGHTPINK = Color.decode("#FF00B6");
 	public static final Color COLOR_GRAY = Color.decode("#DBDBDB");
-	public static final Color COLOR_DARKGRAY = Color.decode("#808080");
-	public static final Color COLOR_PURPLE2 = Color.decode("#8E00DB");
+	//public static final Color COLOR_DARKGRAY = Color.decode("#808080");
+	//public static final Color COLOR_PURPLE2 = Color.decode("#8E00DB");
 	public static final Color COLOR_WHITE = Color.decode("#FFFFFF");
 	
-	public BlockModel[][] childs = new BlockModel[4][4];
+	public BlockModel[][] childs;
 
 	//Position represent top-left corner of the 4x4 grid
-	int x = 0;
-	int y = 0;
+	int x;
+	int y;
 	Point spawnPoint; //Just for the clone()
 	String name;
 	public boolean ignoreCollisionWithFalling = false;
@@ -44,10 +44,10 @@ class PieceModel {
 		this.y = spawnPoint.y;
 		this.spawnPoint = spawnPoint; //Just for the clone()
 		this.name = name;
-		for (int y = 0; y < childs.length; y++) {
-			for (int x = 0; x < childs[y].length; x++) {
-				if(childs[y][x] != null) {
-					childs[y][x].setParent(this);
+		for (BlockModel[] child : childs) {
+			for (BlockModel blockModel : child) {
+				if (blockModel != null) {
+					blockModel.setParent(this);
 				}
 			}
 		}
@@ -59,11 +59,11 @@ class PieceModel {
 	 * @param color the color to change to
 	 */
 	public void changeColor(Color color) {
-		for (int y = 0; y < childs.length; y++) {
-			for (int x = 0; x < childs[y].length; x++) {
-				if(childs[y][x] != null) {
-					childs[y][x].color = color;
-					childs[y][x].recalculate();
+		for (BlockModel[] child : childs) {
+			for (BlockModel blockModel : child) {
+				if (blockModel != null) {
+					blockModel.color = color;
+					blockModel.recalculate();
 				}
 			}
 		}
@@ -72,7 +72,7 @@ class PieceModel {
 	/**
 	 * Rotate a given array of blocks
 	 * @param matrix the arrays
-	 * @param name
+	 * @param name Name of the piece (used for rotation)
 	 * @return the array rotated clockwise
 	 */
 	private static BlockModel[][] rotateClockWise(BlockModel[][] matrix, String name) {
@@ -99,7 +99,7 @@ class PieceModel {
 	/**
 	 * Rotate a given array of blocks
 	 * @param matrix the arrays
-	 * @param name
+	 * @param name Name of the piece (used for rotation)
 	 * @return the array rotated counter clockwise
 	 */
 	private static BlockModel[][] rotateConterClockWise(BlockModel[][] matrix, String name) {
@@ -126,7 +126,7 @@ class PieceModel {
 	/**
 	 * Rotate the piece based on the given direction
 	 * @param direction the direction
-	 * @param name
+	 * @param name Name of the piece (used for rotation)
 	 */
 	void rotateModel(int direction, String name) { // -1LEFT / 1RIGHT
 		if(direction == -1) {
@@ -161,13 +161,16 @@ class PieceModel {
 	 */
 	int getPieceHeight() {
 		int total = 0;
-		for (int y = 0; y < childs.length; y++) {
+		for (BlockModel[] child : childs) {
 			boolean empty = true;
-			for (int x = 0; x < childs[y].length && empty; x++) {
-				if(childs[y][x] == null) empty=false;
+			for (BlockModel blockModel : child) {
+				if (blockModel == null) {
+					empty = false;
+					break;
+				}
 			}
 
-			if(!empty) total++;
+			if (!empty) total++;
 		}
 		return total;
 	}
@@ -178,9 +181,9 @@ class PieceModel {
 	 */
 	int getBlockCount() {
 		int total = 0;
-		for (int y = 0; y < childs.length; y++) {
-			for (int x = 0; x < childs[y].length; x++) {
-				if(childs[y][x] != null) total+=1;
+		for (BlockModel[] child : childs) {
+			for (BlockModel blockModel : child) {
+				if (blockModel != null) total += 1;
 			}
 		}
 		return total;
@@ -410,7 +413,7 @@ class PieceModel {
 		} else {
 			ArrayList<PieceModel> baseArray = new ArrayList<>(Arrays.asList(PiecesLegacy));
 			baseArray.addAll(Arrays.asList(PiecesCustoms));
-			return baseArray.toArray(new PieceModel[baseArray.size()]);
+			return baseArray.toArray(new PieceModel[0]);
 		}
 	}
 }

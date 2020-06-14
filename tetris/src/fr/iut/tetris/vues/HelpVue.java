@@ -2,15 +2,10 @@ package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
 import fr.iut.tetris.controllers.HelpController;
-import fr.iut.tetris.controllers.SettingsKeysController;
 import fr.iut.tetris.models.HelpModel;
-import fr.iut.tetris.models.SettingsKeysModel;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class HelpVue extends JPanel {
@@ -24,10 +19,7 @@ public class HelpVue extends JPanel {
         Color bg = Color.BLACK;
 
         JPanel mainPanel = new JPanel();
-        GridLayout mainLayout = new GridLayout(0, 1);
-        //GridLayout subLayout = new GridLayout(1, 5);
-        GridBagLayout subLayout = new GridBagLayout();
-        //subLayout.columnWeights = new double[]{0.5,0.5};
+        GridBagLayout layout = new GridBagLayout();
 
         int wh = Config.getInstance().getInt("WINDOW_HEIGHT");
         int ww = Config.getInstance().getInt("WINDOW_WIDTH");
@@ -35,17 +27,12 @@ public class HelpVue extends JPanel {
         setBackground(bg);
         mainPanel.setPreferredSize(new Dimension((int) (ww * 0.90), (int) (wh * 0.95)));
 
-        mainPanel.setLayout(subLayout);
+        mainPanel.setLayout(layout);
         mainPanel.setOpaque(false);
-        //mainLayout.setVgap(5);
 
-
-		/*JPanel myLabel = new TetrisLogo(this, (int) (ww*0.7));
-		myLabel.setFont(Config.getInstance().getFont("FONT_ULTRABIG"));*/
-
-        ArrayList<JLabel> labels = new ArrayList<JLabel>();
-        ArrayList<String> images = new ArrayList<String>();
-        ArrayList<Integer> durations = new ArrayList<Integer>();
+        ArrayList<JLabel> labels = new ArrayList<>();
+        ArrayList<String> images = new ArrayList<>();
+        ArrayList<Integer> durations = new ArrayList<>();
 
         JLabel helpLabel = new JLabel("Help:"); labels.add(helpLabel); images.add(""); durations.add(0);
         JLabel helpText = new JLabel("<html>Welcome to TutoredTetris, in this game you play with new pieces but you can disable them by activating the legacy option."); labels.add(helpText); images.add(""); durations.add(0);
@@ -127,15 +114,7 @@ public class HelpVue extends JPanel {
                 c1.gridwidth = 3;
                 mainPanel.add(labels.get(i),c1);
             }
-
-            //mainPanel.add(pan);
         }
-
-        /*c1.gridwidth = 2;
-        c1.gridx = 0;
-        c1.weightx = 1;
-        c1.gridy = labels.size();
-        mainPanel.add(backButton,c1);*/
 
         mainPanel.setLocation(0, 0);
         mainPanel.setPreferredSize(mainPanel.getPreferredSize());
@@ -170,11 +149,9 @@ public class HelpVue extends JPanel {
         add(testPane);
 
         JPanel t = this;
-        new Timer(1, new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                t.repaint();
-                t.revalidate();
-            }
+        new Timer(1, e -> {
+            t.repaint();
+            t.revalidate();
         }).start();
     }
 }

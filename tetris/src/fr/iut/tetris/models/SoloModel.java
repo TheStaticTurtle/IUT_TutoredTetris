@@ -8,7 +8,6 @@ import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.enums.LineCompleted;
 import fr.iut.tetris.exceptions.OverlappedPieceException;
 import fr.iut.tetris.exceptions.PieceOutOfBoardException;
-import fr.iut.tetris.vues.Common;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,9 +17,8 @@ import java.util.Random;
 public class SoloModel {
 	public int height = 20;
 	public int width = 10;
-	int baseSpeed = 1000;
-	public int fallSpeed = baseSpeed; //ms
-	final public int FALL_SPEED = 1000; //ms
+	int baseSpeed;
+	public int fallSpeed; //ms
 	ArrayList<Object> pieceList = new ArrayList<>();
 	public PieceModel fallingPiece = null;
 	public PieceModel nextPiece;

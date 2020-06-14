@@ -1,9 +1,6 @@
 package fr.iut.tetris.vues;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 
 import javax.swing.*;
 
@@ -65,10 +62,10 @@ public class SoloVue extends JPanel {
 		add(testPane);
 
 		JPanel t = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 
 	public void setModel(SoloModel model) {
@@ -86,7 +83,6 @@ public class SoloVue extends JPanel {
 class GamePanelSolo extends JPanel {
 	SoloModel model;
 	int squareSize = 20;
-	BufferedImage img = null;
 	JPanel mainPanel;
 	NextPiecePanel nextPiecePanel;
 	BlockModel noBlockModel;
@@ -173,7 +169,7 @@ class GamePanelSolo extends JPanel {
 		t.width = model.width * squareSize;
 		mainPanel.setPreferredSize(t);
 
-		nextPiecePanel.resetSize((int)(squareSize/2));
+		nextPiecePanel.resetSize(squareSize/2);
 		recalculate();
 	}
 
@@ -181,10 +177,6 @@ class GamePanelSolo extends JPanel {
 
 	public void recalculate() {
 		setIgnoreRepaint(true);
-
-		/*Dimension t = mainPanel.getSize();
-		t.width = t.height * (model.height / model.witdh);
-		mainPanel.setSize(t);*/
 
 		scoreLabel.setText("<html>Score: "+this.model.currentScore);
 
@@ -196,7 +188,6 @@ class GamePanelSolo extends JPanel {
 				for (int y = 0; y < grid.length; y++) {
 					for (int x = 0; x < grid[y].length; x++) {
 						TetrisBlock p = (TetrisBlock) mainPanel.getComponent(y*model.width + x);
-						//p.setSize(mainPanel.getPreferredSize().height / model.height);
 						if(grid[y][x] != null) {
 							p.recalulate(grid[y][x]);
 						} else {
@@ -212,11 +203,4 @@ class GamePanelSolo extends JPanel {
 		setIgnoreRepaint(false);
 		repaint();
 	}
-
-	/*@Override public void paintComponent(Graphics g) {
-		Dimension d = getPreferredSize();
-		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.gray);
-		g2.fillRect(0,0,d.width,d.height);
-	}*/
 }

@@ -17,8 +17,8 @@ import java.util.Random;
 public class CoopModel{
 	public int height = 20;
 	public int width = 10;
-	int baseSpeed = 1000;
-	public int fallSpeed = baseSpeed; //ms
+	int baseSpeed;
+	public int fallSpeed; //ms
 	ArrayList<Object> pieceList = new ArrayList<>();
 	public GameState gameState = GameState.WAITING;
 	public PieceModel fallingPiecePlayerA = null;
@@ -380,7 +380,7 @@ public class CoopModel{
 				computeMixedGrid(false);
 			} catch (PieceOutOfBoardException | OverlappedPieceException e) {
 				fallingPiecePlayerA.y--;
-				convertFullPiecesToBlocks(fallingPiecePlayerA);;
+				convertFullPiecesToBlocks(fallingPiecePlayerA);
 				currentScore += fallingPiecePlayerA.getBlockCount();
 				LineCompleted score = (LineCompleted)checkForFullLineAndRemoveIt(true);
 				this.calculateScore(score);

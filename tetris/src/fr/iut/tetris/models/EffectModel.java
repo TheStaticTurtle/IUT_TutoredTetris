@@ -10,8 +10,6 @@ import fr.iut.tetris.exceptions.PieceOutOfBoardException;
 import javax.swing.*;
 
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -81,12 +79,7 @@ class RandomLine extends EffectModel {
         this.player = player;
         this.tmp = this;
 
-        Timer timer = new Timer(new Random().nextInt(2000)+2000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                doEffect();
-            }
-        });
+        Timer timer = new Timer(new Random().nextInt(2000)+2000, e -> doEffect());
         timer.setRepeats(false); // Only execute once
         timer.start(); // Go go go!
     }
@@ -298,12 +291,7 @@ class RandomBlock extends EffectModel {
         this.player = player;
         this.tmp = this;
 
-        Timer timer = new Timer(new Random().nextInt(2000)+2000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                doEffect();
-            }
-        });
+        Timer timer = new Timer(new Random().nextInt(2000)+2000, e -> doEffect());
         timer.setRepeats(false); // Only execute once
         timer.start(); // Go go go!
     }
@@ -336,9 +324,8 @@ class RandomBlock extends EffectModel {
         	for (int y = models.length-1; y >= 0 ; y--) {
         		
         		ArrayList<Point> listEmptyBlock = new ArrayList<>();
-                listEmptyBlock.clear();
-        		
-        		for (int x = 0; x < 10; x++)
+
+                for (int x = 0; x < 10; x++)
         			if(models[y][x] == null)
         				listEmptyBlock.add(new Point(x, y));
 

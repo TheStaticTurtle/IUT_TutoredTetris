@@ -30,9 +30,7 @@ public class SoloController implements ActionListener, KeyListener {
 		this.audio = audio;
 
 		SoloController me = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			me.timerTicked();
-		}}).start();
+		new Timer(10, e -> me.timerTicked()).start();
 	}
 
 	public void setVue(SoloVue vue) {
@@ -113,16 +111,7 @@ public class SoloController implements ActionListener, KeyListener {
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_FASTDOWN")) { model.fallCurrentAtBottom(); vue.recalculate();}
 
 		if(model.gameState == GameState.PLAYING && e.getKeyCode()==Config.getInstance().getInt("KEYCODE_P1_ROTATE"))  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
-		//if(model.gameState == GameState.PLAYING && e.getKeyCode()==39)  { model.rotateCurrent(Direction.RIGHT); vue.recalculate();}
 
-		/*
-			SPACE = 32
-			LEFT = 37
-			RIGHT = 39
-			UP = 38
-			DOWN = 40
-			ENTER = 10
-		*/
 		Log.debug(this,e.toString());
 	}
 

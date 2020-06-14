@@ -1,6 +1,5 @@
 package fr.iut.tetris.controllers;
 
-import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.models.MenuModel;
 

@@ -118,9 +118,7 @@ public class Config {
 			} catch (IOException | IllegalArgumentException e) {
 				Log.error(this,"Could not load image at location: "+name+" loading default texture");
 
-				BufferedImage b = null;
-
-				b = new BufferedImage(5,5,BufferedImage.TYPE_INT_RGB);
+				BufferedImage b = new BufferedImage(5,5,BufferedImage.TYPE_INT_RGB);
 				Graphics2D g2d = (Graphics2D) b.getGraphics();
 				g2d.setColor(Color.BLACK);
 				g2d.fillRect(0,0,5,5);
@@ -217,7 +215,7 @@ public class Config {
 
 	/**
 	 * Read a string from the config file
-	 * @param key
+	 * @param key The emplacement of the string
 	 * @return the string a the emplacement "key"
 	 */
 	public String getString(String key) {
@@ -229,7 +227,7 @@ public class Config {
 
 	/**
 	 * Read a int from the config file
-	 * @param key
+	 * @param key The emplacement of the int
 	 * @return the int a the emplacement "key"
 	 */
 	public int getInt(String key) {
@@ -241,12 +239,12 @@ public class Config {
 
 	/**
 	 * Read a boolean from the config file
-	 * @param key
+	 * @param key The emplacement of the boolean
 	 * @return the boolean a the emplacement "key"
 	 */
 	public boolean getBool(String key) {
 		if(config.containsKey(key)) {
-			return ((String)config.get(key)).equals("true");
+			return config.get(key).equals("true");
 		}
 		return false;
 	}

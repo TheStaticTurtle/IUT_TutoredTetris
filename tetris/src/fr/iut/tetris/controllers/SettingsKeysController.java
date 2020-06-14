@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class SettingsKeysController implements ActionListener, KeyListener/*, ChangeListener*/ {
+public class SettingsKeysController implements ActionListener, KeyListener {
 
 	public MainController mainCtrl;
 	SettingsKeysModel model;
@@ -58,11 +58,6 @@ public class SettingsKeysController implements ActionListener, KeyListener/*, Ch
 		}
 	}
 	@Override public void keyReleased(KeyEvent e) {}
-
-	/*@Override
-	public void stateChanged(ChangeEvent e) {
-
-	}*/
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

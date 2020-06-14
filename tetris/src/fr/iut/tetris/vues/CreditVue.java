@@ -5,8 +5,6 @@ import fr.iut.tetris.controllers.CreditController;
 import fr.iut.tetris.models.CreditModel;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class CreditVue extends JPanel  {
 
@@ -31,7 +29,7 @@ public class CreditVue extends JPanel  {
 
 		mainPanel.setPreferredSize(new Dimension((int) (ww*0.7), (int) (wh*0.7)));
 
-		JPanel myLabel = new TetrisLogo(this,(int) (ww*0.7));
+		JPanel myLabel = new TetrisLogo((int) (ww*0.7));
 		JButton backButton = new MenuButton("Back",Color.ORANGE,Color.WHITE,ctrl);
 
 		backButton.addActionListener(ctrl);
@@ -90,9 +88,9 @@ public class CreditVue extends JPanel  {
 		add(testPane);
 
 		JPanel t = this;
-		new Timer(1, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(1, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 }

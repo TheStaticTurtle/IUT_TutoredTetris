@@ -2,8 +2,6 @@ package fr.iut.tetris.vues;
 
 import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
-import fr.iut.tetris.controllers.CreditController;
-import fr.iut.tetris.controllers.MenuController;
 import fr.iut.tetris.enums.GameState;
 import fr.iut.tetris.enums.Resolution;
 import fr.iut.tetris.models.*;
@@ -128,14 +126,6 @@ class MenuButton extends JButton implements MouseListener {
 	Color backGroundColor;
 	ActionListener listener;
 
-	public MenuButton(String text, CreditController ctrl) {
-		this(text);
-		listener = ctrl;
-	}
-	public MenuButton(String text, MenuController ctrl) {
-		this(text);
-		listener = ctrl;
-	}
 	public MenuButton(String text, Color foreGroundColor, Color backGroundColor, ActionListener ctrl) {
 		this(text,foreGroundColor,backGroundColor);
 		listener = ctrl;
@@ -200,19 +190,19 @@ class TetrisLogo extends JPanel {
 
 	int offset = 10;
 
-	int canvasWidth = 450;
-	int canvasHeight = (int)(canvasWidth*0.333);
-	int baseWidth = canvasWidth-offset;
-	int baseHeight = canvasHeight-offset;
+	int canvasWidth;
+	int canvasHeight;
+	int baseWidth;
+	int baseHeight;
 
-	int width = baseWidth;
-	int height = baseHeight;
+	int width;
+	int height;
 
 	int speed = 2;
 	int direction = speed;
 	Image img;
 
-	TetrisLogo(JPanel parent, int width) {
+	TetrisLogo(int width) {
 		this.canvasWidth = width;
 		this.canvasHeight = (int)(this.canvasWidth*0.333);
 		this.baseWidth = this.canvasWidth-offset;
@@ -224,9 +214,7 @@ class TetrisLogo extends JPanel {
 
 
 		final TetrisLogo p = this;
-		new Timer(100, new ActionListener() { public void actionPerformed(ActionEvent e) {
-			p.update_size();
-		}}).start();
+		new Timer(100, e -> p.update_size()).start();
 	}
 
 	public void update_size() {
@@ -254,7 +242,7 @@ class TetrisLogo extends JPanel {
 }
 class CustomSlider extends JSlider implements MouseListener {
 
-	int borderSize = 10;
+	int borderSize;
 	int space = 5;
 	int raw_thumb_x;
 	int thumbSpaceing;
@@ -526,7 +514,6 @@ class NextPiecePanel extends JPanel {
 	int canvasWidth;
 	int canvasHeight;
 	int blockSize;
-	BufferedImage img;
 	PieceModel piece;
 	BlockModel noBlockModel;
 
@@ -648,10 +635,10 @@ class PauseMenu extends JPanel {
 
 		recalculate(GameState.WAITING);
 		JPanel t = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 
 	@Override
@@ -759,10 +746,10 @@ class SplashScreenPanel extends JPanel {
 		setVisible(true);
 
 		JPanel t = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			t.repaint();
 			t.revalidate();
-		}}).start();
+		}).start();
 	}
 
 	public void recalculate(boolean visible, GameState state) {
@@ -820,11 +807,11 @@ class EffectImage extends JPanel {
 		setOpaque(false);
 	}
 
-	public EffectImage(String image_path) {
+	/*public EffectImage(String image_path) {
 		imagePath = image_path;
 		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(32,32, Image.SCALE_REPLICATE));
 		setOpaque(false);
-	}
+	}*/
 
 	public void setImage(BufferedImage image) {
 		this.image = image;
@@ -834,25 +821,6 @@ class EffectImage extends JPanel {
 		this.image = image;
 		setOpaque(false);
 	}
-
-	/*@Override
-	public void setPreferredSize(Dimension size) {
-		super.setPreferredSize(size);
-		this.size = size;
-		this.size.height = this.size.width;
-
-		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
-		updateUI();
-	}
-	@Override
-	public void setSize(Dimension size) {
-		super.setSize(size);
-		this.size = size;
-		this.size.height = this.size.width;
-
-		this.image = Common.toBufferedImage(Config.getInstance().getRessourceImage(imagePath).getScaledInstance(size.width,size.height, Image.SCALE_REPLICATE));
-		updateUI();
-	}*/
 
 	@Override
 	public Dimension getPreferredSize() {
@@ -898,7 +866,7 @@ class MovingStarModel {
 	Point position;
 	Dimension parent;
 	Random rng;
-	int speed = 0;
+	int speed;
 	int offset = 300;
 	public MovingStarModel(Random rng, Dimension parent, int speed) {
 		this.parent = parent;
@@ -966,11 +934,11 @@ class MovingStarsAnimation extends JPanel {
 		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 
 		MovingStarsAnimation p = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			for (MovingStarModel star : p.stars) {
 				star.move();
 			}
-		}}).start();
+		}).start();
 	}
 
 	public MovingStarsAnimation(Dimension size) {
@@ -992,11 +960,11 @@ class MovingStarsAnimation extends JPanel {
 		resize_img = img.getScaledInstance(8*8, 8, Image.SCALE_REPLICATE);
 
 		MovingStarsAnimation p = this;
-		new Timer(10, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(10, e -> {
 			for (MovingStarModel star : p.stars) {
 				star.move();
 			}
-		}}).start();
+		}).start();
 	}
 
 	public void resetSize(Dimension size) {
@@ -1033,8 +1001,8 @@ class StaticStarModel {
 
 	Image resize_img;
 
-	double base_size = 0;
-	double size = 0;
+	double base_size;
+	double size;
 	double max_diff = 0.8;
 	double direction = 0.1;
 
@@ -1094,11 +1062,11 @@ class StaticStarAnimation extends JPanel {
 		}
 
 		StaticStarAnimation p = this;
-		new Timer(250, new ActionListener() { public void actionPerformed(ActionEvent e) {
+		new Timer(250, e -> {
 			for (StaticStarModel star : p.stars) {
 				star.move();
 			}
-		}}).start();
+		}).start();
 	}
 
 	@Override public Dimension getPreferredSize() {return size;}

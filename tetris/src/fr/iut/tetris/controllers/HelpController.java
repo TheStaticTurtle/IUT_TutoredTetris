@@ -1,16 +1,13 @@
 package fr.iut.tetris.controllers;
 
-import fr.iut.tetris.Config;
-import fr.iut.tetris.Log;
 import fr.iut.tetris.MainController;
 import fr.iut.tetris.models.HelpModel;
 import fr.iut.tetris.vues.HelpVue;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class HelpController implements ActionListener/*, ChangeListener*/ {
+public class HelpController implements ActionListener {
 
     public MainController mainCtrl;
     HelpModel model;
@@ -28,11 +25,6 @@ public class HelpController implements ActionListener/*, ChangeListener*/ {
     public void setVue(HelpVue vue) {
         this.vue = vue;
     }
-
-	/*@Override
-	public void stateChanged(ChangeEvent e) {
-
-	}*/
 
     @Override
     public void actionPerformed(ActionEvent e) {

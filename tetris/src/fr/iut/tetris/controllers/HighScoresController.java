@@ -1,7 +1,6 @@
 package fr.iut.tetris.controllers;
 
 import fr.iut.tetris.MainController;
-import fr.iut.tetris.models.CreditModel;
 import fr.iut.tetris.models.HighScoresModel;
 
 import java.awt.event.ActionEvent;
