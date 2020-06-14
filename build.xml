@@ -15,8 +15,8 @@
         </copy>
 </target>
 
-<target name="jar">
-        <jar destfile="./Tetris.jar" basedir="./out">
+<target name="build-jar">
+        <jar destfile="./TutoredTetris.jar" basedir="./out">
                 <zipfileset dir="./tetris/src/res" includes="*"/>
 
                 <manifest>
@@ -27,7 +27,12 @@
 </target>
 
 <target name="run">
-        <java classpath="Tetris.jar" classname="fr.iut.tetris.Main" fork="true">  
+        <java classpath="./out" classname="fr.iut.tetris.Main" fork="true">  
+        </java> 
+</target>
+
+<target name="run-jar">
+        <java classpath="./out" classname="fr.iut.tetris.Main" fork="true">  
         </java> 
 </target>
 
