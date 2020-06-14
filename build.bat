@@ -15,4 +15,5 @@ javac -classpath out -sourcepath tetris/src -d out tetris/src/fr/iut/tetris/vues
 echo "Building main"
 javac -classpath out -sourcepath tetris/src -d out tetris/src/fr/iut/tetris/*.java
 echo "Copying ressources"
-cp -r tetris/src/res out/
+mkdir out\res
+xcopy tetris\src\res out\res\ /E
