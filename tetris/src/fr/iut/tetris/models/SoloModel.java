@@ -1,5 +1,6 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.SoloController;
 import fr.iut.tetris.enums.Direction;
@@ -17,7 +18,8 @@ import java.util.Random;
 public class SoloModel {
 	public int height = 20;
 	public int width = 10;
-	public int fallSpeed = 1000; //ms
+	int baseSpeed = 1000;
+	public int fallSpeed = baseSpeed; //ms
 	final public int FALL_SPEED = 1000; //ms
 	ArrayList<Object> pieceList = new ArrayList<>();
 	public PieceModel fallingPiece = null;
@@ -30,6 +32,8 @@ public class SoloModel {
 
 	public SoloModel() {
 		nextPiece = getRandomPiece();
+		baseSpeed = Config.getInstance().getInt("START_SPEED");
+		fallSpeed = baseSpeed; //ms
 	}
 
 	/**
@@ -162,7 +166,7 @@ public class SoloModel {
 
 			// Difficulty
 			if(fallSpeed > 75) {
-				fallSpeed = (int)(1000 - 0.3*currentScore);
+				fallSpeed = (int)(baseSpeed - 0.3*currentScore);
 				Log.debug(this, "FallSpeed = " + this.fallSpeed);
 			}
 

@@ -1,5 +1,6 @@
 package fr.iut.tetris.models;
 
+import fr.iut.tetris.Config;
 import fr.iut.tetris.Log;
 import fr.iut.tetris.controllers.CoopController;
 import fr.iut.tetris.enums.Direction;
@@ -16,7 +17,8 @@ import java.util.Random;
 public class CoopModel{
 	public int height = 20;
 	public int width = 10;
-	public int fallSpeed = 1000; //ms
+	int baseSpeed = 1000;
+	public int fallSpeed = baseSpeed; //ms
 	ArrayList<Object> pieceList = new ArrayList<>();
 	public GameState gameState = GameState.WAITING;
 	public PieceModel fallingPiecePlayerA = null;
@@ -31,6 +33,8 @@ public class CoopModel{
 	public CoopModel() {
 		nextPiecePlayerA = getRandomPiece(0);
 		nextPiecePlayerB = getRandomPiece(1);
+		baseSpeed = Config.getInstance().getInt("START_SPEED");
+		fallSpeed = baseSpeed; //ms
 	}
 
 	/**
@@ -222,7 +226,7 @@ public class CoopModel{
 
 			// Difficulty
 			if(fallSpeed > 75) {
-				fallSpeed = (int)(1000 - 0.3*currentScore);
+				fallSpeed = (int)(baseSpeed - 0.3*currentScore);
 				Log.debug(this, "FallSpeed = " + this.fallSpeed);
 			}
 

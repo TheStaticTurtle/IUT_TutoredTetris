@@ -45,22 +45,23 @@ public class HelpVue extends JPanel {
 
         ArrayList<JLabel> labels = new ArrayList<JLabel>();
         ArrayList<String> images = new ArrayList<String>();
+        ArrayList<Integer> durations = new ArrayList<Integer>();
 
-        JLabel helpLabel = new JLabel("Help:"); labels.add(helpLabel); images.add("");
-        JLabel helpText = new JLabel("<html>Welcome to TutoredTetris, in this game you play with new pieces but you can disable them by activating the legacy option."); labels.add(helpText); images.add("");
+        JLabel helpLabel = new JLabel("Help:"); labels.add(helpLabel); images.add(""); durations.add(0);
+        JLabel helpText = new JLabel("<html>Welcome to TutoredTetris, in this game you play with new pieces but you can disable them by activating the legacy option."); labels.add(helpText); images.add(""); durations.add(0);
 
-        JLabel helpEffectLabel = new JLabel("Effects:"); labels.add(helpEffectLabel); images.add("");
+        JLabel helpEffectLabel = new JLabel("Effects:"); labels.add(helpEffectLabel); images.add(""); durations.add(0);
 
-        JLabel helpEffectgeneral = new JLabel("<html>In versus mode there are custom effects (if enabled in the settings). Purple effects are malus and yellow effects are bonuses you gain / send one every 80 points and they stay for a variable duration"); labels.add(helpEffectgeneral); images.add("");
-        JLabel effectDeleteLine = new JLabel("<html>This will randomly delete a line"); labels.add(effectDeleteLine); images.add("/res/effects/bonus_delete_line.png");
-        JLabel effectBSpeed = new JLabel("<html>This effect will slow your game down"); labels.add(effectBSpeed); images.add("/res/effects/bonus_speed.png");
-        JLabel effectRemoveMalus = new JLabel("<html>This will remove a malus"); labels.add(effectRemoveMalus); images.add("/res/effects/malus_remove_malus.png");
+        JLabel helpEffectgeneral = new JLabel("<html>In versus mode there are custom effects (if enabled in the settings). Purple effects are malus and yellow effects are bonuses you gain / send one every 80 points and they stay for a variable duration"); labels.add(helpEffectgeneral); images.add(""); durations.add(0);
+        JLabel effectDeleteLine = new JLabel("<html>This will randomly delete a line"); labels.add(effectDeleteLine); images.add("/res/effects/bonus_delete_line.png"); durations.add(0);
+        JLabel effectBSpeed = new JLabel("<html>This will slow your game down"); labels.add(effectBSpeed); images.add("/res/effects/bonus_speed.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_BONUS_SPEED"));
+        JLabel effectRemoveMalus = new JLabel("<html>This will remove a malus"); labels.add(effectRemoveMalus); images.add("/res/effects/malus_remove_malus.png"); durations.add(0);
 
-        JLabel effectMSpeed = new JLabel("<html>This effect will speed up your game"); labels.add(effectMSpeed); images.add("/res/effects/malus_speed.png");
-        JLabel effectBlind = new JLabel("<html>This effect will hides the next piece"); labels.add(effectBlind); images.add("/res/effects/malus_blind.png");
-        JLabel effectReverse = new JLabel("<html>This effect will invert your controls"); labels.add(effectReverse); images.add("/res/effects/malus_reverse_cmds.png");
-        JLabel effectRotate = new JLabel("<html>This will rotate you piece randomly"); labels.add(effectRotate); images.add("/res/effects/malus_rotate.png");
-        JLabel effectBlock = new JLabel("<html>This will place a random block"); labels.add(effectBlock); images.add("/res/effects/malus_random_block.png");
+        JLabel effectMSpeed = new JLabel("<html>This will speed up your game"); labels.add(effectMSpeed); images.add("/res/effects/malus_speed.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_SPEED"));
+        JLabel effectBlind = new JLabel("<html>This will hides the next piece"); labels.add(effectBlind); images.add("/res/effects/malus_blind.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_BLIND"));
+        JLabel effectReverse = new JLabel("<html>This will invert your controls"); labels.add(effectReverse); images.add("/res/effects/malus_reverse_cmds.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_INVERT"));
+        JLabel effectRotate = new JLabel("<html>This rotate you piece randomly"); labels.add(effectRotate); images.add("/res/effects/malus_rotate.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_ROTATE"));
+        JLabel effectBlock = new JLabel("<html>This will place a random block"); labels.add(effectBlock); images.add("/res/effects/malus_random_block.png"); durations.add(0);
 
 
         JButton backButton = new MenuButton("Back", Color.GREEN, Color.WHITE, ctrl);
@@ -85,6 +86,7 @@ public class HelpVue extends JPanel {
         c1.weighty = 1.0;
 
         assert labels.size() == images.size();
+        assert labels.size() == durations.size();
         for (int i = 0; i < labels.size(); i++) {
             /*JPanel pan = new JPanel();
             pan.setOpaque(false);
@@ -95,11 +97,28 @@ public class HelpVue extends JPanel {
                 c1.weightx = 0.12;
 
                 c1.gridy = i;
-
                 c1.gridx = 0;
                 mainPanel.add(new EffectImage(images.get(i),true),c1);
 
-                c1.weightx = 0.88;
+                if(durations.get(i) != 0) {
+                    c1.gridy = i;
+                    c1.gridx = 2;
+                    c1.weightx = 0.01;
+                    JLabel label = new JLabel(durations.get(i)+" sec");
+                    label.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+                    label.setForeground(Color.white);
+                    mainPanel.add(label,c1);
+                } else {
+                    c1.gridy = i;
+                    c1.gridx = 2;
+                    c1.weightx = 0.01;
+                    JLabel label = new JLabel("auto");
+                    label.setFont(Config.getInstance().getFont("FONT_VERYTINY"));
+                    label.setForeground(Color.white);
+                    mainPanel.add(label,c1);
+                }
+
+                c1.weightx = 0.87;
                 c1.gridx = 1;
                 mainPanel.add(labels.get(i),c1);
             } else {

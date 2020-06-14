@@ -257,7 +257,7 @@ public class Config {
 	 */
 	static Properties defaultConfig() {
 		Properties p = new Properties();
-		p.put("CONFIG_VERSION"     ,"9");
+		p.put("CONFIG_VERSION"     ,"11");
 
 		p.put("KEYCODE_P1_LEFT"    ,"37"); // Left key
 		p.put("KEYCODE_P1_RIGHT"   ,"39"); // Right key
@@ -296,6 +296,18 @@ public class Config {
 
 		p.put("LEGACY_PIECES" ,"false");
 		p.put("VERSUS_EFFECTS","true");
+
+		p.put("VERSUS_EFFECT_EVERY","80");
+
+
+		p.put("EFFECT_DURATION_BONUS_SPEED","15");
+		p.put("EFFECT_DURATION_MALUS_SPEED","15");
+		p.put("EFFECT_DURATION_MALUS_BLIND","25");
+		p.put("EFFECT_DURATION_MALUS_REVERSE","15");
+		p.put("EFFECT_DURATION_MALUS_ROTATE","10");
+
+
+		p.put("START_SPEED","1000");
 
 		return p;
 	}

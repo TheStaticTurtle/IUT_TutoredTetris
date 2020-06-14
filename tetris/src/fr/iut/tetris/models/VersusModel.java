@@ -19,8 +19,9 @@ public class VersusModel {
 
     public int height = 20;
     public int width = 10;
-    public int fallSpeedPlayerA = 1000; //ms
-    public int fallSpeedPlayerB = 1000; //ms
+    public int baseSpeed = 1000;
+    public int fallSpeedPlayerA = baseSpeed; //ms
+    public int fallSpeedPlayerB = baseSpeed; //ms
     ArrayList<Object> pieceListPlayerA = new ArrayList<>();
     ArrayList<Object> pieceListPlayerB = new ArrayList<>();
     public ArrayList<EffectModel> effectListPlayerA = new ArrayList<>();
@@ -38,7 +39,7 @@ public class VersusModel {
     public int currentScorePlayerB = 0;
     public int nextEffectPlayerA;
     public int nextEffectPlayerB;
-    public final int effectStep = 80;
+    public int effectStep = 80;
     public EffectModel[] effectsList;
     public String winner;
     Random rand = new Random();
@@ -50,6 +51,10 @@ public class VersusModel {
         nextEffectPlayerB = effectStep;
         hideNextPieceA = false;
         hideNextPieceB = false;
+        effectStep = Config.getInstance().getInt("VERSUS_EFFECT_EVERY");
+        baseSpeed = Config.getInstance().getInt("START_SPEED");
+        fallSpeedPlayerA = baseSpeed; //ms
+        fallSpeedPlayerB = baseSpeed; //ms
     }
 
     /**
@@ -215,12 +220,12 @@ public class VersusModel {
             // Difficulty
             if (player == 0) {
                 if(fallSpeedPlayerA > 75) {
-                    fallSpeedPlayerA = (int)(1000 - 0.3*currentScorePlayerA);
+                    fallSpeedPlayerA = (int)(baseSpeed - 0.3*currentScorePlayerA);
                     Log.debug(this, "FallSpeed Player A = " + this.fallSpeedPlayerA);
                 }
             } else {
                 if(fallSpeedPlayerB > 75) {
-                    fallSpeedPlayerB = (int)(1000 - 0.3*currentScorePlayerB);
+                    fallSpeedPlayerB = (int)(baseSpeed - 0.3*currentScorePlayerB);
                     Log.debug(this, "FallSpeed Player B = " + this.fallSpeedPlayerB);
                 }
             }
@@ -462,31 +467,31 @@ public class VersusModel {
 	                if (ennemyShieldIndex != -1)
                         effectListPlayerB.remove(ennemyShieldIndex);
 	                else
-	                    effectListPlayerB.add(new HideNextPiece(this, 1, 25 * 1000));
+	                    effectListPlayerB.add(new HideNextPiece(this, 1, Config.getInstance().getInt("EFFECT_DURATION_MALUS_BLIND") * 1000));
 	                break;
                 case 1:
                     effectListPlayerA.add(new RandomLine(this, 0));
                     break;
                 case 2:
-                    effectListPlayerA.add(new BonusSpeed(this, 0, 15 * 1000));
+                    effectListPlayerA.add(new BonusSpeed(this, 0, Config.getInstance().getInt("EFFECT_DURATION_BONUS_SPEED") * 1000));
                     break;
                 case 3:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerB.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerB.add(new InvertControls(this, 1, 15 * 1000));
+                        effectListPlayerB.add(new InvertControls(this, 1, Config.getInstance().getInt("EFFECT_DURATION_MALUS_REVERSE") * 1000));
                     break;
                 case 4:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerB.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerB.add(new MalusSpeed(this, 1, 15 * 1000));
+                        effectListPlayerB.add(new MalusSpeed(this, 1, Config.getInstance().getInt("EFFECT_DURATION_MALUS_SPEED") * 1000));
                     break;
                 case 5:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerB.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerB.add(new RandomRotation(this, 1, 10*1000));
+                        effectListPlayerB.add(new RandomRotation(this, 1, Config.getInstance().getInt("EFFECT_DURATION_MALUS_ROTATE")*1000));
                     break;
                 case 6:
                     boolean alreadyHasMalus = false;
@@ -522,31 +527,31 @@ public class VersusModel {
                     if (ennemyShieldIndex != -1)
                         effectListPlayerA.remove(ennemyShieldIndex);
                     else
-	                    effectListPlayerA.add(new HideNextPiece(this, 0, 25 * 1000));
+	                    effectListPlayerA.add(new HideNextPiece(this, 0, Config.getInstance().getInt("EFFECT_DURATION_MALUS_BLIND") * 1000));
 	                break;
                 case 1:
                     effectListPlayerB.add(new RandomLine(this, 1));
                     break;
                 case 2:
-                    effectListPlayerB.add(new BonusSpeed(this, 1, 15 * 1000));
+                    effectListPlayerB.add(new BonusSpeed(this, 1, Config.getInstance().getInt("EFFECT_DURATION_BONUS_SPEED") * 1000));
                     break;
                 case 3:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerA.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerA.add(new InvertControls(this, 0, 15 * 1000));
+                        effectListPlayerA.add(new InvertControls(this, 0, Config.getInstance().getInt("EFFECT_DURATION_MALUS_REVERSE") * 1000));
                     break;
                 case 4:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerA.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerA.add(new MalusSpeed(this, 0, 15 * 1000));
+                        effectListPlayerA.add(new MalusSpeed(this, 0, Config.getInstance().getInt("EFFECT_DURATION_MALUS_SPEED") * 1000));
                     break;
                 case 5:
                     if (ennemyShieldIndex != -1)
                         effectListPlayerA.remove(ennemyShieldIndex);
                     else
-                        effectListPlayerA.add(new RandomRotation(this, 0, 10* 1000));
+                        effectListPlayerA.add(new RandomRotation(this, 0, Config.getInstance().getInt("EFFECT_DURATION_MALUS_ROTATE")* 1000));
                     break;
                 case 6:
                     boolean alreadyHasMalus = false;
