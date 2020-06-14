@@ -1,0 +1,5 @@
+body {
+  background-image: url("../piece_grayscale.png");
+  background-repeat: repeat;
+  background-size: calc(100wv / 16) calc(100wv / 16);
+}
