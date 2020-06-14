@@ -59,7 +59,7 @@ public class HelpVue extends JPanel {
 
         JLabel effectMSpeed = new JLabel("<html>This will speed up your game"); labels.add(effectMSpeed); images.add("/res/effects/malus_speed.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_SPEED"));
         JLabel effectBlind = new JLabel("<html>This will hides the next piece"); labels.add(effectBlind); images.add("/res/effects/malus_blind.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_BLIND"));
-        JLabel effectReverse = new JLabel("<html>This will invert your controls"); labels.add(effectReverse); images.add("/res/effects/malus_reverse_cmds.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_INVERT"));
+        JLabel effectReverse = new JLabel("<html>This will invert your controls"); labels.add(effectReverse); images.add("/res/effects/malus_reverse_cmds.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_REVERSE"));
         JLabel effectRotate = new JLabel("<html>This rotate you piece randomly"); labels.add(effectRotate); images.add("/res/effects/malus_rotate.png"); durations.add(Config.getInstance().getInt("EFFECT_DURATION_MALUS_ROTATE"));
         JLabel effectBlock = new JLabel("<html>This will place a random block"); labels.add(effectBlock); images.add("/res/effects/malus_random_block.png"); durations.add(0);
 
