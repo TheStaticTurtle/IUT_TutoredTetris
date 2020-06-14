@@ -6,6 +6,8 @@ IF EXIST out/ (
 	echo "Just building"
 )
 
+mkdir out
+
 echo "Building models"
 javac -classpath out -sourcepath tetris/src -d out tetris/src/fr/iut/tetris/models/*.java
 echo "Building controllers"
